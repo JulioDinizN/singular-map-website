@@ -1,8 +1,8 @@
 import { useRef, useEffect } from 'react';
 import * as THREE from 'three';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
-import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
+import { MapControls as R3FMapControls } from '@react-three/drei';
+import type { MapControls as MapControlsImpl } from 'three-stdlib';
 import { POI_LIST } from '../../data/eventData';
 import type { POI, PoiCategory } from '../../data/eventData';
 import type { NavigationRoute } from '../../utils/pathfinding';
@@ -27,11 +27,12 @@ interface EventMapCanvasProps {
   selectedCategory?: PoiCategory | 'all';
 }
 
-// Internal Camera & Controls Controller
+// Internal Camera & Controls Controller (Google Maps / Waze Style)
 function CameraManager({
   selectedPoi,
   is2DView,
   userPosition,
+  userHeading,
   isSimulating,
   cameraTargetPos,
   cameraTargetTrigger,
@@ -40,13 +41,14 @@ function CameraManager({
   selectedPoi: POI | null;
   is2DView: boolean;
   userPosition: [number, number, number];
+  userHeading: number;
   isSimulating: boolean;
   cameraTargetPos: [number, number, number] | null;
   cameraTargetTrigger: number;
   activeFloor: 1 | 2;
 }) {
   const { camera } = useThree();
-  const controlsRef = useRef<OrbitControlsImpl>(null);
+  const controlsRef = useRef<MapControlsImpl>(null);
 
   const targetCamPos = useRef(new THREE.Vector3(25, 32, 35));
   const targetLookAt = useRef(new THREE.Vector3(0, 0, 0));
@@ -85,13 +87,20 @@ function CameraManager({
 
     if (isSimulating) {
       const [ux, uy, uz] = userPosition;
-      controlsRef.current.target.lerp(new THREE.Vector3(ux, uy, uz), delta * 4);
+      controlsRef.current.target.lerp(new THREE.Vector3(ux, uy, uz), delta * 5);
 
       if (!is2DView) {
+        // Waze/Google Maps follow camera: smoothly tracks behind the user heading
+        const camDist = 16;
+        const camHeight = 14;
+        const camX = ux - Math.sin(userHeading) * camDist;
+        const camZ = uz - Math.cos(userHeading) * camDist;
         camera.position.lerp(
-          new THREE.Vector3(ux + 12, uy + 16, uz + 16),
-          delta * 3
+          new THREE.Vector3(camX, uy + camHeight, camZ),
+          delta * 4
         );
+      } else {
+        camera.position.lerp(new THREE.Vector3(ux, 65, uz + 0.001), delta * 5);
       }
       controlsRef.current.update();
       return;
@@ -103,8 +112,8 @@ function CameraManager({
       controlsRef.current.update();
 
       if (
-        camera.position.distanceTo(targetCamPos.current) < 0.1 &&
-        controlsRef.current.target.distanceTo(targetLookAt.current) < 0.1
+        camera.position.distanceTo(targetCamPos.current) < 0.15 &&
+        controlsRef.current.target.distanceTo(targetLookAt.current) < 0.15
       ) {
         isTransitioning.current = false;
       }
@@ -112,20 +121,21 @@ function CameraManager({
   });
 
   return (
-    <OrbitControls
+    <R3FMapControls
       ref={controlsRef}
       enableDamping
-      dampingFactor={0.06}
-      maxPolarAngle={is2DView ? 0.01 : Math.PI / 2 - 0.08}
-      minDistance={10}
-      maxDistance={110}
+      dampingFactor={0.08}
+      screenSpacePanning={false}
+      maxPolarAngle={is2DView ? 0.01 : Math.PI / 2.25}
+      minPolarAngle={0.01}
+      minDistance={6}
+      maxDistance={125}
       enableRotate={!is2DView}
       rotateSpeed={0.8}
-      panSpeed={0.9}
-      zoomSpeed={1.0}
-      touches={{
-        ONE: is2DView ? THREE.TOUCH.PAN : THREE.TOUCH.ROTATE,
-        TWO: THREE.TOUCH.DOLLY_PAN,
+      panSpeed={1.2}
+      zoomSpeed={1.1}
+      onStart={() => {
+        isTransitioning.current = false;
       }}
     />
   );
@@ -172,6 +182,7 @@ export function EventMapCanvas({
           selectedPoi={selectedPoi}
           is2DView={is2DView}
           userPosition={userPosition}
+          userHeading={userHeading}
           isSimulating={isSimulating}
           cameraTargetPos={cameraTargetPos}
           cameraTargetTrigger={cameraTargetTrigger}
