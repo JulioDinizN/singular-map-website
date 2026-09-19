@@ -407,7 +407,7 @@ export function BoothMesh({
             />
           </mesh>
 
-          {/* NUBANK SPECIFIC: Curved signature reception counters */}
+          {/* NUBANK SPECIFIC: Curved signature reception counters & center display tables */}
           {isNubank && (
             <group>
               {/* Top-Left Curved Counter */}
@@ -420,10 +420,151 @@ export function BoothMesh({
                 <boxGeometry args={[w * 0.35, h * 0.5, 0.7]} />
                 <meshStandardMaterial color="#820AD1" roughness={0.2} />
               </mesh>
+              {/* Center-Top Oval Display Table */}
+              <mesh position={[-w * 0.05, -h / 4, -d * 0.15]} castShadow receiveShadow>
+                <cylinderGeometry args={[0.9, 0.9, 0.5, 24]} />
+                <meshStandardMaterial color="#a855f7" roughness={0.3} />
+              </mesh>
+              {/* Center-Bottom Organic Display Table */}
+              <mesh position={[w * 0.05, -h / 4, d * 0.15]} castShadow receiveShadow>
+                <cylinderGeometry args={[0.8, 0.8, 0.5, 24]} />
+                <meshStandardMaterial color="#c084fc" roughness={0.3} />
+              </mesh>
             </group>
           )}
 
-          {/* EMBRAER EVE SPECIFIC: Mockup eVTOL Cabin & Seating */}
+          {/* iFOOD SPECIFIC: Autonomous robot arena & 7 perimeter display stands */}
+          {poi.id === 'booth-ifood' && (
+            <group>
+              {/* Robot Demonstration Track Circle */}
+              <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.05, 0]}>
+                <ringGeometry args={[1.2, 1.8, 24]} />
+                <meshBasicMaterial color="#ff5252" transparent opacity={0.6} />
+              </mesh>
+              {/* Autonomous Delivery Robot Mockup */}
+              <mesh position={[0, 0.35, 0]} castShadow>
+                <boxGeometry args={[0.8, 0.6, 0.8]} />
+                <meshStandardMaterial color="#ffffff" roughness={0.2} />
+              </mesh>
+              <mesh position={[0, 0.7, 0]} castShadow>
+                <boxGeometry args={[0.4, 0.2, 0.4]} />
+                <meshStandardMaterial color="#ea1d2c" roughness={0.2} />
+              </mesh>
+              {/* 3 Top Display Stands */}
+              {[-w * 0.25, 0, w * 0.25].map((tx) => (
+                <mesh key={`t-${tx}`} position={[tx, -h / 4, -d * 0.38]} castShadow>
+                  <boxGeometry args={[w * 0.2, h * 0.45, 0.4]} />
+                  <meshStandardMaterial color="#ea1d2c" roughness={0.3} />
+                </mesh>
+              ))}
+              {/* 2 Right Display Stands */}
+              {[-d * 0.2, d * 0.2].map((tz) => (
+                <mesh key={`r-${tz}`} position={[w * 0.38, -h / 4, tz]} castShadow>
+                  <boxGeometry args={[0.4, h * 0.45, d * 0.22]} />
+                  <meshStandardMaterial color="#ea1d2c" roughness={0.3} />
+                </mesh>
+              ))}
+              {/* 1 Left Display Stand */}
+              <mesh position={[-w * 0.38, -h / 4, 0]} castShadow>
+                <boxGeometry args={[0.4, h * 0.45, d * 0.3]} />
+                <meshStandardMaterial color="#ea1d2c" roughness={0.3} />
+              </mesh>
+              {/* 1 Bottom Counter */}
+              <mesh position={[0, -h / 4, d * 0.38]} castShadow>
+                <boxGeometry args={[w * 0.3, h * 0.45, 0.4]} />
+                <meshStandardMaterial color="#ea1d2c" roughness={0.3} />
+              </mesh>
+            </group>
+          )}
+
+          {/* ITAÚ BBA SPECIFIC: Curved lounge pods, trapezoidal counter, and organic sofa */}
+          {poi.id === 'booth-itau' && (
+            <group>
+              {/* Top-Left Curved Lounge Pod */}
+              <mesh position={[-w * 0.28, -h / 4, -d * 0.28]} castShadow>
+                <cylinderGeometry args={[1.2, 1.2, h * 0.45, 16, 1, false, 0, Math.PI]} />
+                <meshStandardMaterial color="#ec7000" roughness={0.3} />
+              </mesh>
+              {/* Top-Right Trapezoidal Counter */}
+              <mesh position={[w * 0.25, -h / 4, -d * 0.28]} castShadow>
+                <boxGeometry args={[w * 0.35, h * 0.45, 0.8]} />
+                <meshStandardMaterial color="#003399" roughness={0.3} />
+              </mesh>
+              {/* Bottom Curved Organic Sofa Bench */}
+              <mesh position={[0, -h / 4, d * 0.28]} castShadow>
+                <boxGeometry args={[w * 0.65, h * 0.4, 0.8]} />
+                <meshStandardMaterial color="#ec7000" roughness={0.4} />
+              </mesh>
+              {/* Left & Right Consultation Pods */}
+              <mesh position={[-w * 0.38, -h / 4, 0]} castShadow>
+                <boxGeometry args={[0.4, h * 0.45, d * 0.2]} />
+                <meshStandardMaterial color="#003399" roughness={0.3} />
+              </mesh>
+              <mesh position={[w * 0.38, -h / 4, 0]} castShadow>
+                <boxGeometry args={[0.4, h * 0.45, d * 0.2]} />
+                <meshStandardMaterial color="#003399" roughness={0.3} />
+              </mesh>
+            </group>
+          )}
+
+          {/* TOTVS SPECIFIC: 7 display counters matching blueprint */}
+          {poi.id === 'booth-totvs' && (
+            <group>
+              {/* 2 Top Counters */}
+              {[-w * 0.2, w * 0.2].map((tx) => (
+                <mesh key={`totvs-t-${tx}`} position={[tx, -h / 4, -d * 0.38]} castShadow>
+                  <boxGeometry args={[w * 0.28, h * 0.45, 0.4]} />
+                  <meshStandardMaterial color="#004f9f" roughness={0.3} />
+                </mesh>
+              ))}
+              {/* 2 Bottom Counters */}
+              {[-w * 0.2, w * 0.2].map((tx) => (
+                <mesh key={`totvs-b-${tx}`} position={[tx, -h / 4, d * 0.38]} castShadow>
+                  <boxGeometry args={[w * 0.28, h * 0.45, 0.4]} />
+                  <meshStandardMaterial color="#004f9f" roughness={0.3} />
+                </mesh>
+              ))}
+              {/* 3 Left Counters */}
+              {[-d * 0.25, 0, d * 0.25].map((tz) => (
+                <mesh key={`totvs-l-${tz}`} position={[-w * 0.38, -h / 4, tz]} castShadow>
+                  <boxGeometry args={[0.4, h * 0.45, d * 0.18]} />
+                  <meshStandardMaterial color="#0080ff" roughness={0.3} />
+                </mesh>
+              ))}
+            </group>
+          )}
+
+          {/* MERCADO LIVRE SPECIFIC: Curved counters and logistics display */}
+          {poi.id === 'booth-mercadolivre' && (
+            <group>
+              {/* Top-Right Curved Counter */}
+              <mesh position={[w * 0.28, -h / 4, -d * 0.28]} castShadow>
+                <boxGeometry args={[w * 0.35, h * 0.45, 0.7]} />
+                <meshStandardMaterial color="#ffe600" roughness={0.3} />
+              </mesh>
+              {/* Bottom-Right Curved Counter */}
+              <mesh position={[w * 0.28, -h / 4, d * 0.28]} castShadow>
+                <boxGeometry args={[w * 0.35, h * 0.45, 0.7]} />
+                <meshStandardMaterial color="#ffe600" roughness={0.3} />
+              </mesh>
+              {/* 3 Left Display Stands */}
+              {[-d * 0.25, 0, d * 0.25].map((tz) => (
+                <mesh key={`meli-l-${tz}`} position={[-w * 0.38, -h / 4, tz]} castShadow>
+                  <boxGeometry args={[0.4, h * 0.45, d * 0.2]} />
+                  <meshStandardMaterial color="#2d3277" roughness={0.3} />
+                </mesh>
+              ))}
+              {/* 2 Top-Left Counters */}
+              {[-w * 0.22, 0].map((tx) => (
+                <mesh key={`meli-t-${tx}`} position={[tx, -h / 4, -d * 0.38]} castShadow>
+                  <boxGeometry args={[w * 0.18, h * 0.45, 0.4]} />
+                  <meshStandardMaterial color="#ffe600" roughness={0.3} />
+                </mesh>
+              ))}
+            </group>
+          )}
+
+          {/* EMBRAER EVE SPECIFIC: Mockup eVTOL Cabin & Display Stands */}
           {isEve && (
             <group position={[0, -h / 4 + 0.1, 0]}>
               {/* Helipad Ring */}
@@ -436,11 +577,24 @@ export function BoothMesh({
                 <boxGeometry args={[w * 0.5, 0.9, d * 0.4]} />
                 <meshStandardMaterial color="#002776" roughness={0.2} metalness={0.7} />
               </mesh>
+              {/* Display Stands along Top and Bottom Rows */}
+              {[-w * 0.35, -w * 0.12, w * 0.12, w * 0.35].map((tx) => (
+                <mesh key={`eve-t-${tx}`} position={[tx, 0.3, -d * 0.38]} castShadow>
+                  <boxGeometry args={[w * 0.15, 0.6, 0.4]} />
+                  <meshStandardMaterial color="#009b3a" roughness={0.3} />
+                </mesh>
+              ))}
+              {[-w * 0.35, -w * 0.12, w * 0.12, w * 0.35].map((tx) => (
+                <mesh key={`eve-b-${tx}`} position={[tx, 0.3, d * 0.38]} castShadow>
+                  <boxGeometry args={[w * 0.15, 0.6, 0.4]} />
+                  <meshStandardMaterial color="#009b3a" roughness={0.3} />
+                </mesh>
+              ))}
             </group>
           )}
 
           {/* Standard Reception Desk */}
-          {!isRestroom && !isNubank && !isEve && (
+          {!isRestroom && !isNubank && !isEve && poi.id !== 'booth-ifood' && poi.id !== 'booth-itau' && poi.id !== 'booth-totvs' && poi.id !== 'booth-mercadolivre' && (
             <mesh position={[0, -h / 4, d / 2 - 0.4]} castShadow>
               <boxGeometry args={[Math.min(w * 0.4, 4), h * 0.5, 0.5]} />
               <meshStandardMaterial color="#f1f5f9" roughness={0.3} />
