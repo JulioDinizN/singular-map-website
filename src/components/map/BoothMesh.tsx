@@ -93,7 +93,7 @@ export function BoothMesh({
 
       {/* Main Structure */}
       {isStage ? (
-        // STAGE STRUCTURE
+        // STAGE STRUCTURE (AUDITÓRIO / PLENÁRIA)
         <group>
           {/* Stage Platform */}
           <mesh position={[0, -h / 4, 0]} castShadow receiveShadow>
@@ -107,9 +107,9 @@ export function BoothMesh({
             />
           </mesh>
 
-          {/* Curved Backstage LED Display Screen */}
+          {/* Panoramic Curved Backstage LED Display Screen */}
           <mesh position={[0, h / 2, -d / 3]} castShadow>
-            <boxGeometry args={[w * 0.85, h * 0.85, 0.35]} />
+            <boxGeometry args={[w * 0.9, h * 0.85, 0.4]} />
             <meshStandardMaterial
               color={accentColor}
               emissive={accentColor}
@@ -118,34 +118,50 @@ export function BoothMesh({
             />
           </mesh>
 
-          {/* Truss Arch */}
+          {/* Overhead Truss Arch */}
           <mesh position={[0, h * 0.95, -d / 6]}>
-            <boxGeometry args={[w * 0.9, 0.25, d * 0.6]} />
+            <boxGeometry args={[w * 0.95, 0.3, d * 0.7]} />
             <meshStandardMaterial color="#64748b" metalness={0.7} roughness={0.3} />
+          </mesh>
+
+          {/* Speaker Podium */}
+          <mesh position={[-w * 0.3, h / 4, d * 0.1]} castShadow>
+            <boxGeometry args={[1.2, 1.2, 0.8]} />
+            <meshStandardMaterial color="#0f172a" roughness={0.3} />
           </mesh>
         </group>
       ) : isEntrance ? (
-        // ENTRANCE GATE
+        // PÓRTICO MONUMENTAL SÃO PAULO EXPO COM CATRACAS
         <group>
+          {/* Side Pillars */}
           <mesh position={[-w / 2 + 0.6, 0, 0]} castShadow>
-            <boxGeometry args={[1.2, h * 2, 1.2]} />
+            <boxGeometry args={[1.2, h * 2.2, 1.2]} />
             <meshStandardMaterial color="#15803d" />
           </mesh>
           <mesh position={[w / 2 - 0.6, 0, 0]} castShadow>
-            <boxGeometry args={[1.2, h * 2, 1.2]} />
+            <boxGeometry args={[1.2, h * 2.2, 1.2]} />
             <meshStandardMaterial color="#15803d" />
           </mesh>
-          <mesh position={[0, h * 1.5, 0]} castShadow>
-            <boxGeometry args={[w, 1, 1.4]} />
+          {/* Top Arch */}
+          <mesh position={[0, h * 1.6, 0]} castShadow>
+            <boxGeometry args={[w, 1.2, 1.4]} />
             <meshStandardMaterial color="#16a34a" />
           </mesh>
+          {/* Catracas Eletrônicas */}
+          {[-3, -1, 1, 3].map((cx) => (
+            <mesh key={cx} position={[cx, -h / 4, 1.2]} castShadow>
+              <boxGeometry args={[0.4, 1.0, 0.8]} />
+              <meshStandardMaterial color="#475569" metalness={0.7} roughness={0.3} />
+            </mesh>
+          ))}
+          {/* Carpet Floor */}
           <mesh position={[0, -h / 2 + 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-            <planeGeometry args={[w * 0.9, d * 0.9]} />
+            <planeGeometry args={[w * 0.95, d * 0.95]} />
             <meshBasicMaterial color="#bbf7d0" transparent opacity={0.7} />
           </mesh>
         </group>
       ) : isQuietRoom ? (
-        // SALA DE ACOLHIMENTO (SENSORY RELIEF)
+        // SALA DE ACOLHIMENTO (ESPAÇO GIRASSOL)
         <group>
           <mesh position={[0, 0, 0]} castShadow receiveShadow>
             <boxGeometry args={[w, h, d]} />
@@ -161,17 +177,56 @@ export function BoothMesh({
             <boxGeometry args={[w * 0.98, 0.35, d * 0.98]} />
             <meshStandardMaterial color="#0d9488" roughness={0.3} />
           </mesh>
+          {/* Sunflower Gold Emblem Strip */}
+          <mesh position={[0, h / 2 + 0.05, d / 2 + 0.02]}>
+            <boxGeometry args={[w * 0.5, 0.15, 0.05]} />
+            <meshStandardMaterial color="#eab308" roughness={0.2} emissive="#ca8a04" emissiveIntensity={0.3} />
+          </mesh>
         </group>
       ) : isEmergencyExit ? (
-        // EMERGENCY EXIT DOOR
+        // PORTAS DE EMERGÊNCIA
         <group>
           <mesh position={[0, 0, 0]} castShadow>
             <boxGeometry args={[w, h, d]} />
             <meshStandardMaterial color="#16a34a" roughness={0.3} />
           </mesh>
+          {/* Exit Sign Header */}
+          <mesh position={[0, h / 2 + 0.25, 0]}>
+            <boxGeometry args={[w * 0.7, 0.3, d * 0.3]} />
+            <meshStandardMaterial color="#22c55e" emissive="#15803d" emissiveIntensity={0.6} />
+          </mesh>
+        </group>
+      ) : poi.tier === 'startup' ? (
+        // ESTANDES MODULARES PADRONIZADOS (VILA DAS STARTUPS)
+        <group>
+          {/* Plinth */}
+          <mesh position={[0, -h / 2 + 0.08, 0]} receiveShadow>
+            <boxGeometry args={[w, 0.15, d]} />
+            <meshStandardMaterial color="#f1f5f9" roughness={0.5} />
+          </mesh>
+          {/* Back Wall (Painel Traseiro Modular) */}
+          <mesh position={[0, 0, -d / 2 + 0.1]} castShadow>
+            <boxGeometry args={[w * 0.96, h, 0.15]} />
+            <meshStandardMaterial color="#ffffff" roughness={0.4} />
+          </mesh>
+          {/* Side Partition Wall */}
+          <mesh position={[-w / 2 + 0.1, 0, 0]} castShadow>
+            <boxGeometry args={[0.15, h, d * 0.9]} />
+            <meshStandardMaterial color="#ffffff" roughness={0.4} />
+          </mesh>
+          {/* Branded Fascia Beam (Testeira com Marca) */}
+          <mesh position={[0, h / 2 + 0.15, 0]} castShadow>
+            <boxGeometry args={[w * 0.98, 0.35, d * 0.98]} />
+            <meshStandardMaterial color={accentColor} roughness={0.3} />
+          </mesh>
+          {/* Front Bistro Reception Counter */}
+          <mesh position={[0, -h / 4, d / 2 - 0.4]} castShadow>
+            <boxGeometry args={[w * 0.55, h * 0.5, 0.5]} />
+            <meshStandardMaterial color="#ffffff" roughness={0.3} />
+          </mesh>
         </group>
       ) : (
-        // CLEAN ARCHITECTURAL BOOTH (Apple Maps style)
+        // CLEAN ARCHITECTURAL BOOTH (ILHAS E PENÍNSULAS)
         <group>
           {/* Base Plinth */}
           <mesh position={[0, -h / 2 + 0.1, 0]} castShadow receiveShadow>
@@ -206,10 +261,26 @@ export function BoothMesh({
             />
           </mesh>
 
+          {/* Special Feature: Embraer Eve eVTOL Platform */}
+          {poi.id === 'booth-eve' && (
+            <group position={[0, -h / 4 + 0.1, 0]}>
+              {/* Helipad/Platform Circle */}
+              <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.05, 0]}>
+                <ringGeometry args={[1.5, 2.8, 32]} />
+                <meshBasicMaterial color="#009B3A" transparent opacity={0.8} />
+              </mesh>
+              {/* Center 'H' or 'EVE' mark */}
+              <mesh position={[0, 0.4, 0]} castShadow>
+                <boxGeometry args={[2.5, 0.6, 1.8]} />
+                <meshStandardMaterial color="#002776" roughness={0.2} metalness={0.8} />
+              </mesh>
+            </group>
+          )}
+
           {/* Reception Desk */}
-          {!isRestroom && !isWorkshop && (
+          {!isRestroom && !isWorkshop && poi.id !== 'booth-eve' && (
             <mesh position={[0, -h / 4, d / 2 - 0.4]} castShadow>
-              <boxGeometry args={[w * 0.5, h * 0.5, 0.6]} />
+              <boxGeometry args={[Math.min(w * 0.4, 4), h * 0.5, 0.6]} />
               <meshStandardMaterial color="#f1f5f9" roughness={0.3} />
             </mesh>
           )}

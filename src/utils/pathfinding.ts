@@ -350,18 +350,33 @@ export function calculateRoute(
 
 function getAisleName(x: number, z: number, floor: 1 | 2): string | null {
   if (floor === 2) {
-    if (z <= -12) return 'pelo Mezanino VIP';
+    if (z <= -10) return 'pelo Mezanino VIP';
     return 'pelo Corredor de Workshops';
   }
-  if (Math.abs(z - 15) < 2.5) return 'pelo Concurso Sul';
-  if (Math.abs(z - 1) < 2.5) return 'pelo Concurso Central';
-  if (Math.abs(z - (-14)) < 2.5) return 'pelo Concurso Norte (Grandes Arenas)';
-  if (Math.abs(x) < 2.5 && z > 15) return 'pela Alameda de Acesso da Entrada';
-  if (Math.abs(x - (-12)) < 2.5) return 'pela Alameda 100 (Inovação & IA)';
-  if (Math.abs(x - (-24)) < 2.5) return 'pela Alameda 200 (Tecnologia Brasil)';
-  if (Math.abs(x - 12) < 2.5) return 'pela Alameda 300 (Fintech & Cloud)';
-  if (Math.abs(x - 24) < 2.5) return 'pela Alameda 400 (Mobilidade & Dados)';
-  if (Math.abs(x) < 3.5) return 'pelo Concurso Central';
+  if (z >= 24) return 'pelo Foyer de Entrada & Credenciamento';
+  if (z <= -13) return 'pela Avenida dos Palcos (Grandes Arenas)';
+  if (Math.abs(z - 18) < 2.5) {
+    if (x > 15) return 'pela Praça Gastronômica Brasil';
+    return 'pela Rua das Startups Brasil';
+  }
+  if (Math.abs(z - 1) < 2.5 && Math.abs(x) > 10) return 'pelo Cruzamento Central';
+  if (Math.abs(x) < 3.5) {
+    if (z > 5) return 'pelo Boulevard Central próximo aos Pilares P1 e P2';
+    if (z < -3) return 'pelo Boulevard Central próximo aos Pilares P3 e P4';
+    return 'pelo Boulevard Central';
+  }
+  if (Math.abs(x - (-8)) < 2.5) {
+    if (z > 3) return 'pela Rua 100 junto ao Pilar P1';
+    if (z < -2) return 'pela Rua 100 junto ao Pilar P3';
+    return 'pela Rua 100 (Inovação & IA)';
+  }
+  if (Math.abs(x - (-26.5)) < 3.0) return 'pela Rua 200 (Tecnologia & Robótica)';
+  if (Math.abs(x - 8) < 2.5) {
+    if (z > 3) return 'pela Rua 300 junto ao Pilar P2';
+    if (z < -2) return 'pela Rua 300 junto ao Pilar P4';
+    return 'pela Rua 300 (Fintech & Mobilidade)';
+  }
+  if (Math.abs(x - 25.5) < 3.0) return 'pela Rua 400 (Software & Dados)';
   return null;
 }
 

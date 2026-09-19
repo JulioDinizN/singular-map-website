@@ -64,173 +64,244 @@ export function VenueEnvironment({ activeFloor }: VenueEnvironmentProps) {
           <meshBasicMaterial color="#94a3b8" transparent opacity={0.6} />
         </mesh>
 
-        {/* ================= SOFT PASTEL ZONE OVERLAYS (GRID BLOCKS) ================= */}
-        {/* Sala de Acolhimento / Sensory Quiet Zone (Serene Teal) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-28, 0.01, 22.5]}>
+        {/* ================= SOFT PASTEL ZONE OVERLAYS (SÃO PAULO EXPO) ================= */}
+        {/* Foyer de Entrada & Credenciamento (Soft Slate/Blue) */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 27]}>
+          <planeGeometry args={[36, 10]} />
+          <meshStandardMaterial color="#e0f2fe" roughness={0.9} />
+        </mesh>
+
+        {/* Sala de Acolhimento / Espaço Girassol (Serene Teal) */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-26, 0.01, 22]}>
           <planeGeometry args={[18, 12]} />
           <meshStandardMaterial color="#ccfbf1" roughness={0.9} />
         </mesh>
 
-        {/* Praça de Alimentação & Lounge (Soft Rose) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[26, 0.01, 23]}>
-          <planeGeometry args={[16, 13]} />
+        {/* Praça Gastronômica Brasil (Warm Rose) */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[24, 0.01, 20]}>
+          <planeGeometry args={[18, 15]} />
           <meshStandardMaterial color="#ffe4e6" roughness={0.9} />
         </mesh>
 
-        {/* Startup Alley Zone (Soft Amber) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 22.5]}>
-          <planeGeometry args={[16, 12]} />
+        {/* Rua das Startups Brasil (Soft Amber) */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 16]}>
+          <planeGeometry args={[18, 10]} />
           <meshStandardMaterial color="#fef3c7" roughness={0.9} />
         </mesh>
 
-        {/* Main Stage Zone (Soft Lavender) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-20, 0.01, -23]}>
-          <planeGeometry args={[24, 14]} />
+        {/* Arena Principal Keynote (Palco Brasil) (Soft Lavender) */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-20, 0.01, -22]}>
+          <planeGeometry args={[26, 14]} />
           <meshStandardMaterial color="#ede9fe" roughness={0.9} />
         </mesh>
 
-        {/* Tech Stage Zone (Soft Sky) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[20, 0.01, -23]}>
-          <planeGeometry args={[22, 14]} />
+        {/* Palco DevBrasil (Soft Sky) */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[20, 0.01, -22]}>
+          <planeGeometry args={[24, 14]} />
           <meshStandardMaterial color="#e0f2fe" roughness={0.9} />
         </mesh>
 
-        {/* AI & Robotics Zone - Aisles 100 & 200 (Soft Blue) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-22, 0.01, 0.5]}>
-          <planeGeometry args={[26, 24]} />
+        {/* Pavilhão 1: Inovação, IA & Robótica (Soft Blue) */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-22, 0.01, -4]}>
+          <planeGeometry args={[28, 22]} />
           <meshStandardMaterial color="#dbeafe" roughness={0.9} />
         </mesh>
 
-        {/* Cloud & Fintech Zone - Aisles 300 & 400 (Soft Mint/Cyan) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[22, 0.01, 0.5]}>
-          <planeGeometry args={[26, 24]} />
+        {/* Pavilhão 2: Fintech, Nuvem & Mobilidade (Soft Mint) */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[22, 0.01, -4]}>
+          <planeGeometry args={[28, 22]} />
           <meshStandardMaterial color="#d1fae5" roughness={0.9} />
         </mesh>
 
-        {/* ================= POLISHED WHITE WALKING CORRIDORS (ORTHOGONAL GRID) ================= */}
-        {/* Concurso Central (North-South Main Aisle, X = 0) */}
+        {/* ================= POLISHED WHITE WALKING CORRIDORS ================= */}
+        {/* Boulevard Central (Main Aisle, X = 0, 6m wide) */}
         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 5]} receiveShadow>
-          <planeGeometry args={[3.6, 44]} />
+          <planeGeometry args={[6.0, 42]} />
           <meshStandardMaterial color="#ffffff" roughness={0.5} />
         </mesh>
 
-        {/* Alameda 100 (X = -12) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-12, 0.02, 0.5]} receiveShadow>
-          <planeGeometry args={[3.0, 31]} />
+        {/* Rua 100 (X = -8) */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-8, 0.02, 1.5]} receiveShadow>
+          <planeGeometry args={[3.2, 33]} />
           <meshStandardMaterial color="#ffffff" roughness={0.5} />
         </mesh>
 
-        {/* Alameda 200 (X = -24) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-24, 0.02, 0.5]} receiveShadow>
-          <planeGeometry args={[3.0, 31]} />
+        {/* Rua 200 (X = -26.5) */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-26.5, 0.02, 1.5]} receiveShadow>
+          <planeGeometry args={[3.2, 33]} />
           <meshStandardMaterial color="#ffffff" roughness={0.5} />
         </mesh>
 
-        {/* Alameda 300 (X = 12) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[12, 0.02, 0.5]} receiveShadow>
-          <planeGeometry args={[3.0, 31]} />
+        {/* Rua 300 (X = 8) */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[8, 0.02, 1.5]} receiveShadow>
+          <planeGeometry args={[3.2, 33]} />
           <meshStandardMaterial color="#ffffff" roughness={0.5} />
         </mesh>
 
-        {/* Alameda 400 (X = 24) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[24, 0.02, 0.5]} receiveShadow>
-          <planeGeometry args={[3.0, 31]} />
+        {/* Rua 400 (X = 25.5) */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[25.5, 0.02, 1.5]} receiveShadow>
+          <planeGeometry args={[3.2, 33]} />
           <meshStandardMaterial color="#ffffff" roughness={0.5} />
         </mesh>
 
-        {/* Concurso Norte (Stage Access & Mezzanine, Z = -14) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, -14]} receiveShadow>
-          <planeGeometry args={[68, 3.6]} />
+        {/* Avenida dos Palcos (Z = -15) */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, -15]} receiveShadow>
+          <planeGeometry args={[72, 4.0]} />
           <meshStandardMaterial color="#ffffff" roughness={0.5} />
         </mesh>
 
-        {/* Concurso Central Crossway (Z = 1) */}
+        {/* Cruzamento Central (Z = 1) */}
         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 1]} receiveShadow>
-          <planeGeometry args={[68, 3.2]} />
+          <planeGeometry args={[72, 3.5]} />
           <meshStandardMaterial color="#ffffff" roughness={0.5} />
         </mesh>
 
-        {/* Concurso Sul (Z = 15, connects Sala de Acolhimento, Startups and Food Court) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 15]} receiveShadow>
-          <planeGeometry args={[74, 3.6]} />
+        {/* Concurso Sul & Startups (Z = 18) */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 18]} receiveShadow>
+          <planeGeometry args={[74, 3.8]} />
           <meshStandardMaterial color="#ffffff" roughness={0.5} />
         </mesh>
 
-        {/* Walkway into Sala de Acolhimento entrance */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-26, 0.02, 18]} receiveShadow>
-          <planeGeometry args={[3.0, 4]} />
+        {/* Foyer de Entrada & Catracas (Z = 26) */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 26]} receiveShadow>
+          <planeGeometry args={[32, 6.0]} />
           <meshStandardMaterial color="#ffffff" roughness={0.5} />
         </mesh>
 
-        {/* ================= 3D FLOOR DECALS & AISLE WAYFINDING ================= */}
+        {/* Acesso à Sala de Acolhimento */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-26, 0.02, 20]} receiveShadow>
+          <planeGeometry args={[3.2, 4]} />
+          <meshStandardMaterial color="#ffffff" roughness={0.5} />
+        </mesh>
+
+        {/* ================= 3D FLOOR DECALS & SÃO PAULO EXPO WAYFINDING ================= */}
         <Text
-          position={[0, 0.025, 11]}
+          position={[0, 0.025, 4]}
           rotation={[-Math.PI / 2, 0, 0]}
           fontSize={0.65}
           color="#94a3b8"
           letterSpacing={0.15}
         >
-          CONCURSO CENTRAL • SÃO PAULO EXPO
+          BOULEVARD CENTRAL • SÃO PAULO EXPO
         </Text>
         <Text
-          position={[-12, 0.025, 1]}
+          position={[0, 0.025, 27]}
+          rotation={[-Math.PI / 2, 0, 0]}
+          fontSize={0.55}
+          color="#64748b"
+          letterSpacing={0.15}
+        >
+          FOYER DE ENTRADA & CREDENCIAMENTO
+        </Text>
+        <Text
+          position={[0, 0.025, 14]}
+          rotation={[-Math.PI / 2, 0, 0]}
+          fontSize={0.5}
+          color="#94a3b8"
+          letterSpacing={0.12}
+        >
+          RUA DAS STARTUPS BRASIL
+        </Text>
+        <Text
+          position={[-8, 0.025, 1]}
           rotation={[-Math.PI / 2, 0, -Math.PI / 2]}
           fontSize={0.55}
           color="#94a3b8"
           letterSpacing={0.12}
         >
-          ALAMEDA 100 • INOVAÇÃO & IA
+          RUA 100 • INOVAÇÃO & IA
         </Text>
         <Text
-          position={[-24, 0.025, 1]}
+          position={[-26.5, 0.025, 1]}
           rotation={[-Math.PI / 2, 0, -Math.PI / 2]}
           fontSize={0.55}
           color="#94a3b8"
           letterSpacing={0.12}
         >
-          ALAMEDA 200 • TECNOLOGIA BRASIL
+          RUA 200 • TECNOLOGIA & ROBÓTICA
         </Text>
         <Text
-          position={[12, 0.025, 1]}
+          position={[8, 0.025, 1]}
           rotation={[-Math.PI / 2, 0, -Math.PI / 2]}
           fontSize={0.55}
           color="#94a3b8"
           letterSpacing={0.12}
         >
-          ALAMEDA 300 • FINTECH & CLOUD
+          RUA 300 • FINTECH & MOBILIDADE
         </Text>
         <Text
-          position={[24, 0.025, 1]}
+          position={[25.5, 0.025, 1]}
           rotation={[-Math.PI / 2, 0, -Math.PI / 2]}
           fontSize={0.55}
           color="#94a3b8"
           letterSpacing={0.12}
         >
-          ALAMEDA 400 • MOBILIDADE & DADOS
+          RUA 400 • SOFTWARE & DADOS
         </Text>
         <Text
-          position={[0, 0.025, -14]}
+          position={[0, 0.025, -15]}
           rotation={[-Math.PI / 2, 0, 0]}
           fontSize={0.6}
           color="#94a3b8"
           letterSpacing={0.12}
         >
-          CONCURSO NORTE • GRANDES ARENAS
+          AVENIDA DOS PALCOS • GRANDES ARENAS
         </Text>
         <Text
-          position={[0, 0.025, 15]}
+          position={[24, 0.025, 18]}
           rotation={[-Math.PI / 2, 0, 0]}
-          fontSize={0.6}
+          fontSize={0.5}
           color="#94a3b8"
           letterSpacing={0.12}
         >
-          CONCURSO SUL • ALIMENTAÇÃO & ACOLHIMENTO
+          PRAÇA GASTRONÔMICA BRASIL
         </Text>
+
+        {/* ================= PILARES ESTRUTURAIS DO SÃO PAULO EXPO (P1 A P6) ================= */}
+        {[
+          { id: 'P1', pos: [-10, 0, 7] as [number, number, number] },
+          { id: 'P2', pos: [10, 0, 7] as [number, number, number] },
+          { id: 'P3', pos: [-10, 0, -5] as [number, number, number] },
+          { id: 'P4', pos: [10, 0, -5] as [number, number, number] },
+          { id: 'P5', pos: [-26.5, 0, -5] as [number, number, number] },
+          { id: 'P6', pos: [25.5, 0, -5] as [number, number, number] },
+        ].map((pillar) => (
+          <group key={pillar.id} position={pillar.pos}>
+            {/* Concrete Pillar Column */}
+            <mesh position={[0, 3.75, 0]} castShadow receiveShadow>
+              <boxGeometry args={[1.2, 7.5, 1.2]} />
+              <meshStandardMaterial color="#94a3b8" roughness={0.7} metalness={0.1} />
+            </mesh>
+            {/* Base Protective Collar */}
+            <mesh position={[0, 0.2, 0]} receiveShadow>
+              <boxGeometry args={[1.5, 0.4, 1.5]} />
+              <meshStandardMaterial color="#cbd5e1" roughness={0.5} />
+            </mesh>
+            {/* Overhead Pillar Sign Cube */}
+            <mesh position={[0, 5.0, 0]} castShadow>
+              <boxGeometry args={[1.4, 0.8, 1.4]} />
+              <meshStandardMaterial color="#0f172a" roughness={0.3} />
+            </mesh>
+            {/* Pillar Numbering on 4 Faces */}
+            <Text position={[0, 5.0, 0.72]} fontSize={0.45} color="#ffffff" font="bold">
+              {pillar.id}
+            </Text>
+            <Text position={[0, 5.0, -0.72]} rotation={[0, Math.PI, 0]} fontSize={0.45} color="#ffffff" font="bold">
+              {pillar.id}
+            </Text>
+            <Text position={[0.72, 5.0, 0]} rotation={[0, Math.PI / 2, 0]} fontSize={0.45} color="#ffffff" font="bold">
+              {pillar.id}
+            </Text>
+            <Text position={[-0.72, 5.0, 0]} rotation={[0, -Math.PI / 2, 0]} fontSize={0.45} color="#ffffff" font="bold">
+              {pillar.id}
+            </Text>
+          </group>
+        ))}
       </group>
 
       {/* ================= VERTICAL ACCESS: ELEVATOR & STAIRS ================= */}
       {/* 1) Modern Glass Elevator Tower */}
-      <group position={[2.5, 0, -18]}>
+      <group position={[2.5, 0, -17]}>
         <mesh position={[0, 3.5, 0]} castShadow receiveShadow>
           <boxGeometry args={[4.2, 7, 4.2]} />
           <meshStandardMaterial
