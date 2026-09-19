@@ -30,7 +30,7 @@ import { ReportModal } from './components/ui/ReportModal';
 import type { ReportType } from './components/ui/ReportModal';
 
 // Starting user location: Main Entrance
-const INITIAL_USER_POS: [number, number, number] = [0, 0.4, 24];
+const INITIAL_USER_POS: [number, number, number] = [0, 0.4, 27];
 
 export default function App() {
   const [activeFloor, setActiveFloor] = useState<1 | 2>(1);

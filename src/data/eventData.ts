@@ -162,8 +162,8 @@ export const POI_LIST: POI[] = [
     category: 'entrance',
     tier: 'facility',
     floor: 1,
-    position: [0, 0.5, 27],
-    dimensions: [12, 1, 3],
+    position: [0, 0.5, 28.5],
+    dimensions: [10, 1, 2.5],
     color: '#16a34a',
     accentColor: '#22c55e',
     zone: 'Entrada & Saída',
@@ -176,8 +176,8 @@ export const POI_LIST: POI[] = [
     shortName: 'Saída Sul',
     category: 'exit',
     floor: 1,
-    position: [0, 0.6, 29],
-    dimensions: [8, 1.2, 2],
+    position: [0, 0.6, 30.5],
+    dimensions: [8, 1.2, 1.5],
     color: '#16a34a',
     accentColor: '#4ade80',
     zone: 'Entrada & Saída',
@@ -191,7 +191,7 @@ export const POI_LIST: POI[] = [
     shortName: 'Saída Acessível Oeste',
     category: 'exit',
     floor: 1,
-    position: [-35, 0.6, 16],
+    position: [-36, 0.6, 22.5],
     dimensions: [4, 1.2, 2],
     color: '#16a34a',
     accentColor: '#22c55e',
@@ -206,7 +206,7 @@ export const POI_LIST: POI[] = [
     shortName: 'Saída Norte',
     category: 'exit',
     floor: 1,
-    position: [0, 0.6, -25],
+    position: [0, 0.6, -26],
     dimensions: [6, 1.2, 2],
     color: '#15803d',
     accentColor: '#86efac',
@@ -222,8 +222,8 @@ export const POI_LIST: POI[] = [
     category: 'info',
     tier: 'facility',
     floor: 1,
-    position: [0, 0.9, 9],
-    dimensions: [5, 1.8, 3],
+    position: [0, 0.9, 8.5],
+    dimensions: [3.4, 1.8, 2.2],
     color: '#0284c7',
     accentColor: '#38bdf8',
     zone: 'Entrada & Saída',
@@ -240,7 +240,7 @@ export const POI_LIST: POI[] = [
     shortName: 'Sala Acolhimento',
     category: 'quiet_room',
     floor: 1,
-    position: [-27, 1.2, 18],
+    position: [-26, 1.2, 22.5],
     dimensions: [10, 2.4, 7],
     color: '#0d9488',
     accentColor: '#2dd4bf',
@@ -260,8 +260,8 @@ export const POI_LIST: POI[] = [
     category: 'restroom',
     tier: 'facility',
     floor: 1,
-    position: [-26, 0.8, -5],
-    dimensions: [4, 1.6, 6],
+    position: [-30, 0.8, -6.5],
+    dimensions: [4.5, 1.6, 5],
     color: '#64748b',
     zone: 'Facilidades',
     isAccessible: true,
@@ -274,8 +274,8 @@ export const POI_LIST: POI[] = [
     category: 'restroom',
     tier: 'facility',
     floor: 1,
-    position: [26, 0.8, -5],
-    dimensions: [4, 1.6, 6],
+    position: [30, 0.8, -6.5],
+    dimensions: [4.5, 1.6, 5],
     color: '#64748b',
     zone: 'Facilidades',
     isAccessible: true,
@@ -291,8 +291,8 @@ export const POI_LIST: POI[] = [
     shortName: 'Palco Principal',
     category: 'stage',
     floor: 1,
-    position: [-22, 1.5, -20],
-    dimensions: [18, 3, 12],
+    position: [-20, 1.5, -23],
+    dimensions: [18, 3, 10],
     color: '#7c3aed',
     accentColor: '#a78bfa',
     zone: 'Arena Principal (Keynote)',
@@ -310,8 +310,8 @@ export const POI_LIST: POI[] = [
     shortName: 'Palco DevTech',
     category: 'stage',
     floor: 1,
-    position: [22, 1.2, -20],
-    dimensions: [16, 2.4, 12],
+    position: [20, 1.2, -23],
+    dimensions: [16, 2.4, 10],
     color: '#2563eb',
     accentColor: '#60a5fa',
     zone: 'Pavilhão de IA & Robótica',
@@ -334,8 +334,8 @@ export const POI_LIST: POI[] = [
     category: 'booth',
     tier: 'diamond',
     floor: 1,
-    position: [-15, 1.2, -5],
-    dimensions: [7, 2.4, 6],
+    position: [-18, 1.2, -6.5],
+    dimensions: [6, 2.4, 6],
     color: '#4285F4',
     accentColor: '#34A853',
     zone: 'Pavilhão de IA & Robótica',
@@ -353,8 +353,8 @@ export const POI_LIST: POI[] = [
     category: 'booth',
     tier: 'diamond',
     floor: 1,
-    position: [-15, 1.2, 9],
-    dimensions: [7, 2.4, 6],
+    position: [-18, 1.2, 8],
+    dimensions: [6, 2.4, 6],
     color: '#76B900',
     accentColor: '#9be821',
     zone: 'Pavilhão de IA & Robótica',
@@ -368,8 +368,8 @@ export const POI_LIST: POI[] = [
     category: 'booth',
     tier: 'gold',
     floor: 1,
-    position: [-26, 1.1, 9],
-    dimensions: [7, 2.2, 6],
+    position: [-30, 1.1, 8],
+    dimensions: [6, 2.2, 6],
     color: '#D97706',
     accentColor: '#F59E0B',
     zone: 'Pavilhão de IA & Robótica',
@@ -387,8 +387,8 @@ export const POI_LIST: POI[] = [
     category: 'booth',
     tier: 'diamond',
     floor: 1,
-    position: [15, 1.2, -5],
-    dimensions: [7, 2.4, 6],
+    position: [18, 1.2, -6.5],
+    dimensions: [6, 2.4, 6],
     color: '#FF9900',
     accentColor: '#FFB84D',
     zone: 'Cloud & Infraestrutura',
@@ -402,8 +402,8 @@ export const POI_LIST: POI[] = [
     category: 'booth',
     tier: 'gold',
     floor: 1,
-    position: [15, 1.2, 9],
-    dimensions: [7, 2.4, 6],
+    position: [18, 1.2, 8],
+    dimensions: [6, 2.4, 6],
     color: '#635BFF',
     accentColor: '#7a73ff',
     zone: 'Fintech & Segurança',
@@ -417,8 +417,8 @@ export const POI_LIST: POI[] = [
     category: 'booth',
     tier: 'gold',
     floor: 1,
-    position: [26, 1.1, 9],
-    dimensions: [7, 2.2, 6],
+    position: [30, 1.1, 8],
+    dimensions: [6, 2.2, 6],
     color: '#24292F',
     accentColor: '#58a6ff',
     zone: 'Cloud & Infraestrutura',
@@ -436,8 +436,8 @@ export const POI_LIST: POI[] = [
     category: 'booth',
     tier: 'startup',
     floor: 1,
-    position: [-4.5, 0.8, 14],
-    dimensions: [3.2, 1.6, 3.2],
+    position: [-5.5, 0.8, 20],
+    dimensions: [3, 1.6, 3],
     color: '#0ea5e9',
     zone: 'Alameda de Startups',
     description: 'Robótica de micro-entregas expressas urbanas com zero emissões.',
@@ -450,8 +450,8 @@ export const POI_LIST: POI[] = [
     category: 'booth',
     tier: 'startup',
     floor: 1,
-    position: [4.5, 0.8, 14],
-    dimensions: [3.2, 1.6, 3.2],
+    position: [5.5, 0.8, 20],
+    dimensions: [3, 1.6, 3],
     color: '#14b8a6',
     zone: 'Alameda de Startups',
     description: 'Wearables de interface neural para acessibilidade motora e fala assistida.',
@@ -464,8 +464,8 @@ export const POI_LIST: POI[] = [
     category: 'booth',
     tier: 'startup',
     floor: 1,
-    position: [-4.5, 0.8, 20],
-    dimensions: [3.2, 1.6, 3.2],
+    position: [-5.5, 0.8, 25],
+    dimensions: [3, 1.6, 3],
     color: '#f43f5e',
     zone: 'Alameda de Startups',
     description: 'Malha de segurança zero-trust para microsserviços corporativos.',
@@ -478,8 +478,8 @@ export const POI_LIST: POI[] = [
     category: 'booth',
     tier: 'startup',
     floor: 1,
-    position: [4.5, 0.8, 20],
-    dimensions: [3.2, 1.6, 3.2],
+    position: [5.5, 0.8, 25],
+    dimensions: [3, 1.6, 3],
     color: '#a855f7',
     zone: 'Alameda de Startups',
     description: 'Streaming volumétrico 3D direto no navegador de smartphones.',
@@ -495,8 +495,8 @@ export const POI_LIST: POI[] = [
     category: 'food',
     tier: 'facility',
     floor: 1,
-    position: [27, 0.9, 15],
-    dimensions: [8, 1.8, 5],
+    position: [26, 0.9, 20],
+    dimensions: [8, 1.8, 4.5],
     color: '#ea580c',
     accentColor: '#fb923c',
     zone: 'Praça de Alimentação & Lounge',
@@ -509,8 +509,8 @@ export const POI_LIST: POI[] = [
     category: 'food',
     tier: 'facility',
     floor: 1,
-    position: [27, 0.9, 22],
-    dimensions: [8, 1.8, 5],
+    position: [26, 0.9, 26],
+    dimensions: [8, 1.8, 4.5],
     color: '#db2777',
     accentColor: '#f472b6',
     zone: 'Praça de Alimentação & Lounge',
@@ -588,55 +588,56 @@ export const POI_LIST: POI[] = [
 // Waypoint Graph with Sensory & Accessibility Attributes (Orthogonal Grid)
 export const VENUE_WAYPOINTS: WaypointNode[] = [
   // --- FLOOR 1: CONCURSO CENTRAL (X = 0) ---
-  { id: 'wp_saida_sul', x: 0, z: 28, floor: 1, name: 'Saída de Emergência Sul', isEmergencyExit: true },
-  { id: 'wp_entrance', x: 0, z: 24, floor: 1, name: 'Entrada Principal' },
-  { id: 'wp_concourse_south', x: 0, z: 16, floor: 1, name: 'Concurso Sul & Central' },
-  { id: 'wp_info_desk', x: 0, z: 9, floor: 1, name: 'Balcão de Informações' },
-  { id: 'wp_concourse_mid', x: 0, z: 2, floor: 1, name: 'Concurso Central (Centro)' },
-  { id: 'wp_concourse_north', x: 0, z: -12, floor: 1, name: 'Concurso Norte & Mezanino' },
-  { id: 'wp_stairs_f1', x: -2.5, z: -16, floor: 1, name: 'Escada para 2F', isStairs: true },
-  { id: 'wp_elevator_f1', x: 2.5, z: -16, floor: 1, name: 'Elevador Acessível 1F', isElevator: true },
-  { id: 'wp_saida_norte', x: 0, z: -24, floor: 1, name: 'Saída de Emergência Norte', isEmergencyExit: true },
+  { id: 'wp_saida_sul', x: 0, z: 30.5, floor: 1, name: 'Saída de Emergência Sul', isEmergencyExit: true },
+  { id: 'wp_entrance', x: 0, z: 27, floor: 1, name: 'Entrada Principal' },
+  { id: 'wp_concourse_south', x: 0, z: 15, floor: 1, name: 'Concurso Sul & Central' },
+  { id: 'wp_info_desk', x: 0, z: 8.5, floor: 1, name: 'Balcão de Informações' },
+  { id: 'wp_concourse_mid', x: 0, z: 1, floor: 1, name: 'Concurso Central (Centro)' },
+  { id: 'wp_concourse_north', x: 0, z: -14, floor: 1, name: 'Concurso Norte & Mezanino' },
+  { id: 'wp_stairs_f1', x: -2.5, z: -18, floor: 1, name: 'Escada para 2F', isStairs: true },
+  { id: 'wp_elevator_f1', x: 2.5, z: -18, floor: 1, name: 'Elevador Acessível 1F', isElevator: true },
+  { id: 'wp_saida_norte', x: 0, z: -26, floor: 1, name: 'Saída de Emergência Norte', isEmergencyExit: true },
 
-  // --- FLOOR 1: CONCURSO SUL (Z = 16) ---
-  { id: 'wp_saida_oeste', x: -34, z: 16, floor: 1, name: 'Saída Acessível Oeste', isEmergencyExit: true },
-  { id: 'wp_sala_acolhimento', x: -27, z: 16, floor: 1, name: 'Sala de Acolhimento' },
-  { id: 'wp_sc_w2', x: -20, z: 16, floor: 1, name: 'Alameda 200 & Concurso Sul' },
-  { id: 'wp_sc_w1', x: -10, z: 16, floor: 1, name: 'Alameda 100 & Concurso Sul' },
-  { id: 'wp_sc_e1', x: 10, z: 16, floor: 1, name: 'Alameda 300 & Concurso Sul' },
-  { id: 'wp_sc_e2', x: 20, z: 16, floor: 1, name: 'Alameda 400 & Concurso Sul' },
-  { id: 'wp_food_court_1', x: 26, z: 16, floor: 1, name: 'Cafeteria & Lounge' },
-  { id: 'wp_food_court_2', x: 26, z: 22, floor: 1, name: 'Praça Gourmet' },
+  // --- FLOOR 1: CONCURSO SUL (Z = 15) ---
+  { id: 'wp_saida_oeste', x: -36, z: 15, floor: 1, name: 'Saída Acessível Oeste', isEmergencyExit: true },
+  { id: 'wp_sala_acolhimento', x: -26, z: 15, floor: 1, name: 'Sala de Acolhimento' },
+  { id: 'wp_acolhimento_door', x: -26, z: 19, floor: 1, name: 'Entrada Sala Acolhimento' },
+  { id: 'wp_sc_w2', x: -24, z: 15, floor: 1, name: 'Alameda 200 & Concurso Sul' },
+  { id: 'wp_sc_w1', x: -12, z: 15, floor: 1, name: 'Alameda 100 & Concurso Sul' },
+  { id: 'wp_sc_e1', x: 12, z: 15, floor: 1, name: 'Alameda 300 & Concurso Sul' },
+  { id: 'wp_sc_e2', x: 24, z: 15, floor: 1, name: 'Alameda 400 & Concurso Sul' },
+  { id: 'wp_food_court_1', x: 26, z: 15, floor: 1, name: 'Cafeteria & Lounge' },
+  { id: 'wp_food_court_2', x: 26, z: 26, floor: 1, name: 'Praça Gourmet' },
 
-  // --- FLOOR 1: CONCURSO CENTRAL (Z = 2) ---
-  { id: 'wp_mc_w2', x: -20, z: 2, floor: 1, name: 'Alameda 200 & Concurso Central' },
-  { id: 'wp_mc_w1', x: -10, z: 2, floor: 1, name: 'Alameda 100 & Concurso Central' },
-  { id: 'wp_mc_e1', x: 10, z: 2, floor: 1, name: 'Alameda 300 & Concurso Central' },
-  { id: 'wp_mc_e2', x: 20, z: 2, floor: 1, name: 'Alameda 400 & Concurso Central' },
+  // --- FLOOR 1: CONCURSO CENTRAL (Z = 1) ---
+  { id: 'wp_mc_w2', x: -24, z: 1, floor: 1, name: 'Alameda 200 & Concurso Central' },
+  { id: 'wp_mc_w1', x: -12, z: 1, floor: 1, name: 'Alameda 100 & Concurso Central' },
+  { id: 'wp_mc_e1', x: 12, z: 1, floor: 1, name: 'Alameda 300 & Concurso Central' },
+  { id: 'wp_mc_e2', x: 24, z: 1, floor: 1, name: 'Alameda 400 & Concurso Central' },
 
-  // --- FLOOR 1: CONCURSO NORTE (Z = -12) ---
-  { id: 'wp_main_stage_front', x: -22, z: -14, floor: 1, name: 'Entrada Palco Principal' },
-  { id: 'wp_nc_w2', x: -20, z: -12, floor: 1, name: 'Alameda 200 & Concurso Norte' },
-  { id: 'wp_nc_w1', x: -10, z: -12, floor: 1, name: 'Alameda 100 & Concurso Norte' },
-  { id: 'wp_nc_e1', x: 10, z: -12, floor: 1, name: 'Alameda 300 & Concurso Norte' },
-  { id: 'wp_nc_e2', x: 20, z: -12, floor: 1, name: 'Alameda 400 & Concurso Norte' },
-  { id: 'wp_tech_stage_front', x: 22, z: -14, floor: 1, name: 'Entrada Palco DevTech' },
+  // --- FLOOR 1: CONCURSO NORTE (Z = -14) ---
+  { id: 'wp_main_stage_front', x: -20, z: -16, floor: 1, name: 'Entrada Palco Principal' },
+  { id: 'wp_nc_w2', x: -24, z: -14, floor: 1, name: 'Alameda 200 & Concurso Norte' },
+  { id: 'wp_nc_w1', x: -12, z: -14, floor: 1, name: 'Alameda 100 & Concurso Norte' },
+  { id: 'wp_nc_e1', x: 12, z: -14, floor: 1, name: 'Alameda 300 & Concurso Norte' },
+  { id: 'wp_nc_e2', x: 24, z: -14, floor: 1, name: 'Alameda 400 & Concurso Norte' },
+  { id: 'wp_tech_stage_front', x: 20, z: -16, floor: 1, name: 'Entrada Palco DevTech' },
 
   // --- FLOOR 1: AISLE 200 & 400 AMENITIES ---
-  { id: 'wp_restroom_west', x: -20, z: -5, floor: 1, name: 'Sanitários Oeste' },
-  { id: 'wp_restroom_east', x: 20, z: -5, floor: 1, name: 'Sanitários Leste' },
+  { id: 'wp_restroom_west', x: -24, z: -6.5, floor: 1, name: 'Sanitários Oeste' },
+  { id: 'wp_restroom_east', x: 24, z: -6.5, floor: 1, name: 'Sanitários Leste' },
 
   // --- FLOOR 1: STARTUP ALLEY LANES ---
-  { id: 'wp_startup_w', x: -4.5, z: 17, floor: 1, name: 'Alameda Startups Oeste' },
-  { id: 'wp_startup_e', x: 4.5, z: 17, floor: 1, name: 'Alameda Startups Leste' },
+  { id: 'wp_startup_w', x: -5.5, z: 20, floor: 1, name: 'Alameda Startups Oeste' },
+  { id: 'wp_startup_e', x: 5.5, z: 20, floor: 1, name: 'Alameda Startups Leste' },
 
   // --- FLOOR 2: WORKSHOPS & VIP MEZZANINE ---
-  { id: 'wp_stairs_f2', x: -2.5, z: -16, floor: 2, name: 'Escada vindo de 1F', isStairs: true },
-  { id: 'wp_elevator_f2', x: 2.5, z: -16, floor: 2, name: 'Elevador Acessível 2F', isElevator: true },
-  { id: 'wp_f2_landing', x: 0, z: -12, floor: 2, name: 'Hall Mezanino' },
+  { id: 'wp_stairs_f2', x: -2.5, z: -18, floor: 2, name: 'Escada vindo de 1F', isStairs: true },
+  { id: 'wp_elevator_f2', x: 2.5, z: -18, floor: 2, name: 'Elevador Acessível 2F', isElevator: true },
+  { id: 'wp_f2_landing', x: 0, z: -14, floor: 2, name: 'Hall Mezanino' },
   { id: 'wp_f2_vip', x: 0, z: -14, floor: 2, name: 'Entrada Lounge VIP' },
-  { id: 'wp_f2_west', x: -16, z: -12, floor: 2, name: 'Corredor Workshop A' },
-  { id: 'wp_f2_east', x: 16, z: -12, floor: 2, name: 'Corredor Workshop B' },
+  { id: 'wp_f2_west', x: -16, z: -14, floor: 2, name: 'Corredor Workshop A' },
+  { id: 'wp_f2_east', x: 16, z: -14, floor: 2, name: 'Corredor Workshop B' },
   { id: 'wp_f2_restroom', x: -24, z: -4, floor: 2, name: 'Sanitários 2F' },
 ];
 
@@ -656,10 +657,11 @@ export const VENUE_EDGES: WaypointEdge[] = [
   { from: 'wp_concourse_north', to: 'wp_elevator_f1', lotacao: 1, ruido: 1 },
 
   // ===============================================
-  // FLOOR 1: SOUTH CONCOURSE (Z = 16)
+  // FLOOR 1: SOUTH CONCOURSE (Z = 15)
   // ===============================================
   // Calm, sensory-friendly route to Sala de Acolhimento & Saída Oeste
   { from: 'wp_saida_oeste', to: 'wp_sala_acolhimento', lotacao: 1, ruido: 1 },
+  { from: 'wp_sala_acolhimento', to: 'wp_acolhimento_door', lotacao: 1, ruido: 1 },
   { from: 'wp_sala_acolhimento', to: 'wp_sc_w2', lotacao: 1, ruido: 1 },
 
   // Cross-Concourse Grid
@@ -671,7 +673,7 @@ export const VENUE_EDGES: WaypointEdge[] = [
   { from: 'wp_food_court_1', to: 'wp_food_court_2', lotacao: 3, ruido: 3 },
 
   // ===============================================
-  // FLOOR 1: MID CONCOURSE (Z = 2)
+  // FLOOR 1: MID CONCOURSE (Z = 1)
   // ===============================================
   { from: 'wp_mc_w2', to: 'wp_mc_w1', lotacao: 2, ruido: 2 },
   { from: 'wp_mc_w1', to: 'wp_concourse_mid', lotacao: 3, ruido: 3 },
@@ -679,7 +681,7 @@ export const VENUE_EDGES: WaypointEdge[] = [
   { from: 'wp_mc_e1', to: 'wp_mc_e2', lotacao: 2, ruido: 2 },
 
   // ===============================================
-  // FLOOR 1: NORTH CONCOURSE (Z = -12)
+  // FLOOR 1: NORTH CONCOURSE (Z = -14)
   // ===============================================
   { from: 'wp_main_stage_front', to: 'wp_nc_w2', lotacao: 5, ruido: 5 },
   { from: 'wp_nc_w2', to: 'wp_nc_w1', lotacao: 4, ruido: 4 },
@@ -691,20 +693,20 @@ export const VENUE_EDGES: WaypointEdge[] = [
   // ===============================================
   // FLOOR 1: NORTH-SOUTH AISLES (100, 200, 300, 400)
   // ===============================================
-  // Alameda 100 (X = -10)
+  // Alameda 100 (X = -12)
   { from: 'wp_sc_w1', to: 'wp_mc_w1', lotacao: 2, ruido: 2 },
   { from: 'wp_mc_w1', to: 'wp_nc_w1', lotacao: 3, ruido: 3 },
 
-  // Alameda 200 (X = -20)
+  // Alameda 200 (X = -24)
   { from: 'wp_sc_w2', to: 'wp_mc_w2', lotacao: 2, ruido: 2 },
   { from: 'wp_mc_w2', to: 'wp_restroom_west', lotacao: 2, ruido: 2 },
   { from: 'wp_restroom_west', to: 'wp_nc_w2', lotacao: 3, ruido: 3 },
 
-  // Alameda 300 (X = 10)
+  // Alameda 300 (X = 12)
   { from: 'wp_sc_e1', to: 'wp_mc_e1', lotacao: 2, ruido: 2 },
   { from: 'wp_mc_e1', to: 'wp_nc_e1', lotacao: 3, ruido: 3 },
 
-  // Alameda 400 (X = 20)
+  // Alameda 400 (X = 24)
   { from: 'wp_sc_e2', to: 'wp_mc_e2', lotacao: 2, ruido: 2 },
   { from: 'wp_mc_e2', to: 'wp_restroom_east', lotacao: 2, ruido: 2 },
   { from: 'wp_restroom_east', to: 'wp_nc_e2', lotacao: 3, ruido: 3 },
