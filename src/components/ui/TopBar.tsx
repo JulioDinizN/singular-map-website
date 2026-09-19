@@ -87,10 +87,10 @@ export function TopBar({
   }, []);
 
   return (
-    <header className="absolute top-0 left-0 right-0 z-30 pointer-events-none p-2.5 sm:p-4 flex flex-col gap-2">
+    <header className="absolute top-0 left-0 right-0 z-20 pointer-events-none p-2.5 sm:p-4 flex flex-col gap-2">
       <div className="flex items-center justify-between gap-2 max-w-7xl mx-auto w-full">
-        {/* Brand / Title & Profile Pill */}
-        <div className="pointer-events-auto flex items-center gap-2 bg-slate-900/90 backdrop-blur-md px-3 py-1.5 rounded-2xl border border-slate-700/70 shadow-lg shadow-black/40">
+        {/* Brand & App Title */}
+        <div className="pointer-events-auto flex items-center gap-2 bg-slate-900/98 backdrop-blur-xl px-3 py-1.5 rounded-2xl border border-slate-700/90 shadow-xl shadow-black/60 min-h-[44px]">
           <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-sky-500/30">
             <Compass className="w-4 h-4 sm:w-5 sm:h-5 animate-pulse" />
           </div>
@@ -112,8 +112,8 @@ export function TopBar({
           ref={searchContainerRef}
           className="pointer-events-auto relative flex-1 max-w-md mx-auto"
         >
-          <div className="relative flex items-center bg-slate-900/90 backdrop-blur-md rounded-2xl border border-slate-700/80 shadow-lg focus-within:border-sky-400 focus-within:ring-2 focus-within:ring-sky-500/30 transition-all">
-            <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400 ml-3 shrink-0" />
+          <div className="relative flex items-center bg-slate-900/98 backdrop-blur-xl rounded-2xl border border-slate-700/90 shadow-xl focus-within:border-sky-400 focus-within:ring-2 focus-within:ring-sky-500/30 transition-all min-h-[44px]">
+            <Search className="w-4 h-4 text-slate-400 ml-3 shrink-0" />
             <input
               type="text"
               value={query}
@@ -123,7 +123,7 @@ export function TopBar({
               }}
               onFocus={() => setIsOpen(true)}
               placeholder="Buscar stands, salas, palestrantes..."
-              className="w-full bg-transparent px-2.5 py-1.5 sm:py-2 text-xs sm:text-sm text-slate-100 placeholder-slate-400 focus:outline-none"
+              className="w-full bg-transparent px-2.5 py-2 text-xs sm:text-sm text-slate-100 placeholder-slate-400 focus:outline-none"
             />
             {query && (
               <button
@@ -132,7 +132,7 @@ export function TopBar({
                   setQuery('');
                   setIsOpen(false);
                 }}
-                className="p-1 mr-2 text-slate-400 hover:text-white rounded-full hover:bg-slate-800"
+                className="p-1.5 mr-2 text-slate-400 hover:text-white rounded-full hover:bg-slate-800"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -141,7 +141,7 @@ export function TopBar({
 
           {/* Autocomplete Dropdown */}
           {isOpen && searchResults.length > 0 && (
-            <div className="absolute top-full left-0 right-0 mt-2 bg-slate-900/95 backdrop-blur-xl border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden z-50 divide-y divide-slate-800/80">
+            <div className="absolute top-full left-0 right-0 mt-2 bg-slate-900/98 backdrop-blur-2xl border border-slate-700/90 rounded-2xl shadow-2xl overflow-hidden z-50 divide-y divide-slate-800">
               {searchResults.map((poi) => (
                 <button
                   key={poi.id}
@@ -151,7 +151,7 @@ export function TopBar({
                     setIsOpen(false);
                     setQuery('');
                   }}
-                  className="w-full text-left px-3.5 py-2.5 hover:bg-slate-800/70 flex items-center justify-between gap-2 transition-colors group"
+                  className="w-full text-left px-4 py-3 hover:bg-slate-800/80 flex items-center justify-between gap-2 transition-colors group min-h-[44px]"
                 >
                   <div className="flex items-center gap-2.5 min-w-0">
                     <div
@@ -186,7 +186,7 @@ export function TopBar({
         <button
           type="button"
           onClick={onOpenProfileSelector}
-          className="pointer-events-auto shrink-0 flex items-center gap-1.5 bg-slate-900/90 hover:bg-slate-800 px-3 py-2 rounded-2xl text-xs sm:text-sm font-semibold backdrop-blur-md shadow-lg border border-slate-700/80 transition-all active:scale-95"
+          className="pointer-events-auto shrink-0 flex items-center gap-1.5 bg-slate-900/98 hover:bg-slate-800 px-3 py-2 rounded-2xl text-xs sm:text-sm font-semibold backdrop-blur-xl shadow-xl border border-slate-700/90 transition-all active:scale-95 min-h-[44px]"
           title="Trocar Perfil de Acessibilidade"
         >
           <Accessibility className="w-4 h-4 text-sky-400" />
@@ -203,7 +203,7 @@ export function TopBar({
         <button
           type="button"
           onClick={onOpenSchedule}
-          className="pointer-events-auto shrink-0 flex items-center gap-1.5 bg-indigo-600/90 hover:bg-indigo-500 text-white px-3 py-2 rounded-2xl text-xs sm:text-sm font-medium backdrop-blur-md shadow-lg shadow-indigo-600/30 border border-indigo-400/30 transition-all active:scale-95"
+          className="pointer-events-auto shrink-0 flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-2 rounded-2xl text-xs sm:text-sm font-medium backdrop-blur-xl shadow-xl shadow-indigo-600/30 border border-indigo-400/40 transition-all active:scale-95 min-h-[44px]"
         >
           <Radio className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
           <span className="hidden sm:inline">Ao Vivo</span>
@@ -213,13 +213,13 @@ export function TopBar({
         </button>
       </div>
 
-      {/* Quick Action Pills: Sala de Acolhimento, Rota de Saída, Reportar & Categories */}
+      {/* Action Pills & Categories */}
       <div className="pointer-events-auto flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-7xl mx-auto w-full py-0.5">
         {/* Quick Sala de Acolhimento */}
         <button
           type="button"
           onClick={onGoToQuietRoom}
-          className="shrink-0 flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold bg-teal-950/80 hover:bg-teal-900 text-teal-300 border border-teal-500/40 backdrop-blur-md shadow-md shadow-teal-950/40 transition-all active:scale-95"
+          className="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-teal-950 hover:bg-teal-900 text-teal-300 border border-teal-500/50 backdrop-blur-xl shadow-md min-h-[40px] transition-all active:scale-95"
           title="Espaço calmo para descompressão sensorial"
         >
           <HeartHandshake className="w-3.5 h-3.5 text-teal-400" />
@@ -230,7 +230,7 @@ export function TopBar({
         <button
           type="button"
           onClick={onEmergencyEvacuation}
-          className="shrink-0 flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold bg-red-950/80 hover:bg-red-900 text-red-300 border border-red-500/40 backdrop-blur-md shadow-md shadow-red-950/40 transition-all active:scale-95"
+          className="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-red-950 hover:bg-red-900 text-red-300 border border-red-500/50 backdrop-blur-xl shadow-md min-h-[40px] transition-all active:scale-95"
           title="Calcular rota para a saída viável mais próxima"
         >
           <AlertTriangle className="w-3.5 h-3.5 text-red-400" />
@@ -241,7 +241,7 @@ export function TopBar({
         <button
           type="button"
           onClick={onOpenReportModal}
-          className="shrink-0 flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold bg-amber-950/80 hover:bg-amber-900 text-amber-300 border border-amber-500/40 backdrop-blur-md transition-all active:scale-95"
+          className="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-amber-950 hover:bg-amber-900 text-amber-300 border border-amber-500/50 backdrop-blur-xl min-h-[40px] transition-all active:scale-95"
           title="Reportar bloqueio, lotação ou barulho"
         >
           <Flag className="w-3.5 h-3.5 text-amber-400" />
@@ -258,10 +258,10 @@ export function TopBar({
               key={cat.id}
               type="button"
               onClick={() => onSelectCategory(cat.id)}
-              className={`shrink-0 px-3 py-1.5 rounded-xl text-xs font-medium backdrop-blur-md border transition-all ${
+              className={`shrink-0 px-3 py-2 rounded-xl text-xs font-semibold backdrop-blur-xl border transition-all min-h-[40px] ${
                 isActive
-                  ? 'bg-sky-500 text-white border-sky-400 shadow-md shadow-sky-500/30 scale-105'
-                  : 'bg-slate-900/80 text-slate-300 border-slate-700/80 hover:bg-slate-800 hover:text-white'
+                  ? 'bg-sky-500 text-white border-sky-400 shadow-md shadow-sky-500/30 scale-105 ring-2 ring-sky-300'
+                  : 'bg-slate-900/90 text-slate-300 border-slate-700/90 hover:bg-slate-800 hover:text-white'
               }`}
             >
               {cat.label}

@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
-import { Html } from '@react-three/drei';
+import { Billboard, Text, Html } from '@react-three/drei';
 import type { POI } from '../../data/eventData';
 
 interface BoothMeshProps {
@@ -34,7 +34,6 @@ export function BoothMesh({
       ringRef.current.rotation.z += delta * 1.5;
     }
     if (meshRef.current) {
-      // Slight elevation bounce when hovered or selected
       const targetY = isSelected ? y + 0.4 : isHovered ? y + 0.2 : y;
       meshRef.current.position.y = THREE.MathUtils.lerp(
         meshRef.current.position.y,
@@ -45,12 +44,18 @@ export function BoothMesh({
   });
 
   const isStage = poi.category === 'stage';
+  const isQuietRoom = poi.category === 'quiet_room';
+  const isEmergencyExit = poi.category === 'exit' || poi.isEmergencyExit;
   const isRestroom = poi.category === 'restroom';
   const isWorkshop = poi.category === 'workshop';
   const isEntrance = poi.category === 'entrance';
 
+  // Major landmarks show badge by default; other booths show 3D text and only show badge on hover/select
+  const isMajorLandmark = isStage || isQuietRoom || isEntrance || isEmergencyExit;
+  const showBadge = isSelected || isHovered || internalHover;
+
   // Base opacity and color tweaks
-  const opacity = isDimmed ? 0.35 : 1;
+  const opacity = isDimmed ? 0.25 : 1;
   const mainColor = poi.color;
   const accentColor = poi.accentColor || poi.color;
 
@@ -83,7 +88,7 @@ export function BoothMesh({
           <meshBasicMaterial
             color="#38bdf8"
             transparent
-            opacity={0.8}
+            opacity={0.85}
             side={THREE.DoubleSide}
           />
         </mesh>
@@ -93,7 +98,6 @@ export function BoothMesh({
       {isStage ? (
         // STAGE STRUCTURE
         <group>
-          {/* Stage Platform */}
           <mesh position={[0, -h / 4, 0]} castShadow receiveShadow>
             <boxGeometry args={[w, h / 2, d]} />
             <meshStandardMaterial
@@ -116,7 +120,7 @@ export function BoothMesh({
             />
           </mesh>
 
-          {/* Stage Lighting Truss Arch */}
+          {/* Truss Arch */}
           <mesh position={[0, h * 0.95, -d / 6]}>
             <boxGeometry args={[w * 0.9, 0.25, d * 0.6]} />
             <meshStandardMaterial color="#475569" metalness={0.8} roughness={0.2} />
@@ -125,17 +129,14 @@ export function BoothMesh({
       ) : isEntrance ? (
         // ENTRANCE GATE
         <group>
-          {/* Left Pillar */}
           <mesh position={[-w / 2 + 0.6, 0, 0]} castShadow>
             <boxGeometry args={[1.2, h * 2, 1.2]} />
             <meshStandardMaterial color="#059669" />
           </mesh>
-          {/* Right Pillar */}
           <mesh position={[w / 2 - 0.6, 0, 0]} castShadow>
             <boxGeometry args={[1.2, h * 2, 1.2]} />
             <meshStandardMaterial color="#059669" />
           </mesh>
-          {/* Overhead Header Banner */}
           <mesh position={[0, h * 1.5, 0]} castShadow>
             <boxGeometry args={[w, 1, 1.4]} />
             <meshStandardMaterial
@@ -144,16 +145,49 @@ export function BoothMesh({
               emissiveIntensity={0.5}
             />
           </mesh>
-          {/* Floor Welcome Mat */}
           <mesh position={[0, -h / 2 + 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
             <planeGeometry args={[w * 0.9, d * 0.9]} />
             <meshBasicMaterial color="#065f46" transparent opacity={0.7} />
           </mesh>
         </group>
-      ) : (
-        // EXHIBITION BOOTH / FACILITY
+      ) : isQuietRoom ? (
+        // SALA DE ACOLHIMENTO (SENSORY RELIEF)
         <group>
-          {/* Base Platform */}
+          <mesh position={[0, 0, 0]} castShadow receiveShadow>
+            <boxGeometry args={[w, h, d]} />
+            <meshStandardMaterial
+              color="#0f766e"
+              roughness={0.5}
+              metalness={0.1}
+              transparent
+              opacity={opacity}
+            />
+          </mesh>
+          {/* Soft Calming Header */}
+          <mesh position={[0, h / 2 + 0.25, 0]} castShadow>
+            <boxGeometry args={[w * 0.98, 0.4, d * 0.98]} />
+            <meshStandardMaterial
+              color="#2dd4bf"
+              emissive="#14b8a6"
+              emissiveIntensity={0.6}
+            />
+          </mesh>
+        </group>
+      ) : isEmergencyExit ? (
+        // EMERGENCY EXIT DOOR
+        <group>
+          <mesh position={[0, 0, 0]} castShadow>
+            <boxGeometry args={[w, h, d]} />
+            <meshStandardMaterial
+              color="#16a34a"
+              emissive="#22c55e"
+              emissiveIntensity={0.7}
+            />
+          </mesh>
+        </group>
+      ) : (
+        // STANDARD EXHIBITOR BOOTH
+        <group>
           <mesh position={[0, -h / 2 + 0.15, 0]} castShadow receiveShadow>
             <boxGeometry args={[w, 0.3, d]} />
             <meshStandardMaterial
@@ -164,7 +198,6 @@ export function BoothMesh({
             />
           </mesh>
 
-          {/* Main Booth Body / Walls */}
           <mesh position={[0, 0, 0]} castShadow receiveShadow>
             <boxGeometry args={[w * 0.94, h, d * 0.94]} />
             <meshStandardMaterial
@@ -176,7 +209,6 @@ export function BoothMesh({
             />
           </mesh>
 
-          {/* Header Banner with Accent Color */}
           <mesh position={[0, h / 2 + 0.3, 0]} castShadow>
             <boxGeometry args={[w * 0.96, 0.45, d * 0.96]} />
             <meshStandardMaterial
@@ -187,7 +219,6 @@ export function BoothMesh({
             />
           </mesh>
 
-          {/* Counter Desk in Front for Booths */}
           {!isRestroom && !isWorkshop && (
             <mesh position={[0, -h / 4, d / 2 - 0.4]} castShadow>
               <boxGeometry args={[w * 0.5, h * 0.5, 0.6]} />
@@ -197,49 +228,63 @@ export function BoothMesh({
         </group>
       )}
 
-      {/* Floating 3D/HTML Badge & Name */}
-      <Html
-        position={[0, h + 0.8, 0]}
-        center
-        distanceFactor={38}
-        zIndexRange={[100, 0]}
-        style={{
-          pointerEvents: 'none',
-          userSelect: 'none',
-          transition: 'all 0.2s ease',
-        }}
-      >
-        <div
-          className={`px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap shadow-lg flex items-center gap-1.5 transition-transform duration-200 ${
-            isSelected
-              ? 'bg-sky-500 text-white scale-110 ring-2 ring-white shadow-sky-500/50'
-              : internalHover
-              ? 'bg-slate-800 text-white scale-105 border border-sky-400'
-              : 'bg-slate-900/90 text-slate-200 border border-slate-700/80 backdrop-blur-sm'
-          }`}
+      {/* 3D In-World Text (Never clips over DOM UI elements!) */}
+      <Billboard position={[0, h + 0.5, 0]} follow lockX={false} lockY={false} lockZ={false}>
+        <Text
+          fontSize={isMajorLandmark ? 0.9 : 0.65}
+          color={isSelected ? '#38bdf8' : '#f8fafc'}
+          anchorX="center"
+          anchorY="middle"
+          outlineWidth={0.06}
+          outlineColor="#050811"
+        >
+          {poi.shortName || poi.name}
+        </Text>
+        {poi.boothNumber && (
+          <Text
+            position={[0, -0.65, 0]}
+            fontSize={0.45}
+            color="#94a3b8"
+            anchorX="center"
+            anchorY="middle"
+            outlineWidth={0.04}
+            outlineColor="#050811"
+          >
+            {poi.boothNumber}
+          </Text>
+        )}
+      </Billboard>
+
+      {/* Selected / Hovered Focused HTML Tooltip with STRICT LOW Z-INDEX (z-1) */}
+      {showBadge && (
+        <Html
+          position={[0, h + 1.6, 0]}
+          center
+          distanceFactor={35}
+          zIndexRange={[1, 1]}
           style={{
-            transform: isSelected || internalHover ? 'scale(1.15)' : 'scale(1)',
+            pointerEvents: 'none',
+            userSelect: 'none',
+            transition: 'opacity 0.2s ease',
           }}
         >
-          {/* Status / Category Dot */}
-          <span
-            className="w-2 h-2 rounded-full inline-block"
-            style={{
-              backgroundColor:
-                poi.sessions?.some((s) => s.isLiveNow) ? '#22c55e' : accentColor,
-              boxShadow: poi.sessions?.some((s) => s.isLiveNow)
-                ? '0 0 6px #22c55e'
-                : 'none',
-            }}
-          />
-          <span>{poi.shortName || poi.name}</span>
-          {poi.boothNumber && (
-            <span className="text-[10px] text-slate-400 font-mono">
-              {poi.boothNumber}
-            </span>
-          )}
-        </div>
-      </Html>
+          <div className="px-3 py-1.5 rounded-xl text-xs font-bold text-white bg-slate-900/95 border border-sky-400 shadow-xl shadow-black/80 flex items-center gap-2 whitespace-nowrap">
+            <span
+              className="w-2 h-2 rounded-full shrink-0"
+              style={{
+                backgroundColor:
+                  poi.sessions?.some((s) => s.isLiveNow) ? '#22c55e' : accentColor,
+              }}
+            />
+            <span>{poi.name}</span>
+            {poi.isAccessible && (
+              <span className="text-[10px] bg-sky-950 text-sky-300 px-1.5 py-0.5 rounded border border-sky-700/50">
+                Acessível
+              </span>
+            )}
+          </div>
+        </Html>
+      )}
     </group>
   );
 }

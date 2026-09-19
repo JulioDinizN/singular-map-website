@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
-import { Html } from '@react-three/drei';
+import { Billboard, Text } from '@react-three/drei';
 
 interface LiveUserMarkerProps {
   position: [number, number, number];
@@ -64,7 +64,7 @@ export function LiveUserMarker({
         rotation={[-Math.PI / 2, 0, 0]}
         position={[0, 0.05, 0]}
       >
-        <ringGeometry args={[0.8, 1.2, 32]} />
+        <ringGeometry args={[0.8, 1.3, 32]} />
         <meshBasicMaterial
           color="#38bdf8"
           transparent
@@ -75,12 +75,12 @@ export function LiveUserMarker({
 
       {/* Direction Cone / Heading Indicator */}
       <group rotation={[0, heading, 0]}>
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.06, 0.8]}>
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.06, 0.9]}>
           <coneGeometry args={[0.6, 1.2, 16]} />
           <meshBasicMaterial
             color="#38bdf8"
             transparent
-            opacity={0.35}
+            opacity={0.4}
             side={THREE.DoubleSide}
           />
         </mesh>
@@ -88,34 +88,34 @@ export function LiveUserMarker({
 
       {/* Core Floating User Sphere & Halo */}
       <mesh ref={coreRef} position={[0, 0.6, 0]}>
-        <sphereGeometry args={[0.4, 32, 32]} />
+        <sphereGeometry args={[0.45, 32, 32]} />
         <meshStandardMaterial
           color="#0284c7"
           emissive="#38bdf8"
-          emissiveIntensity={0.8}
+          emissiveIntensity={0.9}
           roughness={0.2}
         />
       </mesh>
 
       {/* Center White Dot */}
       <mesh position={[0, 0.6, 0]}>
-        <sphereGeometry args={[0.2, 16, 16]} />
+        <sphereGeometry args={[0.22, 16, 16]} />
         <meshBasicMaterial color="#ffffff" />
       </mesh>
 
-      {/* Floating "You are here" Pill */}
-      <Html
-        position={[0, 1.8, 0]}
-        center
-        distanceFactor={32}
-        zIndexRange={[200, 100]}
-        style={{ pointerEvents: 'none', userSelect: 'none' }}
-      >
-        <div className="flex items-center gap-1.5 px-2.5 py-1 bg-sky-500/95 text-white text-xs font-bold rounded-full shadow-lg shadow-sky-500/50 backdrop-blur-sm border border-sky-300">
-          <span className="w-2 h-2 rounded-full bg-white animate-ping" />
-          <span>{isSimulating ? 'Walking...' : 'You Are Here'}</span>
-        </div>
-      </Html>
+      {/* 3D In-World User Label (Never clips over DOM UI!) */}
+      <Billboard position={[0, 1.6, 0]} follow>
+        <Text
+          fontSize={0.55}
+          color="#38bdf8"
+          anchorX="center"
+          anchorY="middle"
+          outlineWidth={0.06}
+          outlineColor="#050811"
+        >
+          {isSimulating ? '🚶 Em Deslocamento' : '📍 Você Está Aqui'}
+        </Text>
+      </Billboard>
     </group>
   );
 }

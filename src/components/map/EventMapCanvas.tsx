@@ -22,7 +22,7 @@ interface EventMapCanvasProps {
   userHeading: number;
   isSimulating: boolean;
   is2DView: boolean;
-  cameraTargetTrigger: number; // incremented to trigger camera focus
+  cameraTargetTrigger: number;
   cameraTargetPos: [number, number, number] | null;
   selectedCategory?: PoiCategory | 'all';
 }
@@ -58,11 +58,9 @@ function CameraManager({
     isTransitioning.current = true;
 
     if (is2DView) {
-      // Top-Down 2D View
       targetCamPos.current.set(0, 65, 0.001);
       targetLookAt.current.set(0, activeFloor === 2 ? 7 : 0, 0);
     } else if (cameraTargetPos) {
-      // Specific target (e.g. locate me or reset)
       targetCamPos.current.set(
         cameraTargetPos[0] + 15,
         cameraTargetPos[1] + 20,
@@ -74,12 +72,10 @@ function CameraManager({
         cameraTargetPos[2]
       );
     } else if (selectedPoi) {
-      // Focus on selected POI
       const [px, py, pz] = selectedPoi.position;
       targetCamPos.current.set(px + 12, py + 16, pz + 16);
       targetLookAt.current.set(px, py, pz);
     } else {
-      // Default Isometric 3D View
       const baseY = activeFloor === 2 ? 7 : 0;
       targetCamPos.current.set(24, 30 + baseY, 34);
       targetLookAt.current.set(0, baseY, 0);
@@ -91,7 +87,6 @@ function CameraManager({
     if (!controlsRef.current) return;
 
     if (isSimulating) {
-      // Camera smoothly follows the user marker in Live Walk simulation
       const [ux, uy, uz] = userPosition;
       controlsRef.current.target.lerp(new THREE.Vector3(ux, uy, uz), delta * 4);
 
@@ -154,8 +149,10 @@ export function EventMapCanvas({
   cameraTargetPos,
   selectedCategory = 'all',
 }: EventMapCanvasProps) {
+  const isNavigating = !!route;
+
   return (
-    <div className="w-full h-full relative select-none">
+    <div className="w-full h-full relative select-none z-0">
       <Canvas
         shadows
         gl={{
@@ -165,7 +162,6 @@ export function EventMapCanvas({
         }}
         camera={{ position: [25, 32, 35], fov: 45, near: 0.1, far: 500 }}
         onPointerDown={(e) => {
-          // If clicking empty canvas area, deselect POI
           if (e.target === e.currentTarget) {
             onSelectPoi(null);
           }
@@ -193,9 +189,14 @@ export function EventMapCanvas({
           {POI_LIST.map((poi) => {
             const isSelected = selectedPoi?.id === poi.id;
             const isHovered = hoveredPoi?.id === poi.id;
+            const isDestination = route?.toPoi?.id === poi.id;
+            const isOrigin = route?.fromPoi?.id === poi.id;
+
+            // When navigating, dim booths that aren't the destination or origin
             const isDimmed =
               poi.floor !== activeFloor ||
-              (selectedCategory !== 'all' && poi.category !== selectedCategory);
+              (selectedCategory !== 'all' && poi.category !== selectedCategory) ||
+              (isNavigating && !isDestination && !isOrigin && !isSelected);
 
             return (
               <BoothMesh
