@@ -27,16 +27,16 @@ export function LiveUserMarker({
       radarRingRef.current.scale.set(scale, scale, 1);
       const mat = radarRingRef.current.material as THREE.MeshBasicMaterial;
       if (mat) {
-        mat.opacity = Math.max(0, 0.7 - (scale - 1) / 1.5);
+        mat.opacity = Math.max(0, 0.5 - (scale - 1) / 1.5);
       }
     }
 
     // Gentle vertical bobbing
     if (coreRef.current) {
-      coreRef.current.position.y = 0.6 + Math.sin(t * 3) * 0.08;
+      coreRef.current.position.y = 0.6 + Math.sin(t * 3) * 0.06;
     }
 
-    // Smooth position interpolation for group
+    // Smooth position interpolation
     if (markerGroupRef.current) {
       markerGroupRef.current.position.x = THREE.MathUtils.lerp(
         markerGroupRef.current.position.x,
@@ -66,52 +66,57 @@ export function LiveUserMarker({
       >
         <ringGeometry args={[0.8, 1.3, 32]} />
         <meshBasicMaterial
-          color="#38bdf8"
+          color="#0284c7"
           transparent
-          opacity={0.6}
+          opacity={0.5}
           side={THREE.DoubleSide}
         />
       </mesh>
 
-      {/* Direction Cone / Heading Indicator */}
+      {/* Direction Cone / Heading Indicator (Apple Maps style) */}
       <group rotation={[0, heading, 0]}>
         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.06, 0.9]}>
           <coneGeometry args={[0.6, 1.2, 16]} />
           <meshBasicMaterial
-            color="#38bdf8"
+            color="#0284c7"
             transparent
-            opacity={0.4}
+            opacity={0.35}
             side={THREE.DoubleSide}
           />
         </mesh>
       </group>
 
-      {/* Core Floating User Sphere & Halo */}
+      {/* White Halo Ring for High Contrast */}
+      <mesh position={[0, 0.59, 0]}>
+        <sphereGeometry args={[0.48, 32, 32]} />
+        <meshBasicMaterial color="#ffffff" />
+      </mesh>
+
+      {/* Vibrant Blue Navigation Puck Core */}
       <mesh ref={coreRef} position={[0, 0.6, 0]}>
-        <sphereGeometry args={[0.45, 32, 32]} />
+        <sphereGeometry args={[0.38, 32, 32]} />
         <meshStandardMaterial
-          color="#0284c7"
-          emissive="#38bdf8"
-          emissiveIntensity={0.9}
+          color="#007aff"
           roughness={0.2}
+          metalness={0.1}
         />
       </mesh>
 
       {/* Center White Dot */}
       <mesh position={[0, 0.6, 0]}>
-        <sphereGeometry args={[0.22, 16, 16]} />
+        <sphereGeometry args={[0.16, 16, 16]} />
         <meshBasicMaterial color="#ffffff" />
       </mesh>
 
-      {/* 3D In-World User Label (Never clips over DOM UI!) */}
+      {/* 3D In-World User Label */}
       <Billboard position={[0, 1.6, 0]} follow>
         <Text
           fontSize={0.55}
-          color="#38bdf8"
+          color="#0284c7"
           anchorX="center"
           anchorY="middle"
           outlineWidth={0.06}
-          outlineColor="#050811"
+          outlineColor="#ffffff"
         >
           {isSimulating ? '🚶 Em Deslocamento' : '📍 Você Está Aqui'}
         </Text>

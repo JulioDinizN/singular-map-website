@@ -48,12 +48,10 @@ function CameraManager({
   const { camera } = useThree();
   const controlsRef = useRef<OrbitControlsImpl>(null);
 
-  // Target positions for lerping
   const targetCamPos = useRef(new THREE.Vector3(25, 32, 35));
   const targetLookAt = useRef(new THREE.Vector3(0, 0, 0));
   const isTransitioning = useRef(true);
 
-  // When switching 2D/3D or clicking POI, calculate target
   useEffect(() => {
     isTransitioning.current = true;
 
@@ -82,7 +80,6 @@ function CameraManager({
     }
   }, [is2DView, selectedPoi, cameraTargetTrigger, activeFloor, cameraTargetPos]);
 
-  // Frame loop for smooth transitions and following live user
   useFrame((_, delta) => {
     if (!controlsRef.current) return;
 
@@ -167,8 +164,8 @@ export function EventMapCanvas({
           }
         }}
       >
-        <color attach="background" args={['#050811']} />
-        <fog attach="fog" args={['#050811', 60, 140]} />
+        <color attach="background" args={['#f1f5f9']} />
+        <fog attach="fog" args={['#f1f5f9', 80, 200]} />
 
         {/* Camera and Controls Controller */}
         <CameraManager
@@ -192,7 +189,6 @@ export function EventMapCanvas({
             const isDestination = route?.toPoi?.id === poi.id;
             const isOrigin = route?.fromPoi?.id === poi.id;
 
-            // When navigating, dim booths that aren't the destination or origin
             const isDimmed =
               poi.floor !== activeFloor ||
               (selectedCategory !== 'all' && poi.category !== selectedCategory) ||

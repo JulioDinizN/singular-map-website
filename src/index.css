@@ -15,8 +15,8 @@
     padding: 0;
     overflow: hidden;
     position: relative;
-    background-color: #050811;
-    color: #f8fafc;
+    background-color: #f1f5f9;
+    color: #0f172a;
     font-family: var(--sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -31,6 +31,6 @@
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .no-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

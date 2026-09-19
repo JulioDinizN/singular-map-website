@@ -1,43 +1,36 @@
-import { useMemo } from 'react';
-import * as THREE from 'three';
-
 interface VenueEnvironmentProps {
   activeFloor: 1 | 2;
 }
 
 export function VenueEnvironment({ activeFloor }: VenueEnvironmentProps) {
-  // Ground grid lines
-  const gridHelper = useMemo(() => {
-    return new THREE.GridHelper(80, 40, '#334155', '#1e293b');
-  }, []);
-
   return (
     <group>
-      {/* Lights */}
-      <ambientLight intensity={1.3} />
+      {/* Warm Natural Daylight Lighting */}
+      <ambientLight intensity={1.8} color="#ffffff" />
       <directionalLight
-        position={[30, 45, 25]}
-        intensity={1.8}
+        position={[35, 50, 25]}
+        intensity={2.2}
+        color="#fffef7"
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
-        shadow-camera-far={120}
-        shadow-camera-left={-40}
-        shadow-camera-right={40}
-        shadow-camera-top={40}
-        shadow-camera-bottom={-40}
+        shadow-camera-far={130}
+        shadow-camera-left={-45}
+        shadow-camera-right={45}
+        shadow-camera-top={45}
+        shadow-camera-bottom={-45}
         shadow-bias={-0.0001}
       />
-      {/* Accent Point Lights for High-Tech Vibe */}
-      <pointLight position={[-22, 10, -18]} intensity={4} color="#a855f7" distance={25} />
-      <pointLight position={[22, 10, -18]} intensity={3.5} color="#3b82f6" distance={25} />
-      <pointLight position={[0, 8, 10]} intensity={2.5} color="#38bdf8" distance={20} />
-      {/* Soft Teal light over Sala de Acolhimento */}
-      <pointLight position={[-28, 6, 8]} intensity={2.0} color="#2dd4bf" distance={15} />
+      {/* Soft Sky Fill Light from Opposite Side */}
+      <directionalLight
+        position={[-30, 40, -25]}
+        intensity={0.8}
+        color="#e0f2fe"
+      />
 
       {/* ================= FLOOR 1 (GROUND EXPO) ================= */}
       <group position={[0, 0, 0]}>
-        {/* Main Floor Surface */}
+        {/* Base Architectural Floor Surface (Soft Light Slate) */}
         <mesh
           rotation={[-Math.PI / 2, 0, 0]}
           position={[0, -0.05, 0]}
@@ -45,78 +38,85 @@ export function VenueEnvironment({ activeFloor }: VenueEnvironmentProps) {
         >
           <planeGeometry args={[84, 66]} />
           <meshStandardMaterial
-            color="#0b0f19"
-            roughness={0.8}
-            metalness={0.1}
+            color="#e2e8f0"
+            roughness={0.7}
+            metalness={0.05}
           />
         </mesh>
 
-        {/* Floor Border */}
+        {/* Clean Venue Boundary Outline */}
         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.04, 0]}>
           <ringGeometry args={[41.8, 42.2, 4]} />
-          <meshBasicMaterial color="#38bdf8" transparent opacity={0.4} />
+          <meshBasicMaterial color="#94a3b8" transparent opacity={0.6} />
         </mesh>
 
-        {/* Floor Grid Lines */}
-        <primitive object={gridHelper} position={[0, 0.01, 0]} />
-
-        {/* Zone Floor Tint Overlays */}
-        {/* Sala de Acolhimento / Sensory Quiet Zone */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-28, 0.02, 8]}>
+        {/* Soft Pastel Zone Overlays (Apple Maps style) */}
+        {/* Sala de Acolhimento / Sensory Quiet Zone (Serene Teal) */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-28, 0.01, 8]}>
           <planeGeometry args={[14, 12]} />
-          <meshBasicMaterial color="#14b8a6" transparent opacity={0.12} />
+          <meshStandardMaterial color="#ccfbf1" roughness={0.9} />
         </mesh>
 
-        {/* Main Stage Zone */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-22, 0.02, -18]}>
+        {/* Main Stage Zone (Soft Lavender) */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-22, 0.01, -18]}>
           <planeGeometry args={[24, 18]} />
-          <meshBasicMaterial color="#7c3aed" transparent opacity={0.08} />
+          <meshStandardMaterial color="#ede9fe" roughness={0.9} />
         </mesh>
 
-        {/* Tech Stage Zone */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[22, 0.02, -18]}>
+        {/* Tech Stage Zone (Soft Sky) */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[22, 0.01, -18]}>
           <planeGeometry args={[20, 16]} />
-          <meshBasicMaterial color="#2563eb" transparent opacity={0.08} />
+          <meshStandardMaterial color="#e0f2fe" roughness={0.9} />
         </mesh>
 
-        {/* AI & Robotics Zone */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-10, 0.02, 1]}>
+        {/* AI & Robotics Zone (Soft Blue) */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-10, 0.01, 1]}>
           <planeGeometry args={[14, 22]} />
-          <meshBasicMaterial color="#3b82f6" transparent opacity={0.06} />
+          <meshStandardMaterial color="#dbeafe" roughness={0.9} />
         </mesh>
 
-        {/* Cloud & Fintech Zone */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[10, 0.02, 1]}>
+        {/* Cloud & Fintech Zone (Soft Mint/Cyan) */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[10, 0.01, 1]}>
           <planeGeometry args={[14, 22]} />
-          <meshBasicMaterial color="#06b6d4" transparent opacity={0.06} />
+          <meshStandardMaterial color="#d1fae5" roughness={0.9} />
         </mesh>
 
-        {/* Food & Networking Area */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 20]}>
+        {/* Food & Networking Area (Soft Rose/Peach) */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 20]}>
           <planeGeometry args={[60, 12]} />
-          <meshBasicMaterial color="#ec4899" transparent opacity={0.05} />
+          <meshStandardMaterial color="#ffe4e6" roughness={0.9} />
         </mesh>
 
-        {/* Main Walking Aisle Markings */}
+        {/* Polished White Walking Corridors with Subtle Borders */}
         {/* Central North-South Aisle */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.03, 3]}>
-          <planeGeometry args={[4, 44]} />
-          <meshBasicMaterial color="#334155" transparent opacity={0.25} />
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 3]} receiveShadow>
+          <planeGeometry args={[4.2, 44]} />
+          <meshStandardMaterial color="#ffffff" roughness={0.5} />
         </mesh>
         {/* West-East Cross Aisle */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.03, 1]}>
-          <planeGeometry args={[56, 4]} />
-          <meshBasicMaterial color="#334155" transparent opacity={0.25} />
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 1]} receiveShadow>
+          <planeGeometry args={[56, 4.2]} />
+          <meshStandardMaterial color="#ffffff" roughness={0.5} />
         </mesh>
-        {/* Quiet Aisle towards Sala de Acolhimento */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-22, 0.03, 8]}>
-          <planeGeometry args={[14, 3]} />
-          <meshBasicMaterial color="#0d9488" transparent opacity={0.2} />
+        {/* West Corridor to Stage & Acolhimento */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-16, 0.02, 3]} receiveShadow>
+          <planeGeometry args={[3.6, 40]} />
+          <meshStandardMaterial color="#ffffff" roughness={0.5} />
+        </mesh>
+        {/* East Corridor to Tech Stage */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[16, 0.02, 3]} receiveShadow>
+          <planeGeometry args={[3.6, 40]} />
+          <meshStandardMaterial color="#ffffff" roughness={0.5} />
+        </mesh>
+        {/* Quiet Walkway to Sala de Acolhimento */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-22, 0.02, 8]} receiveShadow>
+          <planeGeometry args={[14, 3.2]} />
+          <meshStandardMaterial color="#ffffff" roughness={0.5} />
         </mesh>
       </group>
 
       {/* ================= VERTICAL ACCESS: ELEVATOR & STAIRS ================= */}
-      {/* 1) Accessible Glass Elevator Tower */}
+      {/* 1) Modern Glass Elevator Tower */}
       <group position={[2, 0, -16]}>
         <mesh position={[0, 3.5, 0]} castShadow receiveShadow>
           <boxGeometry args={[4.2, 7, 4.2]} />
@@ -128,40 +128,48 @@ export function VenueEnvironment({ activeFloor }: VenueEnvironmentProps) {
             metalness={0.9}
           />
         </mesh>
-        {/* Elevator Cab */}
-        <mesh position={[0, 3.5, 0]} castShadow>
-          <boxGeometry args={[3.2, 3, 3.2]} />
-          <meshStandardMaterial color="#1e293b" metalness={0.7} roughness={0.3} />
-        </mesh>
-        {/* Glowing Accessibility Icon Header */}
-        <mesh position={[0, 7.2, 0]}>
-          <boxGeometry args={[4.4, 0.6, 4.4]} />
-          <meshStandardMaterial color="#0284c7" emissive="#38bdf8" emissiveIntensity={0.6} />
-        </mesh>
-      </group>
-
-      {/* 2) Staircase Structure */}
-      <group position={[-2, 0, -16]}>
-        {/* Frame Pillars */}
+        {/* Brushed Aluminum Frame Pillars */}
         {[-2, 2].map((px) =>
           [-2, 2].map((pz) => (
             <mesh key={`${px}-${pz}`} position={[px, 3.5, pz]}>
-              <boxGeometry args={[0.25, 7, 0.25]} />
-              <meshStandardMaterial color="#64748b" metalness={0.8} />
+              <boxGeometry args={[0.2, 7, 0.2]} />
+              <meshStandardMaterial color="#94a3b8" metalness={0.8} roughness={0.2} />
             </mesh>
           ))
         )}
-        {/* Staircase Steps */}
+        {/* Elevator Cab */}
+        <mesh position={[0, 3.5, 0]} castShadow>
+          <boxGeometry args={[3.2, 3, 3.2]} />
+          <meshStandardMaterial color="#f8fafc" metalness={0.3} roughness={0.4} />
+        </mesh>
+        {/* Modern Blue Header */}
+        <mesh position={[0, 7.15, 0]}>
+          <boxGeometry args={[4.4, 0.3, 4.4]} />
+          <meshStandardMaterial color="#0284c7" roughness={0.2} />
+        </mesh>
+      </group>
+
+      {/* 2) Clean Architectural Staircase */}
+      <group position={[-2, 0, -16]}>
+        {/* Steel Railings */}
+        {[-1.8, 1.8].map((px) => (
+          <mesh key={px} position={[px, 3.5, -0.2]} rotation={[Math.PI / 6, 0, 0]}>
+            <boxGeometry args={[0.08, 7.5, 0.08]} />
+            <meshStandardMaterial color="#64748b" metalness={0.8} roughness={0.3} />
+          </mesh>
+        ))}
+        {/* Clean Oak/Steel Steps */}
         {Array.from({ length: 12 }).map((_, i) => (
-          <mesh key={i} position={[0, 0.3 + i * 0.55, -1.8 + i * 0.32]}>
-            <boxGeometry args={[3.4, 0.15, 0.45]} />
-            <meshStandardMaterial color="#475569" metalness={0.5} />
+          <mesh key={i} position={[0, 0.3 + i * 0.55, -1.8 + i * 0.32]} castShadow receiveShadow>
+            <boxGeometry args={[3.4, 0.12, 0.45]} />
+            <meshStandardMaterial color="#cbd5e1" roughness={0.6} metalness={0.1} />
           </mesh>
         ))}
       </group>
 
       {/* ================= FLOOR 2 (MEZZANINE / WORKSHOPS) ================= */}
       <group position={[0, 6.5, 0]}>
+        {/* Mezzanine Surface */}
         <mesh
           rotation={[-Math.PI / 2, 0, 0]}
           position={[0, 0, -8]}
@@ -169,29 +177,27 @@ export function VenueEnvironment({ activeFloor }: VenueEnvironmentProps) {
         >
           <planeGeometry args={[54, 24]} />
           <meshStandardMaterial
-            color="#0f172a"
-            roughness={0.7}
+            color="#f8fafc"
+            roughness={0.6}
             transparent
-            opacity={activeFloor === 2 ? 0.95 : 0.3}
+            opacity={activeFloor === 2 ? 1.0 : 0.4}
           />
         </mesh>
 
-        {/* Safety Glass Railing */}
-        <mesh position={[0, 0.6, 4]}>
-          <boxGeometry args={[54, 1.2, 0.1]} />
+        {/* Clean Glass Safety Railing with Aluminum Cap */}
+        <mesh position={[0, 0.5, 4]}>
+          <boxGeometry args={[54, 1.0, 0.08]} />
           <meshStandardMaterial
-            color="#38bdf8"
+            color="#93c5fd"
             transparent
-            opacity={activeFloor === 2 ? 0.4 : 0.15}
-            roughness={0.2}
+            opacity={activeFloor === 2 ? 0.35 : 0.15}
+            roughness={0.1}
           />
         </mesh>
-
-        {/* Second Floor Grid */}
-        <primitive
-          object={new THREE.GridHelper(54, 18, '#475569', '#1e293b')}
-          position={[0, 0.02, -8]}
-        />
+        <mesh position={[0, 1.02, 4]}>
+          <boxGeometry args={[54, 0.06, 0.12]} />
+          <meshStandardMaterial color="#94a3b8" metalness={0.8} roughness={0.3} />
+        </mesh>
       </group>
     </group>
   );

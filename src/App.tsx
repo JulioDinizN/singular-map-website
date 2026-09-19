@@ -360,7 +360,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative w-full h-full overflow-hidden bg-slate-950 font-sans">
+    <div className="relative w-full h-full overflow-hidden bg-slate-100 font-sans">
       {/* 3D Interactive Map Canvas */}
       <EventMapCanvas
         activeFloor={activeFloor}

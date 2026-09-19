@@ -53,7 +53,6 @@ export function TopBar({
   const [isOpen, setIsOpen] = useState(false);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
-  // Filter POIs based on search query
   const searchResults =
     query.trim() === ''
       ? []
@@ -72,7 +71,6 @@ export function TopBar({
           return matchesName || matchesBooth || matchesZone || matchesSession;
         }).slice(0, 6);
 
-  // Click outside to close dropdown
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (
@@ -89,31 +87,31 @@ export function TopBar({
   return (
     <header className="absolute top-0 left-0 right-0 z-20 pointer-events-none p-2.5 sm:p-4 flex flex-col gap-2">
       <div className="flex items-center justify-between gap-2 max-w-7xl mx-auto w-full">
-        {/* Brand & App Title */}
-        <div className="pointer-events-auto flex items-center gap-2 bg-slate-900/98 backdrop-blur-xl px-3 py-1.5 rounded-2xl border border-slate-700/90 shadow-xl shadow-black/60 min-h-[44px]">
-          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-sky-500/30">
-            <Compass className="w-4 h-4 sm:w-5 sm:h-5 animate-pulse" />
+        {/* Brand & App Title (Apple Maps style card) */}
+        <div className="pointer-events-auto flex items-center gap-2.5 bg-white/95 backdrop-blur-xl px-3.5 py-1.5 rounded-2xl border border-slate-200/90 shadow-lg shadow-slate-900/5 min-h-[44px]">
+          <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-md shadow-blue-500/30">
+            <Compass className="w-5 h-5 animate-pulse" />
           </div>
           <div>
-            <h1 className="text-xs sm:text-sm font-bold tracking-tight text-white flex items-center gap-1.5">
+            <h1 className="text-xs sm:text-sm font-bold tracking-tight text-slate-900 flex items-center gap-1.5">
               <span>ROTAS ACESSÍVEIS</span>
-              <span className="text-[9px] uppercase px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-400 font-semibold border border-sky-500/30">
-                3D LIVE
+              <span className="text-[9px] uppercase px-1.5 py-0.2 rounded bg-blue-50 text-blue-600 font-bold border border-blue-200">
+                3D MAP
               </span>
             </h1>
-            <p className="text-[10px] text-slate-400 hidden sm:block">
+            <p className="text-[10px] text-slate-500 hidden sm:block">
               Tech4Change 2026 • Navegação Inclusiva
             </p>
           </div>
         </div>
 
-        {/* Search Bar */}
+        {/* Search Bar (Clean Apple Maps style search pill) */}
         <div
           ref={searchContainerRef}
           className="pointer-events-auto relative flex-1 max-w-md mx-auto"
         >
-          <div className="relative flex items-center bg-slate-900/98 backdrop-blur-xl rounded-2xl border border-slate-700/90 shadow-xl focus-within:border-sky-400 focus-within:ring-2 focus-within:ring-sky-500/30 transition-all min-h-[44px]">
-            <Search className="w-4 h-4 text-slate-400 ml-3 shrink-0" />
+          <div className="relative flex items-center bg-white/95 backdrop-blur-xl rounded-2xl border border-slate-200/90 shadow-lg shadow-slate-900/5 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 transition-all min-h-[44px]">
+            <Search className="w-4 h-4 text-slate-400 ml-3.5 shrink-0" />
             <input
               type="text"
               value={query}
@@ -122,8 +120,8 @@ export function TopBar({
                 setIsOpen(true);
               }}
               onFocus={() => setIsOpen(true)}
-              placeholder="Buscar stands, salas, palestrantes..."
-              className="w-full bg-transparent px-2.5 py-2 text-xs sm:text-sm text-slate-100 placeholder-slate-400 focus:outline-none"
+              placeholder="Buscar stands, palcos, facilidades..."
+              className="w-full bg-transparent px-3 py-2 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none"
             />
             {query && (
               <button
@@ -132,7 +130,7 @@ export function TopBar({
                   setQuery('');
                   setIsOpen(false);
                 }}
-                className="p-1.5 mr-2 text-slate-400 hover:text-white rounded-full hover:bg-slate-800"
+                className="p-1.5 mr-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -141,7 +139,7 @@ export function TopBar({
 
           {/* Autocomplete Dropdown */}
           {isOpen && searchResults.length > 0 && (
-            <div className="absolute top-full left-0 right-0 mt-2 bg-slate-900/98 backdrop-blur-2xl border border-slate-700/90 rounded-2xl shadow-2xl overflow-hidden z-50 divide-y divide-slate-800">
+            <div className="absolute top-full left-0 right-0 mt-2 bg-white/98 backdrop-blur-2xl border border-slate-200 rounded-2xl shadow-2xl overflow-hidden z-50 divide-y divide-slate-100">
               {searchResults.map((poi) => (
                 <button
                   key={poi.id}
@@ -151,28 +149,28 @@ export function TopBar({
                     setIsOpen(false);
                     setQuery('');
                   }}
-                  className="w-full text-left px-4 py-3 hover:bg-slate-800/80 flex items-center justify-between gap-2 transition-colors group min-h-[44px]"
+                  className="w-full text-left px-4 py-3 hover:bg-slate-50 flex items-center justify-between gap-2 transition-colors group min-h-[44px]"
                 >
                   <div className="flex items-center gap-2.5 min-w-0">
                     <div
-                      className="w-2.5 h-2.5 rounded-full shrink-0"
+                      className="w-2.5 h-2.5 rounded-full shrink-0 shadow-sm"
                       style={{ backgroundColor: poi.accentColor || poi.color }}
                     />
                     <div className="truncate">
-                      <div className="text-xs sm:text-sm font-semibold text-slate-100 group-hover:text-sky-400 truncate flex items-center gap-1.5">
+                      <div className="text-xs sm:text-sm font-semibold text-slate-900 group-hover:text-blue-600 truncate flex items-center gap-1.5">
                         <span>{poi.name}</span>
                         {poi.boothNumber && (
-                          <span className="text-[10px] text-slate-400 font-mono">
+                          <span className="text-[10px] text-slate-500 font-mono">
                             ({poi.boothNumber})
                           </span>
                         )}
                       </div>
-                      <div className="text-[11px] text-slate-400 truncate">
+                      <div className="text-[11px] text-slate-500 truncate">
                         Piso {poi.floor} • {poi.zone}
                       </div>
                     </div>
                   </div>
-                  <div className="shrink-0 flex items-center text-[11px] text-slate-400 group-hover:text-sky-300">
+                  <div className="shrink-0 flex items-center text-[11px] text-slate-500 group-hover:text-blue-600">
                     <MapPin className="w-3.5 h-3.5 mr-1" />
                     <span>Ver</span>
                   </div>
@@ -186,11 +184,11 @@ export function TopBar({
         <button
           type="button"
           onClick={onOpenProfileSelector}
-          className="pointer-events-auto shrink-0 flex items-center gap-1.5 bg-slate-900/98 hover:bg-slate-800 px-3 py-2 rounded-2xl text-xs sm:text-sm font-semibold backdrop-blur-xl shadow-xl border border-slate-700/90 transition-all active:scale-95 min-h-[44px]"
+          className="pointer-events-auto shrink-0 flex items-center gap-1.5 bg-white/95 hover:bg-slate-50 px-3 py-2 rounded-2xl text-xs sm:text-sm font-semibold backdrop-blur-xl shadow-lg shadow-slate-900/5 border border-slate-200/90 transition-all active:scale-95 min-h-[44px]"
           title="Trocar Perfil de Acessibilidade"
         >
-          <Accessibility className="w-4 h-4 text-sky-400" />
-          <span className="hidden md:inline text-slate-200">Perfil:</span>
+          <Accessibility className="w-4 h-4 text-blue-600" />
+          <span className="hidden md:inline text-slate-700">Perfil:</span>
           <span
             className="px-2 py-0.5 rounded-full text-[11px] font-bold text-white shadow-sm"
             style={{ backgroundColor: activeProfile.color }}
@@ -203,26 +201,26 @@ export function TopBar({
         <button
           type="button"
           onClick={onOpenSchedule}
-          className="pointer-events-auto shrink-0 flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-2 rounded-2xl text-xs sm:text-sm font-medium backdrop-blur-xl shadow-xl shadow-indigo-600/30 border border-indigo-400/40 transition-all active:scale-95 min-h-[44px]"
+          className="pointer-events-auto shrink-0 flex items-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded-2xl text-xs sm:text-sm font-medium backdrop-blur-xl shadow-lg shadow-blue-600/20 border border-blue-500/30 transition-all active:scale-95 min-h-[44px]"
         >
-          <Radio className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
+          <Radio className="w-3.5 h-3.5 text-emerald-300 animate-pulse" />
           <span className="hidden sm:inline">Ao Vivo</span>
-          <span className="px-1.5 py-0.2 rounded-full bg-indigo-950 text-[10px] font-bold text-emerald-300">
+          <span className="px-1.5 py-0.2 rounded-full bg-blue-800 text-[10px] font-bold text-emerald-300">
             {liveSessionsCount}
           </span>
         </button>
       </div>
 
-      {/* Action Pills & Categories */}
+      {/* Action Pills & Categories (Clean Apple Maps style pills) */}
       <div className="pointer-events-auto flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-7xl mx-auto w-full py-0.5">
         {/* Quick Sala de Acolhimento */}
         <button
           type="button"
           onClick={onGoToQuietRoom}
-          className="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-teal-950 hover:bg-teal-900 text-teal-300 border border-teal-500/50 backdrop-blur-xl shadow-md min-h-[40px] transition-all active:scale-95"
+          className="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 shadow-sm min-h-[40px] transition-all active:scale-95"
           title="Espaço calmo para descompressão sensorial"
         >
-          <HeartHandshake className="w-3.5 h-3.5 text-teal-400" />
+          <HeartHandshake className="w-3.5 h-3.5 text-teal-600" />
           <span>Acolhimento</span>
         </button>
 
@@ -230,10 +228,10 @@ export function TopBar({
         <button
           type="button"
           onClick={onEmergencyEvacuation}
-          className="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-red-950 hover:bg-red-900 text-red-300 border border-red-500/50 backdrop-blur-xl shadow-md min-h-[40px] transition-all active:scale-95"
+          className="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-red-50 hover:bg-red-100 text-red-800 border border-red-200 shadow-sm min-h-[40px] transition-all active:scale-95"
           title="Calcular rota para a saída viável mais próxima"
         >
-          <AlertTriangle className="w-3.5 h-3.5 text-red-400" />
+          <AlertTriangle className="w-3.5 h-3.5 text-red-600" />
           <span>Rota de Saída</span>
         </button>
 
@@ -241,14 +239,14 @@ export function TopBar({
         <button
           type="button"
           onClick={onOpenReportModal}
-          className="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-amber-950 hover:bg-amber-900 text-amber-300 border border-amber-500/50 backdrop-blur-xl min-h-[40px] transition-all active:scale-95"
+          className="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 shadow-sm min-h-[40px] transition-all active:scale-95"
           title="Reportar bloqueio, lotação ou barulho"
         >
-          <Flag className="w-3.5 h-3.5 text-amber-400" />
+          <Flag className="w-3.5 h-3.5 text-amber-600" />
           <span>Reportar</span>
         </button>
 
-        <div className="h-4 w-px bg-slate-700 shrink-0 mx-1" />
+        <div className="h-4 w-px bg-slate-300 shrink-0 mx-1" />
 
         {/* Category Filter Chips */}
         {CATEGORIES.map((cat) => {
@@ -258,10 +256,10 @@ export function TopBar({
               key={cat.id}
               type="button"
               onClick={() => onSelectCategory(cat.id)}
-              className={`shrink-0 px-3 py-2 rounded-xl text-xs font-semibold backdrop-blur-xl border transition-all min-h-[40px] ${
+              className={`shrink-0 px-3 py-2 rounded-xl text-xs font-semibold border transition-all min-h-[40px] ${
                 isActive
-                  ? 'bg-sky-500 text-white border-sky-400 shadow-md shadow-sky-500/30 scale-105 ring-2 ring-sky-300'
-                  : 'bg-slate-900/90 text-slate-300 border-slate-700/90 hover:bg-slate-800 hover:text-white'
+                  ? 'bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-500/20 scale-105'
+                  : 'bg-white/95 text-slate-700 border-slate-200 hover:bg-slate-100 hover:text-slate-900 shadow-sm'
               }`}
             >
               {cat.label}

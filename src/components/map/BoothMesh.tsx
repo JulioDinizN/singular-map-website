@@ -34,7 +34,7 @@ export function BoothMesh({
       ringRef.current.rotation.z += delta * 1.5;
     }
     if (meshRef.current) {
-      const targetY = isSelected ? y + 0.4 : isHovered ? y + 0.2 : y;
+      const targetY = isSelected ? y + 0.35 : isHovered ? y + 0.18 : y;
       meshRef.current.position.y = THREE.MathUtils.lerp(
         meshRef.current.position.y,
         targetY,
@@ -50,13 +50,10 @@ export function BoothMesh({
   const isWorkshop = poi.category === 'workshop';
   const isEntrance = poi.category === 'entrance';
 
-  // Major landmarks show badge by default; other booths show 3D text and only show badge on hover/select
   const isMajorLandmark = isStage || isQuietRoom || isEntrance || isEmergencyExit;
   const showBadge = isSelected || isHovered || internalHover;
 
-  // Base opacity and color tweaks
-  const opacity = isDimmed ? 0.25 : 1;
-  const mainColor = poi.color;
+  const opacity = isDimmed ? 0.3 : 1;
   const accentColor = poi.accentColor || poi.color;
 
   return (
@@ -84,9 +81,9 @@ export function BoothMesh({
           position={[0, -h / 2 + 0.05, 0]}
           rotation={[-Math.PI / 2, 0, 0]}
         >
-          <ringGeometry args={[Math.max(w, d) * 0.6, Math.max(w, d) * 0.75, 32]} />
+          <ringGeometry args={[Math.max(w, d) * 0.58, Math.max(w, d) * 0.72, 32]} />
           <meshBasicMaterial
-            color="#38bdf8"
+            color="#0284c7"
             transparent
             opacity={0.85}
             side={THREE.DoubleSide}
@@ -98,12 +95,13 @@ export function BoothMesh({
       {isStage ? (
         // STAGE STRUCTURE
         <group>
+          {/* Stage Platform */}
           <mesh position={[0, -h / 4, 0]} castShadow receiveShadow>
             <boxGeometry args={[w, h / 2, d]} />
             <meshStandardMaterial
-              color="#1e1b4b"
+              color="#1e293b"
               roughness={0.4}
-              metalness={0.6}
+              metalness={0.5}
               transparent
               opacity={opacity}
             />
@@ -111,11 +109,11 @@ export function BoothMesh({
 
           {/* Curved Backstage LED Display Screen */}
           <mesh position={[0, h / 2, -d / 3]} castShadow>
-            <boxGeometry args={[w * 0.85, h * 0.85, 0.4]} />
+            <boxGeometry args={[w * 0.85, h * 0.85, 0.35]} />
             <meshStandardMaterial
               color={accentColor}
               emissive={accentColor}
-              emissiveIntensity={isSelected ? 1.2 : 0.6}
+              emissiveIntensity={isSelected ? 0.9 : 0.4}
               roughness={0.2}
             />
           </mesh>
@@ -123,7 +121,7 @@ export function BoothMesh({
           {/* Truss Arch */}
           <mesh position={[0, h * 0.95, -d / 6]}>
             <boxGeometry args={[w * 0.9, 0.25, d * 0.6]} />
-            <meshStandardMaterial color="#475569" metalness={0.8} roughness={0.2} />
+            <meshStandardMaterial color="#64748b" metalness={0.7} roughness={0.3} />
           </mesh>
         </group>
       ) : isEntrance ? (
@@ -131,23 +129,19 @@ export function BoothMesh({
         <group>
           <mesh position={[-w / 2 + 0.6, 0, 0]} castShadow>
             <boxGeometry args={[1.2, h * 2, 1.2]} />
-            <meshStandardMaterial color="#059669" />
+            <meshStandardMaterial color="#15803d" />
           </mesh>
           <mesh position={[w / 2 - 0.6, 0, 0]} castShadow>
             <boxGeometry args={[1.2, h * 2, 1.2]} />
-            <meshStandardMaterial color="#059669" />
+            <meshStandardMaterial color="#15803d" />
           </mesh>
           <mesh position={[0, h * 1.5, 0]} castShadow>
             <boxGeometry args={[w, 1, 1.4]} />
-            <meshStandardMaterial
-              color="#10b981"
-              emissive="#10b981"
-              emissiveIntensity={0.5}
-            />
+            <meshStandardMaterial color="#16a34a" />
           </mesh>
           <mesh position={[0, -h / 2 + 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
             <planeGeometry args={[w * 0.9, d * 0.9]} />
-            <meshBasicMaterial color="#065f46" transparent opacity={0.7} />
+            <meshBasicMaterial color="#bbf7d0" transparent opacity={0.7} />
           </mesh>
         </group>
       ) : isQuietRoom ? (
@@ -156,21 +150,16 @@ export function BoothMesh({
           <mesh position={[0, 0, 0]} castShadow receiveShadow>
             <boxGeometry args={[w, h, d]} />
             <meshStandardMaterial
-              color="#0f766e"
+              color="#f0fdfa"
               roughness={0.5}
-              metalness={0.1}
               transparent
               opacity={opacity}
             />
           </mesh>
-          {/* Soft Calming Header */}
-          <mesh position={[0, h / 2 + 0.25, 0]} castShadow>
-            <boxGeometry args={[w * 0.98, 0.4, d * 0.98]} />
-            <meshStandardMaterial
-              color="#2dd4bf"
-              emissive="#14b8a6"
-              emissiveIntensity={0.6}
-            />
+          {/* Calming Teal Header */}
+          <mesh position={[0, h / 2 + 0.2, 0]} castShadow>
+            <boxGeometry args={[w * 0.98, 0.35, d * 0.98]} />
+            <meshStandardMaterial color="#0d9488" roughness={0.3} />
           </mesh>
         </group>
       ) : isEmergencyExit ? (
@@ -178,65 +167,64 @@ export function BoothMesh({
         <group>
           <mesh position={[0, 0, 0]} castShadow>
             <boxGeometry args={[w, h, d]} />
-            <meshStandardMaterial
-              color="#16a34a"
-              emissive="#22c55e"
-              emissiveIntensity={0.7}
-            />
+            <meshStandardMaterial color="#16a34a" roughness={0.3} />
           </mesh>
         </group>
       ) : (
-        // STANDARD EXHIBITOR BOOTH
+        // CLEAN ARCHITECTURAL BOOTH (Apple Maps style)
         <group>
-          <mesh position={[0, -h / 2 + 0.15, 0]} castShadow receiveShadow>
-            <boxGeometry args={[w, 0.3, d]} />
+          {/* Base Plinth */}
+          <mesh position={[0, -h / 2 + 0.1, 0]} castShadow receiveShadow>
+            <boxGeometry args={[w, 0.2, d]} />
             <meshStandardMaterial
-              color="#1e293b"
+              color="#e2e8f0"
               roughness={0.6}
               transparent
               opacity={opacity}
             />
           </mesh>
 
+          {/* Crisp White Architectural Body */}
           <mesh position={[0, 0, 0]} castShadow receiveShadow>
             <boxGeometry args={[w * 0.94, h, d * 0.94]} />
             <meshStandardMaterial
-              color={mainColor}
+              color="#ffffff"
               roughness={0.4}
-              metalness={0.2}
+              metalness={0.05}
               transparent
               opacity={opacity}
             />
           </mesh>
 
-          <mesh position={[0, h / 2 + 0.3, 0]} castShadow>
-            <boxGeometry args={[w * 0.96, 0.45, d * 0.96]} />
+          {/* Clean Colored Brand Header */}
+          <mesh position={[0, h / 2 + 0.22, 0]} castShadow>
+            <boxGeometry args={[w * 0.96, 0.4, d * 0.96]} />
             <meshStandardMaterial
               color={accentColor}
-              emissive={accentColor}
-              emissiveIntensity={isSelected || internalHover ? 0.8 : 0.3}
               roughness={0.3}
+              metalness={0.1}
             />
           </mesh>
 
+          {/* Reception Desk */}
           {!isRestroom && !isWorkshop && (
             <mesh position={[0, -h / 4, d / 2 - 0.4]} castShadow>
               <boxGeometry args={[w * 0.5, h * 0.5, 0.6]} />
-              <meshStandardMaterial color="#334155" roughness={0.3} />
+              <meshStandardMaterial color="#f1f5f9" roughness={0.3} />
             </mesh>
           )}
         </group>
       )}
 
-      {/* 3D In-World Text (Never clips over DOM UI elements!) */}
+      {/* 3D In-World Text: Dark Charcoal (#0f172a) with White Outline for Maximum Contrast */}
       <Billboard position={[0, h + 0.5, 0]} follow lockX={false} lockY={false} lockZ={false}>
         <Text
           fontSize={isMajorLandmark ? 0.9 : 0.65}
-          color={isSelected ? '#38bdf8' : '#f8fafc'}
+          color={isSelected ? '#0284c7' : '#0f172a'}
           anchorX="center"
           anchorY="middle"
-          outlineWidth={0.06}
-          outlineColor="#050811"
+          outlineWidth={0.07}
+          outlineColor="#ffffff"
         >
           {poi.shortName || poi.name}
         </Text>
@@ -244,18 +232,18 @@ export function BoothMesh({
           <Text
             position={[0, -0.65, 0]}
             fontSize={0.45}
-            color="#94a3b8"
+            color="#64748b"
             anchorX="center"
             anchorY="middle"
-            outlineWidth={0.04}
-            outlineColor="#050811"
+            outlineWidth={0.05}
+            outlineColor="#ffffff"
           >
             {poi.boothNumber}
           </Text>
         )}
       </Billboard>
 
-      {/* Selected / Hovered Focused HTML Tooltip with STRICT LOW Z-INDEX (z-1) */}
+      {/* Hovered/Selected Clean Tooltip */}
       {showBadge && (
         <Html
           position={[0, h + 1.6, 0]}
@@ -268,17 +256,17 @@ export function BoothMesh({
             transition: 'opacity 0.2s ease',
           }}
         >
-          <div className="px-3 py-1.5 rounded-xl text-xs font-bold text-white bg-slate-900/95 border border-sky-400 shadow-xl shadow-black/80 flex items-center gap-2 whitespace-nowrap">
+          <div className="px-3 py-1.5 rounded-xl text-xs font-bold text-slate-900 bg-white/95 border border-slate-200 shadow-xl shadow-slate-900/10 flex items-center gap-2 whitespace-nowrap">
             <span
-              className="w-2 h-2 rounded-full shrink-0"
+              className="w-2.5 h-2.5 rounded-full shrink-0"
               style={{
                 backgroundColor:
-                  poi.sessions?.some((s) => s.isLiveNow) ? '#22c55e' : accentColor,
+                  poi.sessions?.some((s) => s.isLiveNow) ? '#16a34a' : accentColor,
               }}
             />
             <span>{poi.name}</span>
             {poi.isAccessible && (
-              <span className="text-[10px] bg-sky-950 text-sky-300 px-1.5 py-0.5 rounded border border-sky-700/50">
+              <span className="text-[10px] bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded border border-blue-200">
                 Acessível
               </span>
             )}

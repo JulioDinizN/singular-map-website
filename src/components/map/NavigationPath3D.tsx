@@ -12,21 +12,19 @@ export function NavigationPath3D({ route }: NavigationPath3DProps) {
   const pulseRingsRef = useRef<THREE.Group>(null);
   const arrowsGroupRef = useRef<THREE.Group>(null);
 
-  // Generate smooth 3D curve from route points
   const { curve, tubeGeometry, startPos, endPos, isEmergency } = useMemo(() => {
     if (!route || route.points.length < 2) {
       return { curve: null, tubeGeometry: null, startPos: null, endPos: null, isEmergency: false };
     }
 
-    // Elevate slightly to avoid z-fighting with the floor
     const vectors = route.points.map(
-      (p) => new THREE.Vector3(p[0], p[1] + 0.15, p[2])
+      (p) => new THREE.Vector3(p[0], p[1] + 0.18, p[2])
     );
     const splineCurve = new THREE.CatmullRomCurve3(vectors, false, 'catmullrom', 0.15);
     const geom = new THREE.TubeGeometry(
       splineCurve,
       Math.max(24, route.points.length * 12),
-      0.22,
+      0.24,
       12,
       false
     );
@@ -40,7 +38,6 @@ export function NavigationPath3D({ route }: NavigationPath3DProps) {
     };
   }, [route]);
 
-  // Animate directional pulses & destination ripples
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
 
@@ -51,12 +48,12 @@ export function NavigationPath3D({ route }: NavigationPath3DProps) {
         child.scale.set(scale, scale, scale);
         const mat = (child as THREE.Mesh).material as THREE.MeshBasicMaterial;
         if (mat) {
-          mat.opacity = Math.max(0, 0.8 - (scale - 0.6) / 1.5);
+          mat.opacity = Math.max(0, 0.7 - (scale - 0.6) / 1.5);
         }
       });
     }
 
-    // Move directional arrows/pulses along the path
+    // Move directional arrows along the path
     if (arrowsGroupRef.current && curve) {
       const children = arrowsGroupRef.current.children;
       const count = children.length;
@@ -74,21 +71,17 @@ export function NavigationPath3D({ route }: NavigationPath3DProps) {
     return null;
   }
 
-  const pathColor = isEmergency ? '#ef4444' : '#0284c7';
-  const emissiveColor = isEmergency ? '#f87171' : '#38bdf8';
+  // Apple Maps / Google Maps iconic navigation colors
+  const pathColor = isEmergency ? '#ef4444' : '#007aff';
 
   return (
     <group>
-      {/* 3D Glowing Walking Path Tube */}
+      {/* 3D Navigation Blue Tube */}
       <mesh geometry={tubeGeometry}>
         <meshStandardMaterial
           color={pathColor}
-          emissive={emissiveColor}
-          emissiveIntensity={1.0}
-          roughness={0.15}
-          metalness={0.2}
-          transparent
-          opacity={0.9}
+          roughness={0.2}
+          metalness={0.1}
         />
       </mesh>
 
@@ -96,16 +89,15 @@ export function NavigationPath3D({ route }: NavigationPath3DProps) {
       <group ref={arrowsGroupRef}>
         {Array.from({ length: 8 }).map((_, i) => (
           <group key={i}>
-            {/* Forward Chevron Arrow */}
             <mesh rotation={[Math.PI / 2, 0, 0]}>
-              <coneGeometry args={[0.35, 0.6, 12]} />
+              <coneGeometry args={[0.32, 0.55, 12]} />
               <meshBasicMaterial color="#ffffff" />
             </mesh>
           </group>
         ))}
       </group>
 
-      {/* Start Point Marker */}
+      {/* Start Point Marker (Green Base) */}
       <group position={[startPos.x, startPos.y, startPos.z]}>
         <mesh rotation={[-Math.PI / 2, 0, 0]}>
           <circleGeometry args={[0.9, 32]} />
@@ -114,66 +106,69 @@ export function NavigationPath3D({ route }: NavigationPath3DProps) {
         <Billboard position={[0, 1.2, 0]} follow>
           <Text
             fontSize={0.5}
-            color="#34d399"
+            color="#059669"
             anchorX="center"
             anchorY="middle"
-            outlineWidth={0.05}
-            outlineColor="#050811"
+            outlineWidth={0.06}
+            outlineColor="#ffffff"
           >
             INÍCIO
           </Text>
         </Billboard>
       </group>
 
-      {/* Destination Point Marker (Pin & Ripple Rings) */}
+      {/* Destination Point Marker (Classic Red Teardrop / Pin) */}
       <group position={[endPos.x, endPos.y, endPos.z]}>
         {/* Pulsing Floor Rings */}
         <group ref={pulseRingsRef} rotation={[-Math.PI / 2, 0, 0]}>
           <mesh>
             <ringGeometry args={[0.9, 1.2, 32]} />
             <meshBasicMaterial
-              color={isEmergency ? '#ef4444' : '#f43f5e'}
+              color={isEmergency ? '#ef4444' : '#e11d48'}
               transparent
-              opacity={0.8}
+              opacity={0.6}
               side={THREE.DoubleSide}
             />
           </mesh>
           <mesh>
             <ringGeometry args={[0.9, 1.2, 32]} />
             <meshBasicMaterial
-              color={isEmergency ? '#ef4444' : '#f43f5e'}
+              color={isEmergency ? '#ef4444' : '#e11d48'}
               transparent
-              opacity={0.8}
+              opacity={0.6}
               side={THREE.DoubleSide}
             />
           </mesh>
         </group>
 
-        {/* Floating Pin / Diamond */}
-        <mesh position={[0, 2.0, 0]}>
-          <octahedronGeometry args={[0.65, 0]} />
+        {/* Pin Pole */}
+        <mesh position={[0, 0.9, 0]}>
+          <cylinderGeometry args={[0.06, 0.06, 1.8, 12]} />
+          <meshStandardMaterial color="#64748b" metalness={0.7} />
+        </mesh>
+
+        {/* Floating Pin Diamond / Sphere */}
+        <mesh position={[0, 1.9, 0]}>
+          <sphereGeometry args={[0.55, 32, 32]} />
           <meshStandardMaterial
-            color={isEmergency ? '#dc2626' : '#f43f5e'}
-            emissive={isEmergency ? '#ef4444' : '#fb7185'}
-            emissiveIntensity={1.2}
+            color={isEmergency ? '#dc2626' : '#e11d48'}
             roughness={0.2}
           />
         </mesh>
-
-        {/* Pin Pole */}
-        <mesh position={[0, 1.0, 0]}>
-          <cylinderGeometry args={[0.08, 0.08, 2.0, 12]} />
-          <meshStandardMaterial color="#ffffff" metalness={0.8} />
+        {/* White Center Dot on Pin */}
+        <mesh position={[0, 1.9, 0]}>
+          <sphereGeometry args={[0.22, 16, 16]} />
+          <meshBasicMaterial color="#ffffff" />
         </mesh>
 
-        <Billboard position={[0, 3.0, 0]} follow>
+        <Billboard position={[0, 2.9, 0]} follow>
           <Text
             fontSize={0.65}
-            color={isEmergency ? '#fca5a5' : '#fda4af'}
+            color={isEmergency ? '#b91c1c' : '#be123c'}
             anchorX="center"
             anchorY="middle"
-            outlineWidth={0.06}
-            outlineColor="#050811"
+            outlineWidth={0.07}
+            outlineColor="#ffffff"
           >
             {isEmergency ? '🚨 SAÍDA' : '🎯 DESTINO'}
           </Text>
