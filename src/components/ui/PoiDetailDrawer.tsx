@@ -17,6 +17,18 @@ interface PoiDetailDrawerProps {
   onNavigateHere: (poi: POI) => void;
 }
 
+const CATEGORY_LABELS: Record<string, string> = {
+  stage: 'Palco',
+  booth: 'Estande',
+  workshop: 'Workshop',
+  food: 'Alimentação',
+  restroom: 'Sanitário',
+  info: 'Informações',
+  entrance: 'Entrada',
+  quiet_room: 'Sala de Acolhimento',
+  exit: 'Saída de Emergência',
+};
+
 export function PoiDetailDrawer({
   poi,
   onClose,
@@ -52,14 +64,14 @@ export function PoiDetailDrawer({
                 className="px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider text-white shadow-sm"
                 style={{ backgroundColor: poi.accentColor || poi.color }}
               >
-                {poi.category}
+                {CATEGORY_LABELS[poi.category] || poi.category}
               </span>
               <span className="text-xs text-slate-600 font-semibold">
                 Piso {poi.floor}
               </span>
               {poi.boothNumber && (
                 <span className="text-xs text-blue-700 font-mono font-semibold bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
-                  Stand {poi.boothNumber}
+                  Estande {poi.boothNumber}
                 </span>
               )}
             </div>
@@ -93,7 +105,7 @@ export function PoiDetailDrawer({
             <div className="space-y-2 pt-1">
               <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
                 <Clock className="w-3.5 h-3.5 text-blue-600" />
-                <span>Programação de Hoje</span>
+                <span>Programação Oficial</span>
               </h3>
               <div className="space-y-2">
                 {poi.sessions.map((session) => (
@@ -139,7 +151,7 @@ export function PoiDetailDrawer({
             className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-2xl shadow-lg shadow-blue-500/25 text-xs sm:text-sm transition-all active:scale-[0.98] min-h-[44px]"
           >
             <Navigation className="w-4 h-4" />
-            <span>Navegar até Aqui</span>
+            <span>Como Chegar (Rota Acessível)</span>
           </button>
 
           <button

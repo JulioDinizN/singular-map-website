@@ -29,9 +29,9 @@ interface TopBarProps {
 const CATEGORIES: { id: PoiCategory | 'all'; label: string }[] = [
   { id: 'all', label: 'Todos' },
   { id: 'stage', label: 'Palcos' },
-  { id: 'booth', label: 'Stands' },
+  { id: 'booth', label: 'Estandes' },
   { id: 'workshop', label: 'Workshops' },
-  { id: 'quiet_room', label: 'Descompressão' },
+  { id: 'quiet_room', label: 'Sala Acolhimento' },
   { id: 'exit', label: 'Saídas' },
   { id: 'food', label: 'Alimentação' },
   { id: 'restroom', label: 'Sanitários' },
@@ -94,13 +94,13 @@ export function TopBar({
           </div>
           <div>
             <h1 className="text-xs sm:text-sm font-bold tracking-tight text-slate-900 flex items-center gap-1.5">
-              <span>ROTAS ACESSÍVEIS</span>
-              <span className="text-[9px] uppercase px-1.5 py-0.2 rounded bg-blue-50 text-blue-600 font-bold border border-blue-200">
-                3D MAP
+              <span>BRASIL TECH SUMMIT</span>
+              <span className="text-[9px] uppercase px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">
+                MAPA 3D
               </span>
             </h1>
             <p className="text-[10px] text-slate-500 hidden sm:block">
-              Tech4Change 2026 • Navegação Inclusiva
+              São Paulo Expo • Navegação Acessível NBR 9050
             </p>
           </div>
         </div>
@@ -120,7 +120,7 @@ export function TopBar({
                 setIsOpen(true);
               }}
               onFocus={() => setIsOpen(true)}
-              placeholder="Buscar stands, palcos, facilidades..."
+              placeholder="Buscar estandes, palcos, facilidades, café..."
               className="w-full bg-transparent px-3 py-2 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none"
             />
             {query && (

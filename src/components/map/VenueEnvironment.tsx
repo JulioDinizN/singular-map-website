@@ -170,43 +170,43 @@ export function VenueEnvironment({ activeFloor }: VenueEnvironmentProps) {
           color="#94a3b8"
           letterSpacing={0.15}
         >
-          CONCURSO CENTRAL
+          CONCURSO CENTRAL • SÃO PAULO EXPO
         </Text>
         <Text
           position={[-12, 0.025, 1]}
           rotation={[-Math.PI / 2, 0, -Math.PI / 2]}
-          fontSize={0.6}
+          fontSize={0.55}
           color="#94a3b8"
           letterSpacing={0.12}
         >
-          ALAMEDA 100
+          ALAMEDA 100 • INOVAÇÃO & IA
         </Text>
         <Text
           position={[-24, 0.025, 1]}
           rotation={[-Math.PI / 2, 0, -Math.PI / 2]}
-          fontSize={0.6}
+          fontSize={0.55}
           color="#94a3b8"
           letterSpacing={0.12}
         >
-          ALAMEDA 200
+          ALAMEDA 200 • TECNOLOGIA BRASIL
         </Text>
         <Text
           position={[12, 0.025, 1]}
           rotation={[-Math.PI / 2, 0, -Math.PI / 2]}
-          fontSize={0.6}
+          fontSize={0.55}
           color="#94a3b8"
           letterSpacing={0.12}
         >
-          ALAMEDA 300
+          ALAMEDA 300 • FINTECH & CLOUD
         </Text>
         <Text
           position={[24, 0.025, 1]}
           rotation={[-Math.PI / 2, 0, -Math.PI / 2]}
-          fontSize={0.6}
+          fontSize={0.55}
           color="#94a3b8"
           letterSpacing={0.12}
         >
-          ALAMEDA 400
+          ALAMEDA 400 • MOBILIDADE & DADOS
         </Text>
         <Text
           position={[0, 0.025, -14]}
@@ -215,7 +215,7 @@ export function VenueEnvironment({ activeFloor }: VenueEnvironmentProps) {
           color="#94a3b8"
           letterSpacing={0.12}
         >
-          CONCURSO NORTE • PALCOS
+          CONCURSO NORTE • GRANDES ARENAS
         </Text>
         <Text
           position={[0, 0.025, 15]}
@@ -224,7 +224,7 @@ export function VenueEnvironment({ activeFloor }: VenueEnvironmentProps) {
           color="#94a3b8"
           letterSpacing={0.12}
         >
-          CONCURSO SUL
+          CONCURSO SUL • ALIMENTAÇÃO & ACOLHIMENTO
         </Text>
       </group>
 

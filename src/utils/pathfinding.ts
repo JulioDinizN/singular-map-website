@@ -348,6 +348,23 @@ export function calculateRoute(
     Math.ceil(totalDistanceMeters / profile.velocidadeMetersPerMin)
   );
 
+function getAisleName(x: number, z: number, floor: 1 | 2): string | null {
+  if (floor === 2) {
+    if (z <= -12) return 'pelo Mezanino VIP';
+    return 'pelo Corredor de Workshops';
+  }
+  if (Math.abs(z - 15) < 2.5) return 'pelo Concurso Sul';
+  if (Math.abs(z - 1) < 2.5) return 'pelo Concurso Central';
+  if (Math.abs(z - (-14)) < 2.5) return 'pelo Concurso Norte (Grandes Arenas)';
+  if (Math.abs(x) < 2.5 && z > 15) return 'pela Alameda de Acesso da Entrada';
+  if (Math.abs(x - (-12)) < 2.5) return 'pela Alameda 100 (Inovação & IA)';
+  if (Math.abs(x - (-24)) < 2.5) return 'pela Alameda 200 (Tecnologia Brasil)';
+  if (Math.abs(x - 12) < 2.5) return 'pela Alameda 300 (Fintech & Cloud)';
+  if (Math.abs(x - 24) < 2.5) return 'pela Alameda 400 (Mobilidade & Dados)';
+  if (Math.abs(x) < 3.5) return 'pelo Concurso Central';
+  return null;
+}
+
   // Generate Turn-by-Turn Steps
   const steps: RouteStep[] = [];
   const destName = toPoi?.name || 'Destino';
@@ -373,8 +390,8 @@ export function calculateRoute(
         steps.push({
           instruction:
             nextFloor === 2
-              ? 'Acesse o Elevador Acessível e suba para o Piso 2 (Mezanino)'
-              : 'Acesse o Elevador Acessível e desça para o Piso 1 (Pavilhão)',
+              ? 'Acesse o Elevador Acessível e suba para o Piso 2 (Mezanino de Workshops & VIP)'
+              : 'Acesse o Elevador Acessível e desça para o Piso 1 (Pavilhão Principal)',
           distanceMeters: 10,
           floor: nextFloor,
           isElevator: true,
@@ -383,8 +400,8 @@ export function calculateRoute(
         steps.push({
           instruction:
             nextFloor === 2
-              ? 'Suba as escadas para o Piso 2 (Mezanino)'
-              : 'Desça as escadas para o Piso 1 (Pavilhão)',
+              ? 'Suba pela escadaria para o Piso 2 (Mezanino de Workshops & VIP)'
+              : 'Desça pela escadaria para o Piso 1 (Pavilhão Principal)',
           distanceMeters: 10,
           floor: nextFloor,
           isStairs: true,
@@ -408,12 +425,20 @@ export function calculateRoute(
 
     const deg = (diff * 180) / Math.PI;
     const segmentDist = Math.round(Math.hypot(v2x, v2z) * UNIT_TO_METERS);
+    const aisleText = getAisleName(next[0], next[2], nextFloor);
 
-    let instruction = `Siga em frente por ${segmentDist}m pelo corredor`;
+    let instruction = aisleText
+      ? `Siga em frente por ${segmentDist}m ${aisleText}`
+      : `Siga em frente por ${segmentDist}m pelo corredor`;
+
     if (deg < -35) {
-      instruction = `Vire à esquerda e siga por ${segmentDist}m`;
+      instruction = aisleText
+        ? `Vire à esquerda e siga por ${segmentDist}m ${aisleText}`
+        : `Vire à esquerda e siga por ${segmentDist}m`;
     } else if (deg > 35) {
-      instruction = `Vire à direita e siga por ${segmentDist}m`;
+      instruction = aisleText
+        ? `Vire à direita e siga por ${segmentDist}m ${aisleText}`
+        : `Vire à direita e siga por ${segmentDist}m`;
     }
 
     steps.push({
