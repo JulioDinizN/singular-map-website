@@ -161,7 +161,7 @@ export function EventMapCanvas({
   return (
     <div className="w-full h-full relative select-none z-0">
       <Canvas
-        shadows
+        shadows="percentage"
         gl={{
           antialias: true,
           alpha: false,
