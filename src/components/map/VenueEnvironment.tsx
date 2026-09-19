@@ -1,16 +1,67 @@
+import { useMemo } from 'react';
+import * as THREE from 'three';
 import { Text } from '@react-three/drei';
 
 interface VenueEnvironmentProps {
   activeFloor: 1 | 2;
 }
 
+// Exact dimensions calculated from 1376x768 blueprint:
+export const VENUE_PLANE_WIDTH = 84.0;
+export const VENUE_PLANE_DEPTH = (84.0 * 768.0) / 1376.0; // 46.8837
+
+// 24 structural columns (4 rows × 6 columns) matching the architectural grid
+const STRUCTURAL_PILLARS = [
+  // Row 1: North (Avenida dos Palcos, Z = -14.83)
+  { id: 'P1', pos: [-25.21, 0, -14.83] as [number, number, number] },
+  { id: 'P2', pos: [-12.70, 0, -14.83] as [number, number, number] },
+  { id: 'P3', pos: [-2.81, 0, -14.83] as [number, number, number] },
+  { id: 'P4', pos: [2.81, 0, -14.83] as [number, number, number] },
+  { id: 'P5', pos: [9.83, 0, -14.83] as [number, number, number] },
+  { id: 'P6', pos: [23.74, 0, -14.83] as [number, number, number] },
+
+  // Row 2: Upper-Middle (Between top & bottom booths, Z = -7.51)
+  { id: 'P1', pos: [-25.21, 0, -7.51] as [number, number, number] },
+  { id: 'P2', pos: [-12.70, 0, -7.51] as [number, number, number] },
+  { id: 'P3', pos: [-2.81, 0, -7.51] as [number, number, number] },
+  { id: 'P4', pos: [2.81, 0, -7.51] as [number, number, number] },
+  { id: 'P5', pos: [9.83, 0, -7.51] as [number, number, number] },
+  { id: 'P6', pos: [23.74, 0, -7.51] as [number, number, number] },
+
+  // Row 3: Lower-Middle (Cross aisle / Rua 200-300-400, Z = -0.06)
+  { id: 'P1', pos: [-25.21, 0, -0.06] as [number, number, number] },
+  { id: 'P2', pos: [-12.70, 0, -0.06] as [number, number, number] },
+  { id: 'P3', pos: [-2.81, 0, -0.06] as [number, number, number] },
+  { id: 'P4', pos: [2.81, 0, -0.06] as [number, number, number] },
+  { id: 'P5', pos: [9.83, 0, -0.06] as [number, number, number] },
+  { id: 'P6', pos: [23.74, 0, -0.06] as [number, number, number] },
+
+  // Row 4: South (Bottom of booths / Concurso Sul, Z = 7.51)
+  { id: 'P1', pos: [-25.21, 0, 7.51] as [number, number, number] },
+  { id: 'P2', pos: [-12.70, 0, 7.51] as [number, number, number] },
+  { id: 'P3', pos: [-2.81, 0, 7.51] as [number, number, number] },
+  { id: 'P4', pos: [2.81, 0, 7.51] as [number, number, number] },
+  { id: 'P5', pos: [9.83, 0, 7.51] as [number, number, number] },
+  { id: 'P6', pos: [23.74, 0, 7.51] as [number, number, number] },
+];
+
 export function VenueEnvironment({ activeFloor }: VenueEnvironmentProps) {
+  // Load architectural floorplan reference blueprint texture
+  const floorplanTexture = useMemo(() => {
+    const loader = new THREE.TextureLoader();
+    const tex = loader.load('/floorplan_reference.jpg');
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.minFilter = THREE.LinearFilter;
+    tex.magFilter = THREE.LinearFilter;
+    return tex;
+  }, []);
+
   return (
     <group>
-      {/* Warm Natural Daylight Lighting */}
-      <ambientLight intensity={1.8} color="#ffffff" />
+      {/* Warm Natural Exhibition Daylight Lighting */}
+      <ambientLight intensity={1.9} color="#ffffff" />
       <directionalLight
-        position={[35, 50, 25]}
+        position={[35, 55, 25]}
         intensity={2.2}
         color="#fffef7"
         castShadow
@@ -23,364 +74,210 @@ export function VenueEnvironment({ activeFloor }: VenueEnvironmentProps) {
         shadow-camera-bottom={-45}
         shadow-bias={-0.0001}
       />
-      {/* Soft Sky Fill Light from Opposite Side */}
       <directionalLight
-        position={[-30, 40, -25]}
-        intensity={0.8}
+        position={[-30, 45, -25]}
+        intensity={0.9}
         color="#e0f2fe"
       />
 
       {/* ================= FLOOR 1 (GROUND EXPO) ================= */}
       <group position={[0, 0, 0]}>
-        {/* Base Architectural Floor Surface (Soft Light Slate) */}
+        {/* Architectural Blueprint Floor Ground Overlay (100% 1:1 Scale) */}
+        <mesh
+          rotation={[-Math.PI / 2, 0, 0]}
+          position={[0, 0.001, 0]}
+          receiveShadow
+        >
+          <planeGeometry args={[VENUE_PLANE_WIDTH, VENUE_PLANE_DEPTH]} />
+          <meshBasicMaterial
+            map={floorplanTexture}
+            toneMapped={false}
+          />
+        </mesh>
+
+        {/* Outer Background Border Base */}
         <mesh
           rotation={[-Math.PI / 2, 0, 0]}
           position={[0, -0.05, 0]}
           receiveShadow
         >
-          <planeGeometry args={[84, 66]} />
-          <meshStandardMaterial
-            color="#e2e8f0"
-            roughness={0.7}
-            metalness={0.05}
-          />
+          <planeGeometry args={[96, 58]} />
+          <meshStandardMaterial color="#cbd5e1" roughness={0.8} />
         </mesh>
 
-        {/* Clean Rectangular Venue Boundary Outline */}
-        <mesh position={[0, -0.04, -32.5]}>
-          <boxGeometry args={[83, 0.02, 0.2]} />
-          <meshBasicMaterial color="#94a3b8" transparent opacity={0.6} />
-        </mesh>
-        <mesh position={[0, -0.04, 32.5]}>
-          <boxGeometry args={[83, 0.02, 0.2]} />
-          <meshBasicMaterial color="#94a3b8" transparent opacity={0.6} />
-        </mesh>
-        <mesh position={[-41.5, -0.04, 0]}>
-          <boxGeometry args={[0.2, 0.02, 65]} />
-          <meshBasicMaterial color="#94a3b8" transparent opacity={0.6} />
-        </mesh>
-        <mesh position={[41.5, -0.04, 0]}>
-          <boxGeometry args={[0.2, 0.02, 65]} />
-          <meshBasicMaterial color="#94a3b8" transparent opacity={0.6} />
+        {/* ================= PERIMETER STRUCTURAL WALLS ================= */}
+        {/* Main Hall North Wall */}
+        <mesh position={[0.64, 1.8, -20.88]} castShadow receiveShadow>
+          <boxGeometry args={[72.1, 3.6, 0.35]} />
+          <meshStandardMaterial color="#64748b" roughness={0.5} />
         </mesh>
 
-        {/* ================= SOFT PASTEL ZONE OVERLAYS (SÃO PAULO EXPO) ================= */}
-        {/* Foyer de Entrada & Credenciamento (Soft Slate/Blue) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 27]}>
-          <planeGeometry args={[36, 10]} />
-          <meshStandardMaterial color="#e0f2fe" roughness={0.9} />
+        {/* Main Hall West Wall */}
+        <mesh position={[-35.41, 1.8, -3.42]} castShadow receiveShadow>
+          <boxGeometry args={[0.35, 3.6, 34.92]} />
+          <meshStandardMaterial color="#64748b" roughness={0.5} />
         </mesh>
 
-        {/* Sala de Acolhimento / Espaço Girassol (Serene Teal) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-26, 0.01, 22]}>
-          <planeGeometry args={[18, 12]} />
-          <meshStandardMaterial color="#ccfbf1" roughness={0.9} />
+        {/* Main Hall East Wall */}
+        <mesh position={[36.69, 1.8, -3.42]} castShadow receiveShadow>
+          <boxGeometry args={[0.35, 3.6, 34.92]} />
+          <meshStandardMaterial color="#64748b" roughness={0.5} />
         </mesh>
 
-        {/* Praça Gastronômica Brasil (Warm Rose) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[24, 0.01, 20]}>
-          <planeGeometry args={[18, 15]} />
-          <meshStandardMaterial color="#ffe4e6" roughness={0.9} />
+        {/* Main Hall South Wall Left (west of lobby) */}
+        <mesh position={[-24.69, 1.8, 14.04]} castShadow receiveShadow>
+          <boxGeometry args={[21.43, 3.6, 0.35]} />
+          <meshStandardMaterial color="#64748b" roughness={0.5} />
         </mesh>
 
-        {/* Rua das Startups Brasil (Soft Amber) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 16]}>
-          <planeGeometry args={[18, 10]} />
-          <meshStandardMaterial color="#fef3c7" roughness={0.9} />
+        {/* Main Hall South Wall Right (east of lobby) */}
+        <mesh position={[25.42, 1.8, 14.04]} castShadow receiveShadow>
+          <boxGeometry args={[22.53, 3.6, 0.35]} />
+          <meshStandardMaterial color="#64748b" roughness={0.5} />
         </mesh>
 
-        {/* Arena Principal Keynote (Palco Brasil) (Soft Lavender) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-20, 0.01, -22]}>
-          <planeGeometry args={[26, 14]} />
-          <meshStandardMaterial color="#ede9fe" roughness={0.9} />
+        {/* Lobby West Wall */}
+        <mesh position={[-13.98, 1.8, 16.63]} castShadow receiveShadow>
+          <boxGeometry args={[0.35, 3.6, 5.19]} />
+          <meshStandardMaterial color="#64748b" roughness={0.5} />
         </mesh>
 
-        {/* Palco DevBrasil (Soft Sky) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[20, 0.01, -22]}>
-          <planeGeometry args={[24, 14]} />
-          <meshStandardMaterial color="#e0f2fe" roughness={0.9} />
+        {/* Lobby East Wall */}
+        <mesh position={[14.16, 1.8, 16.63]} castShadow receiveShadow>
+          <boxGeometry args={[0.35, 3.6, 5.19]} />
+          <meshStandardMaterial color="#64748b" roughness={0.5} />
         </mesh>
 
-        {/* Pavilhão 1: Inovação, IA & Robótica (Soft Blue) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-22, 0.01, -4]}>
-          <planeGeometry args={[28, 22]} />
-          <meshStandardMaterial color="#dbeafe" roughness={0.9} />
+        {/* Lobby South Wall (with entrance portal gap in center) */}
+        <mesh position={[-8.5, 1.8, 19.23]} castShadow receiveShadow>
+          <boxGeometry args={[10.5, 3.6, 0.35]} />
+          <meshStandardMaterial color="#64748b" roughness={0.5} />
+        </mesh>
+        <mesh position={[8.5, 1.8, 19.23]} castShadow receiveShadow>
+          <boxGeometry args={[10.5, 3.6, 0.35]} />
+          <meshStandardMaterial color="#64748b" roughness={0.5} />
         </mesh>
 
-        {/* Pavilhão 2: Fintech, Nuvem & Mobilidade (Soft Mint) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[22, 0.01, -4]}>
-          <planeGeometry args={[28, 22]} />
-          <meshStandardMaterial color="#d1fae5" roughness={0.9} />
+        {/* Food Court Dividing Wall */}
+        <mesh position={[26.56, 1.6, -3.42]} castShadow receiveShadow>
+          <boxGeometry args={[0.25, 3.2, 34.92]} />
+          <meshStandardMaterial color="#94a3b8" transparent opacity={0.3} />
         </mesh>
 
-        {/* ================= POLISHED WHITE WALKING CORRIDORS ================= */}
-        {/* Boulevard Central (Main Aisle, X = 0, 6m wide) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 5]} receiveShadow>
-          <planeGeometry args={[6.0, 42]} />
-          <meshStandardMaterial color="#ffffff" roughness={0.5} />
-        </mesh>
-
-        {/* Rua 100 (X = -8) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-8, 0.02, 1.5]} receiveShadow>
-          <planeGeometry args={[3.2, 33]} />
-          <meshStandardMaterial color="#ffffff" roughness={0.5} />
-        </mesh>
-
-        {/* Rua 200 (X = -26.5) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-26.5, 0.02, 1.5]} receiveShadow>
-          <planeGeometry args={[3.2, 33]} />
-          <meshStandardMaterial color="#ffffff" roughness={0.5} />
-        </mesh>
-
-        {/* Rua 300 (X = 8) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[8, 0.02, 1.5]} receiveShadow>
-          <planeGeometry args={[3.2, 33]} />
-          <meshStandardMaterial color="#ffffff" roughness={0.5} />
-        </mesh>
-
-        {/* Rua 400 (X = 25.5) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[25.5, 0.02, 1.5]} receiveShadow>
-          <planeGeometry args={[3.2, 33]} />
-          <meshStandardMaterial color="#ffffff" roughness={0.5} />
-        </mesh>
-
-        {/* Avenida dos Palcos (Z = -15) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, -15]} receiveShadow>
-          <planeGeometry args={[72, 4.0]} />
-          <meshStandardMaterial color="#ffffff" roughness={0.5} />
-        </mesh>
-
-        {/* Cruzamento Central (Z = 1) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 1]} receiveShadow>
-          <planeGeometry args={[72, 3.5]} />
-          <meshStandardMaterial color="#ffffff" roughness={0.5} />
-        </mesh>
-
-        {/* Concurso Sul & Startups (Z = 18) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 18]} receiveShadow>
-          <planeGeometry args={[74, 3.8]} />
-          <meshStandardMaterial color="#ffffff" roughness={0.5} />
-        </mesh>
-
-        {/* Foyer de Entrada & Catracas (Z = 26) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 26]} receiveShadow>
-          <planeGeometry args={[32, 6.0]} />
-          <meshStandardMaterial color="#ffffff" roughness={0.5} />
-        </mesh>
-
-        {/* Acesso à Sala de Acolhimento */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-26, 0.02, 20]} receiveShadow>
-          <planeGeometry args={[3.2, 4]} />
-          <meshStandardMaterial color="#ffffff" roughness={0.5} />
-        </mesh>
-
-        {/* ================= 3D FLOOR DECALS & SÃO PAULO EXPO WAYFINDING ================= */}
-        <Text
-          position={[0, 0.025, 4]}
-          rotation={[-Math.PI / 2, 0, 0]}
-          fontSize={0.65}
-          color="#94a3b8"
-          letterSpacing={0.15}
-        >
-          BOULEVARD CENTRAL • SÃO PAULO EXPO
-        </Text>
-        <Text
-          position={[0, 0.025, 27]}
-          rotation={[-Math.PI / 2, 0, 0]}
-          fontSize={0.55}
-          color="#64748b"
-          letterSpacing={0.15}
-        >
-          FOYER DE ENTRADA & CREDENCIAMENTO
-        </Text>
-        <Text
-          position={[0, 0.025, 14]}
-          rotation={[-Math.PI / 2, 0, 0]}
-          fontSize={0.5}
-          color="#94a3b8"
-          letterSpacing={0.12}
-        >
-          RUA DAS STARTUPS BRASIL
-        </Text>
-        <Text
-          position={[-8, 0.025, 1]}
-          rotation={[-Math.PI / 2, 0, -Math.PI / 2]}
-          fontSize={0.55}
-          color="#94a3b8"
-          letterSpacing={0.12}
-        >
-          RUA 100 • INOVAÇÃO & IA
-        </Text>
-        <Text
-          position={[-26.5, 0.025, 1]}
-          rotation={[-Math.PI / 2, 0, -Math.PI / 2]}
-          fontSize={0.55}
-          color="#94a3b8"
-          letterSpacing={0.12}
-        >
-          RUA 200 • TECNOLOGIA & ROBÓTICA
-        </Text>
-        <Text
-          position={[8, 0.025, 1]}
-          rotation={[-Math.PI / 2, 0, -Math.PI / 2]}
-          fontSize={0.55}
-          color="#94a3b8"
-          letterSpacing={0.12}
-        >
-          RUA 300 • FINTECH & MOBILIDADE
-        </Text>
-        <Text
-          position={[25.5, 0.025, 1]}
-          rotation={[-Math.PI / 2, 0, -Math.PI / 2]}
-          fontSize={0.55}
-          color="#94a3b8"
-          letterSpacing={0.12}
-        >
-          RUA 400 • SOFTWARE & DADOS
-        </Text>
-        <Text
-          position={[0, 0.025, -15]}
-          rotation={[-Math.PI / 2, 0, 0]}
-          fontSize={0.6}
-          color="#94a3b8"
-          letterSpacing={0.12}
-        >
-          AVENIDA DOS PALCOS • GRANDES ARENAS
-        </Text>
-        <Text
-          position={[24, 0.025, 18]}
-          rotation={[-Math.PI / 2, 0, 0]}
-          fontSize={0.5}
-          color="#94a3b8"
-          letterSpacing={0.12}
-        >
-          PRAÇA GASTRONÔMICA BRASIL
-        </Text>
-
-        {/* ================= PILARES ESTRUTURAIS DO SÃO PAULO EXPO (P1 A P6) ================= */}
-        {[
-          { id: 'P1', pos: [-10, 0, 7] as [number, number, number] },
-          { id: 'P2', pos: [10, 0, 7] as [number, number, number] },
-          { id: 'P3', pos: [-10, 0, -5] as [number, number, number] },
-          { id: 'P4', pos: [10, 0, -5] as [number, number, number] },
-          { id: 'P5', pos: [-26.5, 0, -5] as [number, number, number] },
-          { id: 'P6', pos: [25.5, 0, -5] as [number, number, number] },
-        ].map((pillar) => (
-          <group key={pillar.id} position={pillar.pos}>
+        {/* ================= 24 STRUCTURAL PILLARS (P1 to P6) ================= */}
+        {STRUCTURAL_PILLARS.map((pillar, idx) => (
+          <group key={`${pillar.id}-${idx}`} position={pillar.pos}>
             {/* Concrete Pillar Column */}
-            <mesh position={[0, 3.75, 0]} castShadow receiveShadow>
-              <boxGeometry args={[1.2, 7.5, 1.2]} />
-              <meshStandardMaterial color="#94a3b8" roughness={0.7} metalness={0.1} />
+            <mesh position={[0, 3.5, 0]} castShadow receiveShadow>
+              <boxGeometry args={[0.85, 7.0, 0.85]} />
+              <meshStandardMaterial color="#64748b" roughness={0.7} metalness={0.1} />
             </mesh>
             {/* Base Protective Collar */}
             <mesh position={[0, 0.2, 0]} receiveShadow>
-              <boxGeometry args={[1.5, 0.4, 1.5]} />
-              <meshStandardMaterial color="#cbd5e1" roughness={0.5} />
+              <boxGeometry args={[1.1, 0.4, 1.1]} />
+              <meshStandardMaterial color="#94a3b8" roughness={0.5} />
             </mesh>
             {/* Overhead Pillar Sign Cube */}
             <mesh position={[0, 5.0, 0]} castShadow>
-              <boxGeometry args={[1.4, 0.8, 1.4]} />
+              <boxGeometry args={[1.0, 0.65, 1.0]} />
               <meshStandardMaterial color="#0f172a" roughness={0.3} />
             </mesh>
             {/* Pillar Numbering on 4 Faces */}
-            <Text position={[0, 5.0, 0.72]} fontSize={0.5} color="#ffffff" outlineWidth={0.02} outlineColor="#ffffff">
+            <Text position={[0, 5.0, 0.52]} fontSize={0.4} color="#ffffff">
               {pillar.id}
             </Text>
-            <Text position={[0, 5.0, -0.72]} rotation={[0, Math.PI, 0]} fontSize={0.5} color="#ffffff" outlineWidth={0.02} outlineColor="#ffffff">
+            <Text position={[0, 5.0, -0.52]} rotation={[0, Math.PI, 0]} fontSize={0.4} color="#ffffff">
               {pillar.id}
             </Text>
-            <Text position={[0.72, 5.0, 0]} rotation={[0, Math.PI / 2, 0]} fontSize={0.5} color="#ffffff" outlineWidth={0.02} outlineColor="#ffffff">
+            <Text position={[0.52, 5.0, 0]} rotation={[0, Math.PI / 2, 0]} fontSize={0.4} color="#ffffff">
               {pillar.id}
             </Text>
-            <Text position={[-0.72, 5.0, 0]} rotation={[0, -Math.PI / 2, 0]} fontSize={0.5} color="#ffffff" outlineWidth={0.02} outlineColor="#ffffff">
+            <Text position={[-0.52, 5.0, 0]} rotation={[0, -Math.PI / 2, 0]} fontSize={0.4} color="#ffffff">
               {pillar.id}
             </Text>
           </group>
         ))}
-      </group>
 
-      {/* ================= VERTICAL ACCESS: ELEVATOR & STAIRS ================= */}
-      {/* 1) Modern Glass Elevator Tower */}
-      <group position={[2.5, 0, -17]}>
-        <mesh position={[0, 3.5, 0]} castShadow receiveShadow>
-          <boxGeometry args={[4.2, 7, 4.2]} />
-          <meshStandardMaterial
-            color="#38bdf8"
-            transparent
-            opacity={0.35}
-            roughness={0.1}
-            metalness={0.9}
-          />
-        </mesh>
-        {/* Brushed Aluminum Frame Pillars */}
-        {[-2, 2].map((px) =>
-          [-2, 2].map((pz) => (
-            <mesh key={`${px}-${pz}`} position={[px, 3.5, pz]}>
-              <boxGeometry args={[0.2, 7, 0.2]} />
-              <meshStandardMaterial color="#94a3b8" metalness={0.8} roughness={0.2} />
-            </mesh>
-          ))
-        )}
-        {/* Elevator Cab */}
-        <mesh position={[0, 3.5, 0]} castShadow>
-          <boxGeometry args={[3.2, 3, 3.2]} />
-          <meshStandardMaterial color="#f8fafc" metalness={0.3} roughness={0.4} />
-        </mesh>
-        {/* Modern Blue Header */}
-        <mesh position={[0, 7.15, 0]}>
-          <boxGeometry args={[4.4, 0.3, 4.4]} />
-          <meshStandardMaterial color="#0284c7" roughness={0.2} />
-        </mesh>
-      </group>
-
-      {/* 2) Clean Architectural Staircase */}
-      <group position={[-2.5, 0, -18]}>
-        {/* Steel Railings */}
-        {[-1.8, 1.8].map((px) => (
-          <mesh key={px} position={[px, 3.5, -0.2]} rotation={[Math.PI / 6, 0, 0]}>
-            <boxGeometry args={[0.08, 7.5, 0.08]} />
-            <meshStandardMaterial color="#64748b" metalness={0.8} roughness={0.3} />
+        {/* ================= LOBBY STAIRS & ELEVATORS ================= */}
+        {/* Left Lobby Staircase */}
+        <group position={[-12.43, 0, 16.63]}>
+          <mesh position={[0, 1.6, 0]} castShadow receiveShadow>
+            <boxGeometry args={[2.6, 3.2, 4.8]} />
+            <meshStandardMaterial color="#cbd5e1" roughness={0.6} />
           </mesh>
-        ))}
-        {/* Clean Oak/Steel Steps */}
-        {Array.from({ length: 12 }).map((_, i) => (
-          <mesh key={i} position={[0, 0.3 + i * 0.55, -1.8 + i * 0.32]} castShadow receiveShadow>
-            <boxGeometry args={[3.4, 0.12, 0.45]} />
-            <meshStandardMaterial color="#cbd5e1" roughness={0.6} metalness={0.1} />
+          <Text position={[0, 3.3, 0]} rotation={[-Math.PI / 2, 0, 0]} fontSize={0.4} color="#334155">
+            ESCADA 2F
+          </Text>
+        </group>
+
+        {/* Right Lobby Staircase */}
+        <group position={[12.57, 0, 16.63]}>
+          <mesh position={[0, 1.6, 0]} castShadow receiveShadow>
+            <boxGeometry args={[2.6, 3.2, 4.8]} />
+            <meshStandardMaterial color="#cbd5e1" roughness={0.6} />
           </mesh>
-        ))}
+          <Text position={[0, 3.3, 0]} rotation={[-Math.PI / 2, 0, 0]} fontSize={0.4} color="#334155">
+            ESCADA 2F
+          </Text>
+        </group>
+
+        {/* Modern Glass Elevator Tower in Lobby */}
+        <group position={[2.5, 0, 15.5]}>
+          <mesh position={[0, 3.5, 0]} castShadow receiveShadow>
+            <boxGeometry args={[2.5, 7, 2.5]} />
+            <meshStandardMaterial
+              color="#38bdf8"
+              transparent
+              opacity={0.35}
+              roughness={0.1}
+              metalness={0.8}
+            />
+          </mesh>
+          {/* Elevator Cab */}
+          <mesh position={[0, 1.6, 0]} castShadow>
+            <boxGeometry args={[2.0, 3, 2.0]} />
+            <meshStandardMaterial color="#f8fafc" metalness={0.3} roughness={0.4} />
+          </mesh>
+        </group>
       </group>
 
-      {/* ================= FLOOR 2 (MEZZANINE / WORKSHOPS) ================= */}
-      <group position={[0, 6.5, 0]}>
-        {/* Mezzanine Surface */}
+      {/* ================= FLOOR 2 (MEZZANINE / WORKSHOPS) - STRICT VISIBILITY ================= */}
+      <group position={[0, 6.5, 0]} visible={activeFloor === 2}>
+        {/* Mezzanine Surface overlooking the Boulevard */}
         <mesh
           rotation={[-Math.PI / 2, 0, 0]}
-          position={[0, 0, -8]}
+          position={[0, 0, 16.63]}
           receiveShadow
         >
-          <planeGeometry args={[56, 22]} />
+          <planeGeometry args={[28, 5.2]} />
           <meshStandardMaterial
             color="#f8fafc"
             roughness={0.6}
-            transparent
-            opacity={activeFloor === 2 ? 1.0 : 0.4}
           />
         </mesh>
 
-        {/* Clean Glass Safety Railing with Aluminum Cap */}
-        <mesh position={[0, 0.5, 3]}>
-          <boxGeometry args={[56, 1.0, 0.08]} />
+        {/* North Mezzanine Gallery over Palcos */}
+        <mesh
+          rotation={[-Math.PI / 2, 0, 0]}
+          position={[0, 0, -15.0]}
+          receiveShadow
+        >
+          <planeGeometry args={[56, 8.0]} />
+          <meshStandardMaterial
+            color="#f8fafc"
+            roughness={0.6}
+          />
+        </mesh>
+
+        {/* Glass Safety Railing */}
+        <mesh position={[0, 0.5, 14.1]}>
+          <boxGeometry args={[28, 1.0, 0.08]} />
           <meshStandardMaterial
             color="#93c5fd"
             transparent
-            opacity={activeFloor === 2 ? 0.35 : 0.15}
+            opacity={0.4}
             roughness={0.1}
           />
-        </mesh>
-        <mesh position={[0, 1.02, 3]}>
-          <boxGeometry args={[56, 0.06, 0.12]} />
-          <meshStandardMaterial color="#94a3b8" metalness={0.8} roughness={0.3} />
         </mesh>
       </group>
     </group>

@@ -47,8 +47,11 @@ export function BoothMesh({
   const isQuietRoom = poi.category === 'quiet_room';
   const isEmergencyExit = poi.category === 'exit' || poi.isEmergencyExit;
   const isRestroom = poi.category === 'restroom';
-  const isWorkshop = poi.category === 'workshop';
   const isEntrance = poi.category === 'entrance';
+  const isFoodCourt = poi.id === 'food-court-1';
+  const isCafeteria = poi.id === 'cafeteria';
+  const isNubank = poi.id === 'booth-nubank';
+  const isEve = poi.id === 'booth-eve';
 
   const isMajorLandmark = isStage || isQuietRoom || isEntrance || isEmergencyExit;
   const showBadge = isSelected || isHovered || internalHover;
@@ -91,70 +94,218 @@ export function BoothMesh({
         </mesh>
       )}
 
-      {/* Main Structure */}
+      {/* Main Structure Matching Architectural Blueprint */}
       {isStage ? (
-        // STAGE STRUCTURE (AUDITÓRIO / PLENÁRIA)
+        // PALCO BRASIL (CURVED WEST STAGE + EXPANSIVE FAN-SHAPED TIERED SEATING)
         <group>
-          {/* Stage Platform */}
-          <mesh position={[0, -h / 4, 0]} castShadow receiveShadow>
-            <boxGeometry args={[w, h / 2, d]} />
-            <meshStandardMaterial
-              color="#1e293b"
-              roughness={0.4}
-              metalness={0.5}
-              transparent
-              opacity={opacity}
-            />
+          {/* Base Platform */}
+          <mesh position={[0, -h / 2 + 0.1, 0]} receiveShadow>
+            <boxGeometry args={[w, 0.2, d]} />
+            <meshStandardMaterial color="#1e293b" roughness={0.5} />
           </mesh>
 
-          {/* Panoramic Curved Backstage LED Display Screen */}
-          <mesh position={[0, h / 2, -d / 3]} castShadow>
-            <boxGeometry args={[w * 0.9, h * 0.85, 0.4]} />
+          {/* Curved Stage Platform on West Side (facing East) */}
+          <mesh position={[-w * 0.32, 0.3, 0]} castShadow receiveShadow>
+            <cylinderGeometry args={[d * 0.35, d * 0.35, 0.6, 32, 1, false, -Math.PI / 2, Math.PI]} />
+            <meshStandardMaterial color="#1e293b" roughness={0.3} metalness={0.5} />
+          </mesh>
+
+          {/* Panoramic Curved Backstage LED Wall */}
+          <mesh position={[-w * 0.45, h * 0.6, 0]} castShadow>
+            <boxGeometry args={[0.3, h * 1.2, d * 0.72]} />
             <meshStandardMaterial
               color={accentColor}
               emissive={accentColor}
-              emissiveIntensity={isSelected ? 0.9 : 0.4}
+              emissiveIntensity={isSelected ? 0.9 : 0.45}
               roughness={0.2}
             />
           </mesh>
 
-          {/* Overhead Truss Arch */}
-          <mesh position={[0, h * 0.95, -d / 6]}>
-            <boxGeometry args={[w * 0.95, 0.3, d * 0.7]} />
-            <meshStandardMaterial color="#64748b" metalness={0.7} roughness={0.3} />
+          {/* Speaker Podium */}
+          <mesh position={[-w * 0.22, 0.7, 0]} castShadow>
+            <boxGeometry args={[0.8, 0.9, 0.6]} />
+            <meshStandardMaterial color="#0f172a" roughness={0.3} />
           </mesh>
 
-          {/* Speaker Podium */}
-          <mesh position={[-w * 0.3, h / 4, d * 0.1]} castShadow>
-            <boxGeometry args={[1.2, 1.2, 0.8]} />
-            <meshStandardMaterial color="#0f172a" roughness={0.3} />
+          {/* Expansive Fan-Shaped Tiered Seating Rows (6 Rows × 3 Wedges) */}
+          {[0, 1, 2, 3, 4, 5].map((row) => {
+            const rx = -w * 0.05 + row * (w * 0.09);
+            const ry = 0.15 + row * 0.25;
+            const rDepth = d * (0.88 - row * 0.06);
+
+            return (
+              <group key={row} position={[rx, ry, 0]}>
+                {/* Left Wedge */}
+                <mesh position={[0, 0, -rDepth * 0.32]} castShadow receiveShadow>
+                  <boxGeometry args={[w * 0.075, 0.3 + row * 0.05, rDepth * 0.28]} />
+                  <meshStandardMaterial color="#475569" roughness={0.6} />
+                </mesh>
+                {/* Center Wedge */}
+                <mesh position={[0, 0, 0]} castShadow receiveShadow>
+                  <boxGeometry args={[w * 0.075, 0.3 + row * 0.05, rDepth * 0.26]} />
+                  <meshStandardMaterial color="#334155" roughness={0.6} />
+                </mesh>
+                {/* Right Wedge */}
+                <mesh position={[0, 0, rDepth * 0.32]} castShadow receiveShadow>
+                  <boxGeometry args={[w * 0.075, 0.3 + row * 0.05, rDepth * 0.28]} />
+                  <meshStandardMaterial color="#475569" roughness={0.6} />
+                </mesh>
+
+                {/* Violet Cushioned Seats on Top */}
+                <mesh position={[0, 0.18 + row * 0.025, 0]} castShadow>
+                  <boxGeometry args={[w * 0.065, 0.08, rDepth * 0.92]} />
+                  <meshStandardMaterial color="#7c3aed" roughness={0.7} />
+                </mesh>
+              </group>
+            );
+          })}
+
+          {/* Technical Area / Sound & Light Control Booth (South) */}
+          <mesh position={[w * 0.22, 0.5, d * 0.38]} castShadow>
+            <boxGeometry args={[w * 0.45, 1.0, d * 0.18]} />
+            <meshStandardMaterial color="#0f172a" roughness={0.4} />
+          </mesh>
+          <Text position={[w * 0.22, 1.1, d * 0.38]} fontSize={0.32} color="#94a3b8">
+            ÁREA TÉCNICA / SOM & LUZ
+          </Text>
+        </group>
+      ) : isFoodCourt ? (
+        // PRAÇA GASTRONÔMICA (FOOD COURT WITH NORTH/SOUTH TABLES & CENTRAL COMMUNAL COUNTER)
+        <group>
+          {/* Base Plinth */}
+          <mesh position={[0, -h / 2 + 0.05, 0]} receiveShadow>
+            <boxGeometry args={[w, 0.1, d]} />
+            <meshStandardMaterial color="#f8fafc" roughness={0.6} />
+          </mesh>
+
+          {/* North Section: Dining Tables */}
+          {[-1.3, 1.3].map((tx) =>
+            Array.from({ length: 3 }).map((_, ti) => {
+              const tz = -d * 0.42 + ti * (d * 0.1);
+              return (
+                <group key={`n-${tx}-${ti}`} position={[tx, 0, tz]}>
+                  <mesh position={[0, 0.45, 0]} castShadow receiveShadow>
+                    <boxGeometry args={[1.3, 0.08, 1.3]} />
+                    <meshStandardMaterial color="#fed7aa" roughness={0.4} />
+                  </mesh>
+                  <mesh position={[0, 0.22, 0]}>
+                    <cylinderGeometry args={[0.08, 0.12, 0.45, 12]} />
+                    <meshStandardMaterial color="#475569" metalness={0.8} />
+                  </mesh>
+                  {[-0.7, 0.7].map((cx) => (
+                    <mesh key={cx} position={[cx, 0.25, 0]}>
+                      <boxGeometry args={[0.32, 0.48, 0.32]} />
+                      <meshStandardMaterial color="#ea580c" roughness={0.5} />
+                    </mesh>
+                  ))}
+                </group>
+              );
+            })
+          )}
+
+          {/* Center Section: Long High Communal Counter with Bar Stools */}
+          <group position={[0, 0, 0]}>
+            {/* High Counter Top */}
+            <mesh position={[0, 0.85, 0]} castShadow receiveShadow>
+              <boxGeometry args={[1.6, 0.1, d * 0.32]} />
+              <meshStandardMaterial color="#78350f" roughness={0.3} />
+            </mesh>
+            {/* Supporting Pillar Legs */}
+            {[-d * 0.12, 0, d * 0.12].map((pz) => (
+              <mesh key={pz} position={[0, 0.42, pz]}>
+                <boxGeometry args={[0.2, 0.84, 0.2]} />
+                <meshStandardMaterial color="#0f172a" metalness={0.8} />
+              </mesh>
+            ))}
+            {/* Bar Stools along both sides */}
+            {[-1.1, 1.1].map((sx) =>
+              [-d * 0.12, -d * 0.04, d * 0.04, d * 0.12].map((sz) => (
+                <mesh key={`${sx}-${sz}`} position={[sx, 0.4, sz]} castShadow>
+                  <cylinderGeometry args={[0.2, 0.2, 0.5, 16]} />
+                  <meshStandardMaterial color="#f97316" roughness={0.5} />
+                </mesh>
+              ))
+            )}
+          </group>
+
+          {/* South Section: Dining Tables */}
+          {[-1.3, 1.3].map((tx) =>
+            Array.from({ length: 3 }).map((_, ti) => {
+              const tz = d * 0.22 + ti * (d * 0.1);
+              return (
+                <group key={`s-${tx}-${ti}`} position={[tx, 0, tz]}>
+                  <mesh position={[0, 0.45, 0]} castShadow receiveShadow>
+                    <boxGeometry args={[1.3, 0.08, 1.3]} />
+                    <meshStandardMaterial color="#fed7aa" roughness={0.4} />
+                  </mesh>
+                  <mesh position={[0, 0.22, 0]}>
+                    <cylinderGeometry args={[0.08, 0.12, 0.45, 12]} />
+                    <meshStandardMaterial color="#475569" metalness={0.8} />
+                  </mesh>
+                  {[-0.7, 0.7].map((cx) => (
+                    <mesh key={cx} position={[cx, 0.25, 0]}>
+                      <boxGeometry args={[0.32, 0.48, 0.32]} />
+                      <meshStandardMaterial color="#ea580c" roughness={0.5} />
+                    </mesh>
+                  ))}
+                </group>
+              );
+            })
+          )}
+        </group>
+      ) : isCafeteria ? (
+        // CAFETERIA DO CERRADO (ESPRESSO BAR + WARM LEATHER LOUNGE)
+        <group>
+          <mesh position={[0, -h / 2 + 0.05, 0]} receiveShadow>
+            <boxGeometry args={[w, 0.1, d]} />
+            <meshStandardMaterial color="#fff7ed" roughness={0.5} />
+          </mesh>
+          {/* Main Barista Coffee Counter in Rich Walnut */}
+          <mesh position={[-w * 0.12, 0.55, -d * 0.22]} castShadow>
+            <boxGeometry args={[w * 0.65, 1.1, 0.8]} />
+            <meshStandardMaterial color="#451a03" roughness={0.3} />
+          </mesh>
+          {/* Brushed Stainless Steel Espresso Machine */}
+          <mesh position={[-w * 0.12, 1.25, -d * 0.22]} castShadow>
+            <boxGeometry args={[0.8, 0.35, 0.5]} />
+            <meshStandardMaterial color="#cbd5e1" metalness={0.9} roughness={0.15} />
+          </mesh>
+          {/* Warm Amber Leather Lounge Sofas */}
+          <mesh position={[0, 0.35, d * 0.22]} castShadow>
+            <boxGeometry args={[w * 0.75, 0.7, 1.2]} />
+            <meshStandardMaterial color="#d97706" roughness={0.7} />
+          </mesh>
+          {/* Low Coffee Table */}
+          <mesh position={[0, 0.22, 0]} castShadow receiveShadow>
+            <boxGeometry args={[w * 0.5, 0.3, 0.8]} />
+            <meshStandardMaterial color="#78350f" roughness={0.4} />
           </mesh>
         </group>
       ) : isEntrance ? (
         // PÓRTICO MONUMENTAL SÃO PAULO EXPO COM CATRACAS
         <group>
           {/* Side Pillars */}
-          <mesh position={[-w / 2 + 0.6, 0, 0]} castShadow>
-            <boxGeometry args={[1.2, h * 2.2, 1.2]} />
+          <mesh position={[-w / 2 + 0.4, 0, 0]} castShadow>
+            <boxGeometry args={[0.8, h * 2.2, 0.8]} />
             <meshStandardMaterial color="#15803d" />
           </mesh>
-          <mesh position={[w / 2 - 0.6, 0, 0]} castShadow>
-            <boxGeometry args={[1.2, h * 2.2, 1.2]} />
+          <mesh position={[w / 2 - 0.4, 0, 0]} castShadow>
+            <boxGeometry args={[0.8, h * 2.2, 0.8]} />
             <meshStandardMaterial color="#15803d" />
           </mesh>
           {/* Top Arch */}
-          <mesh position={[0, h * 1.6, 0]} castShadow>
-            <boxGeometry args={[w, 1.2, 1.4]} />
+          <mesh position={[0, h * 1.5, 0]} castShadow>
+            <boxGeometry args={[w, 0.8, 1.0]} />
             <meshStandardMaterial color="#16a34a" />
           </mesh>
-          {/* Catracas Eletrônicas */}
-          {[-3, -1, 1, 3].map((cx) => (
-            <mesh key={cx} position={[cx, -h / 4, 1.2]} castShadow>
-              <boxGeometry args={[0.4, 1.0, 0.8]} />
+          {/* 8 Security Turnstiles / Catracas */}
+          {[-3, -2, -1, 0, 1, 2, 3].map((cx) => (
+            <mesh key={cx} position={[cx * (w * 0.12), -h / 4, 0]} castShadow>
+              <boxGeometry args={[0.3, 0.9, 0.6]} />
               <meshStandardMaterial color="#475569" metalness={0.7} roughness={0.3} />
             </mesh>
           ))}
-          {/* Carpet Floor */}
+          {/* Floor Carpet */}
           <mesh position={[0, -h / 2 + 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
             <planeGeometry args={[w * 0.95, d * 0.95]} />
             <meshBasicMaterial color="#bbf7d0" transparent opacity={0.7} />
@@ -173,8 +324,8 @@ export function BoothMesh({
             />
           </mesh>
           {/* Calming Teal Header */}
-          <mesh position={[0, h / 2 + 0.2, 0]} castShadow>
-            <boxGeometry args={[w * 0.98, 0.35, d * 0.98]} />
+          <mesh position={[0, h / 2 + 0.15, 0]} castShadow>
+            <boxGeometry args={[w * 0.98, 0.3, d * 0.98]} />
             <meshStandardMaterial color="#0d9488" roughness={0.3} />
           </mesh>
           {/* Sunflower Gold Emblem Strip */}
@@ -191,8 +342,8 @@ export function BoothMesh({
             <meshStandardMaterial color="#16a34a" roughness={0.3} />
           </mesh>
           {/* Exit Sign Header */}
-          <mesh position={[0, h / 2 + 0.25, 0]}>
-            <boxGeometry args={[w * 0.7, 0.3, d * 0.3]} />
+          <mesh position={[0, h / 2 + 0.2, 0]}>
+            <boxGeometry args={[w * 0.8, 0.25, d * 0.8]} />
             <meshStandardMaterial color="#22c55e" emissive="#15803d" emissiveIntensity={0.6} />
           </mesh>
         </group>
@@ -204,29 +355,24 @@ export function BoothMesh({
             <boxGeometry args={[w, 0.15, d]} />
             <meshStandardMaterial color="#f1f5f9" roughness={0.5} />
           </mesh>
-          {/* Back Wall (Painel Traseiro Modular) */}
+          {/* Back Wall */}
           <mesh position={[0, 0, -d / 2 + 0.1]} castShadow>
-            <boxGeometry args={[w * 0.96, h, 0.15]} />
+            <boxGeometry args={[w * 0.96, h, 0.12]} />
             <meshStandardMaterial color="#ffffff" roughness={0.4} />
           </mesh>
-          {/* Side Partition Wall */}
-          <mesh position={[-w / 2 + 0.1, 0, 0]} castShadow>
-            <boxGeometry args={[0.15, h, d * 0.9]} />
-            <meshStandardMaterial color="#ffffff" roughness={0.4} />
-          </mesh>
-          {/* Branded Fascia Beam (Testeira com Marca) */}
+          {/* Branded Fascia Beam */}
           <mesh position={[0, h / 2 + 0.15, 0]} castShadow>
-            <boxGeometry args={[w * 0.98, 0.35, d * 0.98]} />
+            <boxGeometry args={[w * 0.98, 0.3, d * 0.98]} />
             <meshStandardMaterial color={accentColor} roughness={0.3} />
           </mesh>
-          {/* Front Bistro Reception Counter */}
-          <mesh position={[0, -h / 4, d / 2 - 0.4]} castShadow>
-            <boxGeometry args={[w * 0.55, h * 0.5, 0.5]} />
+          {/* Front Bistro Counter */}
+          <mesh position={[0, -h / 4, d / 2 - 0.3]} castShadow>
+            <boxGeometry args={[w * 0.6, h * 0.5, 0.4]} />
             <meshStandardMaterial color="#ffffff" roughness={0.3} />
           </mesh>
         </group>
       ) : (
-        // CLEAN ARCHITECTURAL BOOTH (ILHAS E PENÍNSULAS)
+        // ARCHITECTURAL BOOTHS (NUBANK, IFOOD, ITAU, TOTVS, MERCADO LIVRE, EMBRAER EVE)
         <group>
           {/* Base Plinth */}
           <mesh position={[0, -h / 2 + 0.1, 0]} castShadow receiveShadow>
@@ -251,8 +397,8 @@ export function BoothMesh({
             />
           </mesh>
 
-          {/* Clean Colored Brand Header */}
-          <mesh position={[0, h / 2 + 0.22, 0]} castShadow>
+          {/* Brand Colored Fascia Beam */}
+          <mesh position={[0, h / 2 + 0.2, 0]} castShadow>
             <boxGeometry args={[w * 0.96, 0.4, d * 0.96]} />
             <meshStandardMaterial
               color={accentColor}
@@ -261,36 +407,52 @@ export function BoothMesh({
             />
           </mesh>
 
-          {/* Special Feature: Embraer Eve eVTOL Platform */}
-          {poi.id === 'booth-eve' && (
-            <group position={[0, -h / 4 + 0.1, 0]}>
-              {/* Helipad/Platform Circle */}
-              <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.05, 0]}>
-                <ringGeometry args={[1.5, 2.8, 32]} />
-                <meshBasicMaterial color="#009B3A" transparent opacity={0.8} />
+          {/* NUBANK SPECIFIC: Curved signature reception counters */}
+          {isNubank && (
+            <group>
+              {/* Top-Left Curved Counter */}
+              <mesh position={[-w * 0.28, -h / 4, -d * 0.25]} castShadow>
+                <boxGeometry args={[w * 0.35, h * 0.5, 0.7]} />
+                <meshStandardMaterial color="#820AD1" roughness={0.2} />
               </mesh>
-              {/* Center 'H' or 'EVE' mark */}
-              <mesh position={[0, 0.4, 0]} castShadow>
-                <boxGeometry args={[2.5, 0.6, 1.8]} />
-                <meshStandardMaterial color="#002776" roughness={0.2} metalness={0.8} />
+              {/* Bottom-Right Curved Counter */}
+              <mesh position={[w * 0.28, -h / 4, d * 0.25]} castShadow>
+                <boxGeometry args={[w * 0.35, h * 0.5, 0.7]} />
+                <meshStandardMaterial color="#820AD1" roughness={0.2} />
               </mesh>
             </group>
           )}
 
-          {/* Reception Desk */}
-          {!isRestroom && !isWorkshop && poi.id !== 'booth-eve' && (
+          {/* EMBRAER EVE SPECIFIC: Mockup eVTOL Cabin & Seating */}
+          {isEve && (
+            <group position={[0, -h / 4 + 0.1, 0]}>
+              {/* Helipad Ring */}
+              <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.05, 0]}>
+                <ringGeometry args={[1.5, 2.5, 32]} />
+                <meshBasicMaterial color="#009B3A" transparent opacity={0.8} />
+              </mesh>
+              {/* eVTOL Fuselage Mockup */}
+              <mesh position={[0, 0.5, 0]} castShadow>
+                <boxGeometry args={[w * 0.5, 0.9, d * 0.4]} />
+                <meshStandardMaterial color="#002776" roughness={0.2} metalness={0.7} />
+              </mesh>
+            </group>
+          )}
+
+          {/* Standard Reception Desk */}
+          {!isRestroom && !isNubank && !isEve && (
             <mesh position={[0, -h / 4, d / 2 - 0.4]} castShadow>
-              <boxGeometry args={[Math.min(w * 0.4, 4), h * 0.5, 0.6]} />
+              <boxGeometry args={[Math.min(w * 0.4, 4), h * 0.5, 0.5]} />
               <meshStandardMaterial color="#f1f5f9" roughness={0.3} />
             </mesh>
           )}
         </group>
       )}
 
-      {/* 3D In-World Text: Dark Charcoal (#0f172a) with White Outline for Maximum Contrast */}
+      {/* 3D Billboard Text Label */}
       <Billboard position={[0, h + 0.5, 0]} follow lockX={false} lockY={false} lockZ={false}>
         <Text
-          fontSize={isMajorLandmark ? 0.9 : 0.65}
+          fontSize={isMajorLandmark ? 0.85 : 0.6}
           color={isSelected ? '#0284c7' : '#0f172a'}
           anchorX="center"
           anchorY="middle"
@@ -301,8 +463,8 @@ export function BoothMesh({
         </Text>
         {poi.boothNumber && (
           <Text
-            position={[0, -0.65, 0]}
-            fontSize={0.45}
+            position={[0, -0.6, 0]}
+            fontSize={0.42}
             color="#64748b"
             anchorX="center"
             anchorY="middle"
@@ -317,7 +479,7 @@ export function BoothMesh({
       {/* Hovered/Selected Clean Tooltip */}
       {showBadge && (
         <Html
-          position={[0, h + 1.6, 0]}
+          position={[0, h + 1.5, 0]}
           center
           distanceFactor={35}
           zIndexRange={[1, 1]}

@@ -192,16 +192,15 @@ export function EventMapCanvas({
         {/* 3D Venue Structure & Lighting */}
         <VenueEnvironment activeFloor={activeFloor} />
 
-        {/* 3D Booths & POIs */}
+        {/* 3D Booths & POIs (Strict Floor Isolation) */}
         <group>
-          {POI_LIST.map((poi) => {
+          {POI_LIST.filter((poi) => poi.floor === activeFloor).map((poi) => {
             const isSelected = selectedPoi?.id === poi.id;
             const isHovered = hoveredPoi?.id === poi.id;
             const isDestination = route?.toPoi?.id === poi.id;
             const isOrigin = route?.fromPoi?.id === poi.id;
 
             const isDimmed =
-              poi.floor !== activeFloor ||
               (selectedCategory !== 'all' && poi.category !== selectedCategory) ||
               (isNavigating && !isDestination && !isOrigin && !isSelected);
 
