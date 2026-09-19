@@ -152,24 +152,24 @@ export const VENUE_ZONES = [
 ];
 
 export const POI_LIST: POI[] = [
-  // --- FLOOR 1: SALA DE ACOLHIMENTO (SENSORY RELIEF) ---
+  // ==========================================
+  // --- FLOOR 1: FACILIDADES & EMERGÊNCIA ---
+  // ==========================================
   {
-    id: 'sala-acolhimento',
-    name: 'Sala de Acolhimento & Descompressão',
-    shortName: 'Sala Acolhimento',
-    category: 'quiet_room',
+    id: 'entrance-main',
+    name: 'Entrada Principal & Credenciamento',
+    shortName: 'Entrada Principal',
+    category: 'entrance',
+    tier: 'facility',
     floor: 1,
-    position: [-28, 1.2, 8],
-    dimensions: [8, 2.2, 6],
-    color: '#0d9488',
-    accentColor: '#2dd4bf',
-    zone: 'Espaço de Descompressão',
+    position: [0, 0.5, 27],
+    dimensions: [12, 1, 3],
+    color: '#16a34a',
+    accentColor: '#22c55e',
+    zone: 'Entrada & Saída',
     isAccessible: true,
-    isQuietZone: true,
-    description: 'Ambiente silencioso com iluminação reduzida, abafadores de ruído, sofás confortáveis e equipe de apoio para pessoas neurodivergentes ou com sobrecarga sensorial.',
+    description: 'Check-in, retirada de crachás, filas prioritárias para pessoas com deficiência, idosos e gestantes.',
   },
-
-  // --- FLOOR 1: SAÍDAS DE EMERGÊNCIA ---
   {
     id: 'saida-sul',
     name: 'Saída de Emergência Sul (Principal)',
@@ -191,14 +191,14 @@ export const POI_LIST: POI[] = [
     shortName: 'Saída Acessível Oeste',
     category: 'exit',
     floor: 1,
-    position: [-36, 0.6, 6],
-    dimensions: [5, 1.2, 2],
+    position: [-35, 0.6, 16],
+    dimensions: [4, 1.2, 2],
     color: '#16a34a',
     accentColor: '#22c55e',
     zone: 'Saídas de Emergência',
     isAccessible: true,
     isEmergencyExit: true,
-    description: 'Rota de fuga prioritária com piso tátil, sinalização sonoro-luminosa e rampa com inclinação NBR 9050.',
+    description: 'Rota de fuga prioritária com piso tátil, sinalização sonoro-luminosa e rampa com inclinação NBR 9050 conectada à Sala de Acolhimento.',
   },
   {
     id: 'saida-norte',
@@ -206,7 +206,7 @@ export const POI_LIST: POI[] = [
     shortName: 'Saída Norte',
     category: 'exit',
     floor: 1,
-    position: [0, 0.6, -26],
+    position: [0, 0.6, -25],
     dimensions: [6, 1.2, 2],
     color: '#15803d',
     accentColor: '#86efac',
@@ -215,16 +215,84 @@ export const POI_LIST: POI[] = [
     isEmergencyExit: true,
     description: 'Saída de emergência aos fundos dos palcos com barra antipânico.',
   },
+  {
+    id: 'info-desk',
+    name: 'Balcão de Informações & Acessibilidade',
+    shortName: 'Informações',
+    category: 'info',
+    tier: 'facility',
+    floor: 1,
+    position: [0, 0.9, 9],
+    dimensions: [5, 1.8, 3],
+    color: '#0284c7',
+    accentColor: '#38bdf8',
+    zone: 'Entrada & Saída',
+    isAccessible: true,
+    description: 'Central de atendimento com empréstimo de cadeiras de rodas, fones antirruído, cordões de girassol e guias videntes.',
+  },
 
-  // --- FLOOR 1: STAGES & ATTRACTIONS ---
+  // =======================================================
+  // --- FLOOR 1: SALA DE ACOLHIMENTO (SENSORY CALM ZONE) ---
+  // =======================================================
+  {
+    id: 'sala-acolhimento',
+    name: 'Sala de Acolhimento & Descompressão',
+    shortName: 'Sala Acolhimento',
+    category: 'quiet_room',
+    floor: 1,
+    position: [-27, 1.2, 18],
+    dimensions: [10, 2.4, 7],
+    color: '#0d9488',
+    accentColor: '#2dd4bf',
+    zone: 'Espaço de Descompressão',
+    isAccessible: true,
+    isQuietZone: true,
+    description: 'Ambiente silencioso com iluminação reduzida, abafadores de ruído, sofás confortáveis e equipe de apoio para pessoas neurodivergentes ou com sobrecarga sensorial.',
+  },
+
+  // ==========================================
+  // --- FLOOR 1: SANITÁRIOS (RESTROOMS) ---
+  // ==========================================
+  {
+    id: 'restroom-west',
+    name: 'Sanitários Acessíveis & Bebedouro (Oeste)',
+    shortName: 'Sanitários Oeste',
+    category: 'restroom',
+    tier: 'facility',
+    floor: 1,
+    position: [-26, 0.8, -5],
+    dimensions: [4, 1.6, 6],
+    color: '#64748b',
+    zone: 'Facilidades',
+    isAccessible: true,
+    description: 'Cabines acessíveis para cadeirantes, barras de apoio, trocador infantil e bebedouro com acionamento baixo.',
+  },
+  {
+    id: 'restroom-east',
+    name: 'Sanitários & Bebedouro (Leste)',
+    shortName: 'Sanitários Leste',
+    category: 'restroom',
+    tier: 'facility',
+    floor: 1,
+    position: [26, 0.8, -5],
+    dimensions: [4, 1.6, 6],
+    color: '#64748b',
+    zone: 'Facilidades',
+    isAccessible: true,
+    description: 'Sanitários masculinos, femininos e cabine acessível com botão de emergência.',
+  },
+
+  // ==========================================
+  // --- FLOOR 1: STAGES (ARENAS NORTE) ---
+  // ==========================================
   {
     id: 'stage-main',
     name: 'Arena Principal de Keynote',
     shortName: 'Palco Principal',
     category: 'stage',
     floor: 1,
-    position: [-22, 1.5, -18],
-    dimensions: [18, 3, 14],
+    position: [-22, 1.5, -20],
+    dimensions: [18, 3, 12],
     color: '#7c3aed',
     accentColor: '#a78bfa',
     zone: 'Arena Principal (Keynote)',
@@ -242,8 +310,8 @@ export const POI_LIST: POI[] = [
     shortName: 'Palco DevTech',
     category: 'stage',
     floor: 1,
-    position: [22, 1.2, -18],
-    dimensions: [14, 2.4, 12],
+    position: [22, 1.2, -20],
+    dimensions: [16, 2.4, 12],
     color: '#2563eb',
     accentColor: '#60a5fa',
     zone: 'Pavilhão de IA & Robótica',
@@ -255,17 +323,19 @@ export const POI_LIST: POI[] = [
     ],
   },
 
-  // --- FLOOR 1: EXHIBITOR BOOTHS ---
+  // ===============================================================
+  // --- FLOOR 1: EXPO GRID - PAVILHÃO IA & ROBÓTICA (OESTE) ---
+  // ===============================================================
   {
     id: 'booth-google-cloud',
     name: 'Google Cloud & Vertex AI',
     shortName: 'Google Cloud',
-    boothNumber: 'A01',
+    boothNumber: 'A101',
     category: 'booth',
     tier: 'diamond',
     floor: 1,
-    position: [-10, 1.2, -4],
-    dimensions: [8, 2.5, 6],
+    position: [-15, 1.2, -5],
+    dimensions: [7, 2.4, 6],
     color: '#4285F4',
     accentColor: '#34A853',
     zone: 'Pavilhão de IA & Robótica',
@@ -279,27 +349,46 @@ export const POI_LIST: POI[] = [
     id: 'booth-nvidia',
     name: 'NVIDIA Omniverse & Robótica',
     shortName: 'NVIDIA',
-    boothNumber: 'A02',
+    boothNumber: 'A102',
     category: 'booth',
     tier: 'diamond',
     floor: 1,
-    position: [-10, 1.2, 6],
-    dimensions: [8, 2.5, 6],
+    position: [-15, 1.2, 9],
+    dimensions: [7, 2.4, 6],
     color: '#76B900',
     accentColor: '#9be821',
     zone: 'Pavilhão de IA & Robótica',
     description: 'Gêmeos digitais no Omniverse e arquiteturas de aceleração neural em hardware Blackwell.',
   },
   {
+    id: 'booth-anthropic',
+    name: 'Anthropic Claude Showcase',
+    shortName: 'Anthropic',
+    boothNumber: 'A201',
+    category: 'booth',
+    tier: 'gold',
+    floor: 1,
+    position: [-26, 1.1, 9],
+    dimensions: [7, 2.2, 6],
+    color: '#D97706',
+    accentColor: '#F59E0B',
+    zone: 'Pavilhão de IA & Robótica',
+    description: 'Segurança em IA, raciocínio avançado com Claude e workshops de prompting.',
+  },
+
+  // ===============================================================
+  // --- FLOOR 1: EXPO GRID - CLOUD & FINTECH (LESTE) ---
+  // ===============================================================
+  {
     id: 'booth-aws',
     name: 'AWS Cloud & Bedrock',
     shortName: 'AWS',
-    boothNumber: 'B01',
+    boothNumber: 'B301',
     category: 'booth',
     tier: 'diamond',
     floor: 1,
-    position: [10, 1.2, -4],
-    dimensions: [8, 2.5, 6],
+    position: [15, 1.2, -5],
+    dimensions: [7, 2.4, 6],
     color: '#FF9900',
     accentColor: '#FFB84D',
     zone: 'Cloud & Infraestrutura',
@@ -309,59 +398,46 @@ export const POI_LIST: POI[] = [
     id: 'booth-stripe',
     name: 'Stripe Global Payments',
     shortName: 'Stripe',
-    boothNumber: 'B02',
+    boothNumber: 'B302',
     category: 'booth',
     tier: 'gold',
     floor: 1,
-    position: [10, 1.2, 6],
-    dimensions: [8, 2.5, 6],
+    position: [15, 1.2, 9],
+    dimensions: [7, 2.4, 6],
     color: '#635BFF',
     accentColor: '#7a73ff',
     zone: 'Fintech & Segurança',
     description: 'Checkout autônomo por agentes e orquestração global de pagamentos.',
   },
   {
-    id: 'booth-anthropic',
-    name: 'Anthropic Claude Showcase',
-    shortName: 'Anthropic',
-    boothNumber: 'A03',
-    category: 'booth',
-    tier: 'gold',
-    floor: 1,
-    position: [-22, 1, 6],
-    dimensions: [7, 2, 5],
-    color: '#D97706',
-    accentColor: '#F59E0B',
-    zone: 'Pavilhão de IA & Robótica',
-    description: 'Segurança em IA, raciocínio avançado com Claude e workshops de prompting.',
-  },
-  {
     id: 'booth-github',
     name: 'GitHub Copilot Workspace',
     shortName: 'GitHub',
-    boothNumber: 'B03',
+    boothNumber: 'B401',
     category: 'booth',
     tier: 'gold',
     floor: 1,
-    position: [22, 1, 6],
-    dimensions: [7, 2, 5],
+    position: [26, 1.1, 9],
+    dimensions: [7, 2.2, 6],
     color: '#24292F',
     accentColor: '#58a6ff',
     zone: 'Cloud & Infraestrutura',
     description: 'Desafios de código assistido por IA e adesivos exclusivos do Octocat.',
   },
 
-  // --- FLOOR 1: STARTUP ALLEY ---
+  // =======================================================
+  // --- FLOOR 1: STARTUP ALLEY (ALAMEDA DE STARTUPS) ---
+  // =======================================================
   {
     id: 'pod-startup-1',
     name: 'Veloce AI (Entregas Autônomas)',
     shortName: 'Veloce AI',
-    boothNumber: 'S01',
+    boothNumber: 'S101',
     category: 'booth',
     tier: 'startup',
     floor: 1,
-    position: [-2, 0.8, 14],
-    dimensions: [3.5, 1.6, 3.5],
+    position: [-4.5, 0.8, 14],
+    dimensions: [3.2, 1.6, 3.2],
     color: '#0ea5e9',
     zone: 'Alameda de Startups',
     description: 'Robótica de micro-entregas expressas urbanas com zero emissões.',
@@ -370,12 +446,12 @@ export const POI_LIST: POI[] = [
     id: 'pod-startup-2',
     name: 'Synapse Biosystems',
     shortName: 'Synapse',
-    boothNumber: 'S02',
+    boothNumber: 'S102',
     category: 'booth',
     tier: 'startup',
     floor: 1,
-    position: [4, 0.8, 14],
-    dimensions: [3.5, 1.6, 3.5],
+    position: [4.5, 0.8, 14],
+    dimensions: [3.2, 1.6, 3.2],
     color: '#14b8a6',
     zone: 'Alameda de Startups',
     description: 'Wearables de interface neural para acessibilidade motora e fala assistida.',
@@ -384,12 +460,12 @@ export const POI_LIST: POI[] = [
     id: 'pod-startup-3',
     name: 'PulseFlow Security',
     shortName: 'PulseFlow',
-    boothNumber: 'S03',
+    boothNumber: 'S103',
     category: 'booth',
     tier: 'startup',
     floor: 1,
-    position: [-2, 0.8, 20],
-    dimensions: [3.5, 1.6, 3.5],
+    position: [-4.5, 0.8, 20],
+    dimensions: [3.2, 1.6, 3.2],
     color: '#f43f5e',
     zone: 'Alameda de Startups',
     description: 'Malha de segurança zero-trust para microsserviços corporativos.',
@@ -398,48 +474,20 @@ export const POI_LIST: POI[] = [
     id: 'pod-startup-4',
     name: 'HoloGraph 3D',
     shortName: 'HoloGraph',
-    boothNumber: 'S04',
+    boothNumber: 'S104',
     category: 'booth',
     tier: 'startup',
     floor: 1,
-    position: [4, 0.8, 20],
-    dimensions: [3.5, 1.6, 3.5],
+    position: [4.5, 0.8, 20],
+    dimensions: [3.2, 1.6, 3.2],
     color: '#a855f7',
     zone: 'Alameda de Startups',
     description: 'Streaming volumétrico 3D direto no navegador de smartphones.',
   },
 
-  // --- FLOOR 1: AMENITIES & FACILITIES ---
-  {
-    id: 'entrance-main',
-    name: 'Entrada Principal & Credenciamento',
-    shortName: 'Entrada Principal',
-    category: 'entrance',
-    tier: 'facility',
-    floor: 1,
-    position: [0, 0.5, 27],
-    dimensions: [12, 1, 4],
-    color: '#22c55e',
-    accentColor: '#86efac',
-    zone: 'Entrada & Saída',
-    isAccessible: true,
-    description: 'Check-in, retirada de crachás, filas prioritárias para pessoas com deficiência e gestantes.',
-  },
-  {
-    id: 'info-desk',
-    name: 'Balcão de Informações & Acessibilidade',
-    shortName: 'Informações',
-    category: 'info',
-    tier: 'facility',
-    floor: 1,
-    position: [0, 0.9, 10],
-    dimensions: [5, 1.8, 3],
-    color: '#0284c7',
-    accentColor: '#38bdf8',
-    zone: 'Entrada & Saída',
-    isAccessible: true,
-    description: 'Central de atendimento com empréstimo de cadeiras de rodas, fones antirruído, cordões de girassol e guias videntes.',
-  },
+  // ===============================================================
+  // --- FLOOR 1: PRAÇA DE ALIMENTAÇÃO & LOUNGE (LESTE SUL) ---
+  // ===============================================================
   {
     id: 'food-court-1',
     name: 'Cafeteria Artesanal & Lanches',
@@ -447,8 +495,8 @@ export const POI_LIST: POI[] = [
     category: 'food',
     tier: 'facility',
     floor: 1,
-    position: [-24, 0.9, 20],
-    dimensions: [8, 1.8, 6],
+    position: [27, 0.9, 15],
+    dimensions: [8, 1.8, 5],
     color: '#ea580c',
     accentColor: '#fb923c',
     zone: 'Praça de Alimentação & Lounge',
@@ -461,43 +509,17 @@ export const POI_LIST: POI[] = [
     category: 'food',
     tier: 'facility',
     floor: 1,
-    position: [24, 0.9, 20],
-    dimensions: [10, 1.8, 6],
+    position: [27, 0.9, 22],
+    dimensions: [8, 1.8, 5],
     color: '#db2777',
     accentColor: '#f472b6',
     zone: 'Praça de Alimentação & Lounge',
     description: 'Cardápio variado com opções veganas, pratos rápidos e mesas com altura adaptada.',
   },
-  {
-    id: 'restroom-west',
-    name: 'Sanitários Acessíveis & Bebedouro (Oeste)',
-    shortName: 'Sanitários Oeste',
-    category: 'restroom',
-    tier: 'facility',
-    floor: 1,
-    position: [-32, 0.8, -4],
-    dimensions: [4, 1.6, 6],
-    color: '#64748b',
-    zone: 'Facilidades',
-    isAccessible: true,
-    description: 'Cabines acessíveis para cadeirantes, barras de apoio, trocador infantil e bebedouro com acionamento baixo.',
-  },
-  {
-    id: 'restroom-east',
-    name: 'Sanitários & Bebedouro (Leste)',
-    shortName: 'Sanitários Leste',
-    category: 'restroom',
-    tier: 'facility',
-    floor: 1,
-    position: [32, 0.8, -4],
-    dimensions: [4, 1.6, 6],
-    color: '#64748b',
-    zone: 'Facilidades',
-    isAccessible: true,
-    description: 'Sanitários masculinos, femininos e cabine acessível com botão de emergência.',
-  },
 
+  // ===============================================================
   // --- FLOOR 2: WORKSHOPS & VIP MEZZANINE ---
+  // ===============================================================
   {
     id: 'workshop-room-a',
     name: 'Sala de Workshop A: IA Agêntica',
@@ -505,7 +527,7 @@ export const POI_LIST: POI[] = [
     category: 'workshop',
     floor: 2,
     position: [-16, 7.5, -8],
-    dimensions: [12, 2.5, 10],
+    dimensions: [12, 2.5, 8],
     color: '#4f46e5',
     accentColor: '#818cf8',
     zone: 'Salas de Workshop',
@@ -522,7 +544,7 @@ export const POI_LIST: POI[] = [
     category: 'workshop',
     floor: 2,
     position: [16, 7.5, -8],
-    dimensions: [12, 2.5, 10],
+    dimensions: [12, 2.5, 8],
     color: '#0891b2',
     accentColor: '#22d3ee',
     zone: 'Salas de Workshop',
@@ -540,7 +562,7 @@ export const POI_LIST: POI[] = [
     tier: 'diamond',
     floor: 2,
     position: [0, 7.5, -14],
-    dimensions: [14, 2.5, 8],
+    dimensions: [12, 2.5, 6],
     color: '#ca8a04',
     accentColor: '#facc15',
     zone: 'Lounge VIP & Palestrantes',
@@ -554,7 +576,7 @@ export const POI_LIST: POI[] = [
     category: 'restroom',
     tier: 'facility',
     floor: 2,
-    position: [-22, 7.3, 4],
+    position: [-24, 7.3, 0],
     dimensions: [4, 1.6, 5],
     color: '#64748b',
     zone: 'Facilidades',
@@ -563,124 +585,150 @@ export const POI_LIST: POI[] = [
   },
 ];
 
-// Waypoint Graph with Sensory & Accessibility Attributes
+// Waypoint Graph with Sensory & Accessibility Attributes (Orthogonal Grid)
 export const VENUE_WAYPOINTS: WaypointNode[] = [
-  // --- FLOOR 1 NODES ---
+  // --- FLOOR 1: CONCURSO CENTRAL (X = 0) ---
+  { id: 'wp_saida_sul', x: 0, z: 28, floor: 1, name: 'Saída de Emergência Sul', isEmergencyExit: true },
   { id: 'wp_entrance', x: 0, z: 24, floor: 1, name: 'Entrada Principal' },
-  { id: 'wp_south_center', x: 0, z: 17, floor: 1 },
-  { id: 'wp_south_west', x: -16, z: 17, floor: 1 },
-  { id: 'wp_south_east', x: 16, z: 17, floor: 1 },
-  { id: 'wp_coffee', x: -24, z: 16, floor: 1, name: 'Café & Lounge' },
-  { id: 'wp_food_hall', x: 24, z: 16, floor: 1, name: 'Praça de Alimentação' },
+  { id: 'wp_concourse_south', x: 0, z: 16, floor: 1, name: 'Concurso Sul & Central' },
+  { id: 'wp_info_desk', x: 0, z: 9, floor: 1, name: 'Balcão de Informações' },
+  { id: 'wp_concourse_mid', x: 0, z: 2, floor: 1, name: 'Concurso Central (Centro)' },
+  { id: 'wp_concourse_north', x: 0, z: -12, floor: 1, name: 'Concurso Norte & Mezanino' },
+  { id: 'wp_stairs_f1', x: -2.5, z: -16, floor: 1, name: 'Escada para 2F', isStairs: true },
+  { id: 'wp_elevator_f1', x: 2.5, z: -16, floor: 1, name: 'Elevador Acessível 1F', isElevator: true },
+  { id: 'wp_saida_norte', x: 0, z: -24, floor: 1, name: 'Saída de Emergência Norte', isEmergencyExit: true },
 
-  // Sala de Acolhimento corridor & Emergency exits
-  { id: 'wp_sala_acolhimento', x: -28, z: 8, floor: 1, name: 'Sala de Acolhimento' },
-  { id: 'wp_saida_oeste', x: -34, z: 6, floor: 1, name: 'Saída Acessível Oeste', isEmergencyExit: true },
-  { id: 'wp_saida_sul', x: 0, z: 28, floor: 1, name: 'Saída Emergência Sul', isEmergencyExit: true },
-  { id: 'wp_saida_norte', x: 0, z: -24, floor: 1, name: 'Saída Emergência Norte', isEmergencyExit: true },
+  // --- FLOOR 1: CONCURSO SUL (Z = 16) ---
+  { id: 'wp_saida_oeste', x: -34, z: 16, floor: 1, name: 'Saída Acessível Oeste', isEmergencyExit: true },
+  { id: 'wp_sala_acolhimento', x: -27, z: 16, floor: 1, name: 'Sala de Acolhimento' },
+  { id: 'wp_sc_w2', x: -20, z: 16, floor: 1, name: 'Alameda 200 & Concurso Sul' },
+  { id: 'wp_sc_w1', x: -10, z: 16, floor: 1, name: 'Alameda 100 & Concurso Sul' },
+  { id: 'wp_sc_e1', x: 10, z: 16, floor: 1, name: 'Alameda 300 & Concurso Sul' },
+  { id: 'wp_sc_e2', x: 20, z: 16, floor: 1, name: 'Alameda 400 & Concurso Sul' },
+  { id: 'wp_food_court_1', x: 26, z: 16, floor: 1, name: 'Cafeteria & Lounge' },
+  { id: 'wp_food_court_2', x: 26, z: 22, floor: 1, name: 'Praça Gourmet' },
 
-  // Central Aisle & Info Desk
-  { id: 'wp_info_desk', x: 0, z: 10, floor: 1, name: 'Balcão Central' },
-  { id: 'wp_center_mid', x: 0, z: 1, floor: 1 },
-  { id: 'wp_center_north', x: 0, z: -10, floor: 1 },
+  // --- FLOOR 1: CONCURSO CENTRAL (Z = 2) ---
+  { id: 'wp_mc_w2', x: -20, z: 2, floor: 1, name: 'Alameda 200 & Concurso Central' },
+  { id: 'wp_mc_w1', x: -10, z: 2, floor: 1, name: 'Alameda 100 & Concurso Central' },
+  { id: 'wp_mc_e1', x: 10, z: 2, floor: 1, name: 'Alameda 300 & Concurso Central' },
+  { id: 'wp_mc_e2', x: 20, z: 2, floor: 1, name: 'Alameda 400 & Concurso Central' },
 
-  // Aisle West (Stage side - noisy during keynotes)
-  { id: 'wp_west_aisle_south', x: -16, z: 10, floor: 1 },
-  { id: 'wp_west_aisle_mid', x: -16, z: 1, floor: 1 },
-  { id: 'wp_west_aisle_north', x: -16, z: -10, floor: 1 },
-  { id: 'wp_main_stage_front', x: -22, z: -10, floor: 1, name: 'Entrada Palco Principal' },
-  { id: 'wp_restroom_west', x: -28, z: -4, floor: 1, name: 'Sanitários Oeste' },
+  // --- FLOOR 1: CONCURSO NORTE (Z = -12) ---
+  { id: 'wp_main_stage_front', x: -22, z: -14, floor: 1, name: 'Entrada Palco Principal' },
+  { id: 'wp_nc_w2', x: -20, z: -12, floor: 1, name: 'Alameda 200 & Concurso Norte' },
+  { id: 'wp_nc_w1', x: -10, z: -12, floor: 1, name: 'Alameda 100 & Concurso Norte' },
+  { id: 'wp_nc_e1', x: 10, z: -12, floor: 1, name: 'Alameda 300 & Concurso Norte' },
+  { id: 'wp_nc_e2', x: 20, z: -12, floor: 1, name: 'Alameda 400 & Concurso Norte' },
+  { id: 'wp_tech_stage_front', x: 22, z: -14, floor: 1, name: 'Entrada Palco DevTech' },
 
-  // Aisle East (Tech side)
-  { id: 'wp_east_aisle_south', x: 16, z: 10, floor: 1 },
-  { id: 'wp_east_aisle_mid', x: 16, z: 1, floor: 1 },
-  { id: 'wp_east_aisle_north', x: 16, z: -10, floor: 1 },
-  { id: 'wp_tech_stage_front', x: 22, z: -10, floor: 1, name: 'Entrada Palco DevTech' },
-  { id: 'wp_restroom_east', x: 28, z: -4, floor: 1, name: 'Sanitários Leste' },
+  // --- FLOOR 1: AISLE 200 & 400 AMENITIES ---
+  { id: 'wp_restroom_west', x: -20, z: -5, floor: 1, name: 'Sanitários Oeste' },
+  { id: 'wp_restroom_east', x: 20, z: -5, floor: 1, name: 'Sanitários Leste' },
 
-  // Startup Alley Crossways
-  { id: 'wp_startup_lane_1', x: -2, z: 14, floor: 1 },
-  { id: 'wp_startup_lane_2', x: 4, z: 14, floor: 1 },
-  { id: 'wp_startup_lane_3', x: -2, z: 20, floor: 1 },
-  { id: 'wp_startup_lane_4', x: 4, z: 20, floor: 1 },
+  // --- FLOOR 1: STARTUP ALLEY LANES ---
+  { id: 'wp_startup_w', x: -4.5, z: 17, floor: 1, name: 'Alameda Startups Oeste' },
+  { id: 'wp_startup_e', x: 4.5, z: 17, floor: 1, name: 'Alameda Startups Leste' },
 
-  // Vertical Connections: Stairs vs Accessible Elevator
-  { id: 'wp_stairs_f1', x: -2, z: -16, floor: 1, name: 'Escada para 2F', isStairs: true },
-  { id: 'wp_stairs_f2', x: -2, z: -16, floor: 2, name: 'Escada vindo de 1F', isStairs: true },
-
-  { id: 'wp_elevator_f1', x: 2, z: -16, floor: 1, name: 'Elevador Acessível 1F', isElevator: true },
-  { id: 'wp_elevator_f2', x: 2, z: -16, floor: 2, name: 'Elevador Acessível 2F', isElevator: true },
-
-  // --- FLOOR 2 NODES ---
+  // --- FLOOR 2: WORKSHOPS & VIP MEZZANINE ---
+  { id: 'wp_stairs_f2', x: -2.5, z: -16, floor: 2, name: 'Escada vindo de 1F', isStairs: true },
+  { id: 'wp_elevator_f2', x: 2.5, z: -16, floor: 2, name: 'Elevador Acessível 2F', isElevator: true },
   { id: 'wp_f2_landing', x: 0, z: -12, floor: 2, name: 'Hall Mezanino' },
+  { id: 'wp_f2_vip', x: 0, z: -14, floor: 2, name: 'Entrada Lounge VIP' },
   { id: 'wp_f2_west', x: -16, z: -12, floor: 2, name: 'Corredor Workshop A' },
   { id: 'wp_f2_east', x: 16, z: -12, floor: 2, name: 'Corredor Workshop B' },
-  { id: 'wp_f2_vip', x: 0, z: -10, floor: 2, name: 'Entrada Lounge VIP' },
-  { id: 'wp_f2_restroom', x: -20, z: 2, floor: 2, name: 'Sanitários 2F' },
+  { id: 'wp_f2_restroom', x: -24, z: -4, floor: 2, name: 'Sanitários 2F' },
 ];
 
 export const VENUE_EDGES: WaypointEdge[] = [
-  // Floor 1 Connections:
-  { from: 'wp_entrance', to: 'wp_south_center', lotacao: 3, ruido: 2 },
-  { from: 'wp_entrance', to: 'wp_saida_sul', lotacao: 1, ruido: 1 },
-  { from: 'wp_south_center', to: 'wp_south_west', lotacao: 2, ruido: 2 },
-  { from: 'wp_south_center', to: 'wp_south_east', lotacao: 2, ruido: 2 },
-  { from: 'wp_south_west', to: 'wp_coffee', lotacao: 3, ruido: 3 },
-  { from: 'wp_south_east', to: 'wp_food_hall', lotacao: 4, ruido: 4 },
+  // ===============================================
+  // FLOOR 1: MAIN CONCOURSE (X = 0)
+  // ===============================================
+  { from: 'wp_saida_sul', to: 'wp_entrance', lotacao: 1, ruido: 1 },
+  { from: 'wp_entrance', to: 'wp_concourse_south', lotacao: 3, ruido: 2 },
+  { from: 'wp_concourse_south', to: 'wp_info_desk', lotacao: 3, ruido: 2 },
+  { from: 'wp_info_desk', to: 'wp_concourse_mid', lotacao: 3, ruido: 2 },
+  { from: 'wp_concourse_mid', to: 'wp_concourse_north', lotacao: 3, ruido: 3 },
+  { from: 'wp_concourse_north', to: 'wp_saida_norte', lotacao: 1, ruido: 1 },
 
-  // Sala de Acolhimento calm path (low noise, low crowd)
-  { from: 'wp_south_west', to: 'wp_sala_acolhimento', lotacao: 1, ruido: 1 },
-  { from: 'wp_sala_acolhimento', to: 'wp_saida_oeste', lotacao: 1, ruido: 1 },
-  { from: 'wp_sala_acolhimento', to: 'wp_restroom_west', lotacao: 1, ruido: 1 },
+  // Vertical Access Links (Stairs & Elevator)
+  { from: 'wp_concourse_north', to: 'wp_stairs_f1', lotacao: 2, ruido: 2 },
+  { from: 'wp_concourse_north', to: 'wp_elevator_f1', lotacao: 1, ruido: 1 },
 
-  // Central Aisle & Info Desk
-  { from: 'wp_south_center', to: 'wp_info_desk', lotacao: 3, ruido: 2 },
-  { from: 'wp_south_west', to: 'wp_west_aisle_south', lotacao: 2, ruido: 2 },
-  { from: 'wp_south_east', to: 'wp_east_aisle_south', lotacao: 2, ruido: 2 },
+  // ===============================================
+  // FLOOR 1: SOUTH CONCOURSE (Z = 16)
+  // ===============================================
+  // Calm, sensory-friendly route to Sala de Acolhimento & Saída Oeste
+  { from: 'wp_saida_oeste', to: 'wp_sala_acolhimento', lotacao: 1, ruido: 1 },
+  { from: 'wp_sala_acolhimento', to: 'wp_sc_w2', lotacao: 1, ruido: 1 },
 
-  { from: 'wp_info_desk', to: 'wp_west_aisle_south', lotacao: 3, ruido: 3 },
-  { from: 'wp_info_desk', to: 'wp_east_aisle_south', lotacao: 3, ruido: 3 },
-  { from: 'wp_info_desk', to: 'wp_center_mid', lotacao: 4, ruido: 3 },
+  // Cross-Concourse Grid
+  { from: 'wp_sc_w2', to: 'wp_sc_w1', lotacao: 2, ruido: 2 },
+  { from: 'wp_sc_w1', to: 'wp_concourse_south', lotacao: 2, ruido: 2 },
+  { from: 'wp_concourse_south', to: 'wp_sc_e1', lotacao: 2, ruido: 2 },
+  { from: 'wp_sc_e1', to: 'wp_sc_e2', lotacao: 2, ruido: 2 },
+  { from: 'wp_sc_e2', to: 'wp_food_court_1', lotacao: 3, ruido: 3 },
+  { from: 'wp_food_court_1', to: 'wp_food_court_2', lotacao: 3, ruido: 3 },
 
-  // West Aisle (Near Main Stage - High noise!)
-  { from: 'wp_west_aisle_south', to: 'wp_west_aisle_mid', lotacao: 3, ruido: 4 },
-  { from: 'wp_west_aisle_mid', to: 'wp_west_aisle_north', lotacao: 4, ruido: 5 },
-  { from: 'wp_west_aisle_north', to: 'wp_main_stage_front', lotacao: 5, ruido: 5 },
-  { from: 'wp_west_aisle_mid', to: 'wp_restroom_west', lotacao: 2, ruido: 2 },
+  // ===============================================
+  // FLOOR 1: MID CONCOURSE (Z = 2)
+  // ===============================================
+  { from: 'wp_mc_w2', to: 'wp_mc_w1', lotacao: 2, ruido: 2 },
+  { from: 'wp_mc_w1', to: 'wp_concourse_mid', lotacao: 3, ruido: 3 },
+  { from: 'wp_concourse_mid', to: 'wp_mc_e1', lotacao: 3, ruido: 3 },
+  { from: 'wp_mc_e1', to: 'wp_mc_e2', lotacao: 2, ruido: 2 },
 
-  // East Aisle (Tech Stage - High noise!)
-  { from: 'wp_east_aisle_south', to: 'wp_east_aisle_mid', lotacao: 3, ruido: 3 },
-  { from: 'wp_east_aisle_mid', to: 'wp_east_aisle_north', lotacao: 4, ruido: 4 },
-  { from: 'wp_east_aisle_north', to: 'wp_tech_stage_front', lotacao: 4, ruido: 5 },
-  { from: 'wp_east_aisle_mid', to: 'wp_restroom_east', lotacao: 2, ruido: 2 },
+  // ===============================================
+  // FLOOR 1: NORTH CONCOURSE (Z = -12)
+  // ===============================================
+  { from: 'wp_main_stage_front', to: 'wp_nc_w2', lotacao: 5, ruido: 5 },
+  { from: 'wp_nc_w2', to: 'wp_nc_w1', lotacao: 4, ruido: 4 },
+  { from: 'wp_nc_w1', to: 'wp_concourse_north', lotacao: 3, ruido: 3 },
+  { from: 'wp_concourse_north', to: 'wp_nc_e1', lotacao: 3, ruido: 3 },
+  { from: 'wp_nc_e1', to: 'wp_nc_e2', lotacao: 4, ruido: 4 },
+  { from: 'wp_nc_e2', to: 'wp_tech_stage_front', lotacao: 4, ruido: 4 },
 
-  // Center aisles
-  { from: 'wp_center_mid', to: 'wp_west_aisle_mid', lotacao: 3, ruido: 3 },
-  { from: 'wp_center_mid', to: 'wp_east_aisle_mid', lotacao: 3, ruido: 3 },
-  { from: 'wp_center_mid', to: 'wp_center_north', lotacao: 3, ruido: 3 },
+  // ===============================================
+  // FLOOR 1: NORTH-SOUTH AISLES (100, 200, 300, 400)
+  // ===============================================
+  // Alameda 100 (X = -10)
+  { from: 'wp_sc_w1', to: 'wp_mc_w1', lotacao: 2, ruido: 2 },
+  { from: 'wp_mc_w1', to: 'wp_nc_w1', lotacao: 3, ruido: 3 },
 
-  { from: 'wp_center_north', to: 'wp_west_aisle_north', lotacao: 3, ruido: 4 },
-  { from: 'wp_center_north', to: 'wp_east_aisle_north', lotacao: 3, ruido: 4 },
-  { from: 'wp_center_north', to: 'wp_stairs_f1', lotacao: 2, ruido: 2 },
-  { from: 'wp_center_north', to: 'wp_elevator_f1', lotacao: 2, ruido: 1 },
-  { from: 'wp_center_north', to: 'wp_saida_norte', lotacao: 1, ruido: 1 },
+  // Alameda 200 (X = -20)
+  { from: 'wp_sc_w2', to: 'wp_mc_w2', lotacao: 2, ruido: 2 },
+  { from: 'wp_mc_w2', to: 'wp_restroom_west', lotacao: 2, ruido: 2 },
+  { from: 'wp_restroom_west', to: 'wp_nc_w2', lotacao: 3, ruido: 3 },
 
-  // Startup Alley Grid (Crowded lane)
-  { from: 'wp_south_center', to: 'wp_startup_lane_3', lotacao: 4, ruido: 3 },
-  { from: 'wp_south_center', to: 'wp_startup_lane_4', lotacao: 4, ruido: 3 },
-  { from: 'wp_startup_lane_3', to: 'wp_startup_lane_1', lotacao: 4, ruido: 3 },
-  { from: 'wp_startup_lane_4', to: 'wp_startup_lane_2', lotacao: 4, ruido: 3 },
-  { from: 'wp_startup_lane_1', to: 'wp_info_desk', lotacao: 4, ruido: 3 },
-  { from: 'wp_startup_lane_2', to: 'wp_info_desk', lotacao: 4, ruido: 3 },
+  // Alameda 300 (X = 10)
+  { from: 'wp_sc_e1', to: 'wp_mc_e1', lotacao: 2, ruido: 2 },
+  { from: 'wp_mc_e1', to: 'wp_nc_e1', lotacao: 3, ruido: 3 },
 
-  // VERTICAL CONNECTIONS:
+  // Alameda 400 (X = 20)
+  { from: 'wp_sc_e2', to: 'wp_mc_e2', lotacao: 2, ruido: 2 },
+  { from: 'wp_mc_e2', to: 'wp_restroom_east', lotacao: 2, ruido: 2 },
+  { from: 'wp_restroom_east', to: 'wp_nc_e2', lotacao: 3, ruido: 3 },
+
+  // ===============================================
+  // FLOOR 1: STARTUP ALLEY (ALAMEDA DE STARTUPS)
+  // ===============================================
+  { from: 'wp_concourse_south', to: 'wp_startup_w', lotacao: 3, ruido: 3 },
+  { from: 'wp_concourse_south', to: 'wp_startup_e', lotacao: 3, ruido: 3 },
+  { from: 'wp_startup_w', to: 'wp_info_desk', lotacao: 3, ruido: 3 },
+  { from: 'wp_startup_e', to: 'wp_info_desk', lotacao: 3, ruido: 3 },
+
+  // ===============================================
+  // VERTICAL CONNECTIONS: FLOOR 1 <-> FLOOR 2
+  // ===============================================
   // Stairs (intransponível para cadeirante e mobilidade reduzida)
   { from: 'wp_stairs_f1', to: 'wp_stairs_f2', temEscada: true, lotacao: 2, ruido: 2 },
 
   // Accessible Elevator (100% livre de barreiras)
   { from: 'wp_elevator_f1', to: 'wp_elevator_f2', isElevador: true, lotacao: 1, ruido: 1 },
 
-  // Floor 2 Connections
+  // ===============================================
+  // FLOOR 2: WORKSHOPS & VIP MEZZANINE
+  // ===============================================
   { from: 'wp_stairs_f2', to: 'wp_f2_landing', lotacao: 1, ruido: 1 },
   { from: 'wp_elevator_f2', to: 'wp_f2_landing', lotacao: 1, ruido: 1 },
   { from: 'wp_f2_landing', to: 'wp_f2_vip', lotacao: 2, ruido: 2 },

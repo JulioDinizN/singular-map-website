@@ -30,7 +30,7 @@ import { ReportModal } from './components/ui/ReportModal';
 import type { ReportType } from './components/ui/ReportModal';
 
 // Starting user location: Main Entrance
-const INITIAL_USER_POS: [number, number, number] = [0, 0.4, 25];
+const INITIAL_USER_POS: [number, number, number] = [0, 0.4, 24];
 
 export default function App() {
   const [activeFloor, setActiveFloor] = useState<1 | 2>(1);
@@ -204,8 +204,8 @@ export default function App() {
           ? { bloqueado: false, lotacao: 1, ruido: 1 }
           : {};
 
-        nextMap.set(`${locationId}->wp_center_mid`, override);
-        nextMap.set(`wp_center_mid->${locationId}`, override);
+        nextMap.set(`${locationId}->wp_concourse_mid`, override);
+        nextMap.set(`wp_concourse_mid->${locationId}`, override);
         nextMap.set(`${locationId}->wp_info_desk`, override);
         nextMap.set(`wp_info_desk->${locationId}`, override);
 

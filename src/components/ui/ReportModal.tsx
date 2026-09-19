@@ -58,7 +58,7 @@ export function ReportModal({
   onSubmitReport,
 }: ReportModalProps) {
   const [selectedType, setSelectedType] = useState<ReportType>('BLOQUEIO');
-  const [selectedLocation, setSelectedLocation] = useState<string>('wp_west_aisle_north');
+  const [selectedLocation, setSelectedLocation] = useState<string>('wp_nc_w2');
   const [notes, setNotes] = useState<string>('');
   const [submitted, setSubmitted] = useState<boolean>(false);
 
@@ -160,12 +160,12 @@ export function ReportModal({
                 onChange={(e) => setSelectedLocation(e.target.value)}
                 className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-blue-500 min-h-[44px]"
               >
-                <option value="wp_west_aisle_north">Corredor Oeste (Próximo ao Palco Principal)</option>
-                <option value="wp_east_aisle_north">Corredor Leste (Próximo ao DevTech)</option>
+                <option value="wp_nc_w2">Alameda 200 / Norte (Próximo ao Palco Principal)</option>
+                <option value="wp_nc_e2">Alameda 400 / Norte (Próximo ao DevTech)</option>
                 <option value="wp_elevator_f1">Elevador Acessível (Piso 1)</option>
                 <option value="wp_stairs_f1">Escadaria Central</option>
-                <option value="wp_info_desk">Cruzamento Central / Informações</option>
-                <option value="wp_startup_lane_3">Alameda de Startups (Corredor Sul)</option>
+                <option value="wp_info_desk">Concurso Central / Informações</option>
+                <option value="wp_startup_w">Alameda de Startups</option>
                 {POI_LIST.map((poi) => (
                   <option key={poi.id} value={poi.id}>
                     {poi.name} (Piso {poi.floor})
