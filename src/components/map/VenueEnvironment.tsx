@@ -283,16 +283,16 @@ export function VenueEnvironment({ activeFloor }: VenueEnvironmentProps) {
               <meshStandardMaterial color="#0f172a" roughness={0.3} />
             </mesh>
             {/* Pillar Numbering on 4 Faces */}
-            <Text position={[0, 5.0, 0.72]} fontSize={0.45} color="#ffffff" font="bold">
+            <Text position={[0, 5.0, 0.72]} fontSize={0.5} color="#ffffff" outlineWidth={0.02} outlineColor="#ffffff">
               {pillar.id}
             </Text>
-            <Text position={[0, 5.0, -0.72]} rotation={[0, Math.PI, 0]} fontSize={0.45} color="#ffffff" font="bold">
+            <Text position={[0, 5.0, -0.72]} rotation={[0, Math.PI, 0]} fontSize={0.5} color="#ffffff" outlineWidth={0.02} outlineColor="#ffffff">
               {pillar.id}
             </Text>
-            <Text position={[0.72, 5.0, 0]} rotation={[0, Math.PI / 2, 0]} fontSize={0.45} color="#ffffff" font="bold">
+            <Text position={[0.72, 5.0, 0]} rotation={[0, Math.PI / 2, 0]} fontSize={0.5} color="#ffffff" outlineWidth={0.02} outlineColor="#ffffff">
               {pillar.id}
             </Text>
-            <Text position={[-0.72, 5.0, 0]} rotation={[0, -Math.PI / 2, 0]} fontSize={0.45} color="#ffffff" font="bold">
+            <Text position={[-0.72, 5.0, 0]} rotation={[0, -Math.PI / 2, 0]} fontSize={0.5} color="#ffffff" outlineWidth={0.02} outlineColor="#ffffff">
               {pillar.id}
             </Text>
           </group>
