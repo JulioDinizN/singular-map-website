@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import {
   ChevronUp,
+  ChevronDown,
   HeartHandshake,
   ShieldAlert,
   Bot,
@@ -11,7 +12,6 @@ import {
   Navigation,
   Sparkles,
   Layers,
-  X,
 } from 'lucide-react';
 import { POI_LIST } from '@/data/eventData';
 import type { POI, PoiCategory } from '@/data/eventData';
@@ -20,12 +20,9 @@ import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import {
   Drawer,
-  DrawerTrigger,
   DrawerContent,
-  DrawerHeader,
   DrawerTitle,
   DrawerDescription,
-  DrawerClose,
 } from '@/components/ui/drawer';
 
 interface MobileExploreSheetProps {
@@ -52,6 +49,9 @@ const CATEGORIES: { id: PoiCategory | 'all'; label: string; iconEmoji: string }[
   { id: 'restroom', label: 'Sanitários', iconEmoji: '🚻' },
 ];
 
+const SNAP_PEEK = '148px';
+const SNAP_EXPANDED = 0.8;
+
 export function MobileExploreSheet({
   selectedCategory,
   onSelectCategory,
@@ -64,7 +64,9 @@ export function MobileExploreSheet({
   onOpenSchedule,
   liveSessionsCount,
 }: MobileExploreSheetProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [snapPoint, setSnapPoint] = useState<number | string | null>(SNAP_PEEK);
+
+  const isExpanded = snapPoint === SNAP_EXPANDED || snapPoint === 0.8 || snapPoint === '80%' || snapPoint === 1;
 
   // Filter POIs by category
   const filteredPois = useMemo(() => {
@@ -101,41 +103,65 @@ export function MobileExploreSheet({
     return counts;
   }, []);
 
+  const toggleSnap = () => {
+    setSnapPoint(isExpanded ? SNAP_PEEK : SNAP_EXPANDED);
+  };
+
   return (
-    <Drawer open={isOpen} onOpenChange={setIsOpen}>
-      {/* 1. PERSISTENT BOTTOM PEEK BAR ON THE 3D MAP */}
-      <aside
-        aria-label="Menu de Navegação e Exploração"
-        className="fixed inset-x-0 bottom-0 z-20 pointer-events-auto flex flex-col sm:hidden"
+    <Drawer
+      open={true}
+      dismissible={false}
+      modal={false}
+      shouldScaleBackground={false}
+      snapPoints={[SNAP_PEEK, SNAP_EXPANDED]}
+      activeSnapPoint={snapPoint}
+      setActiveSnapPoint={setSnapPoint}
+    >
+      <DrawerContent
+        hideOverlay
+        className="fixed inset-x-0 top-0 bottom-0 z-30 flex flex-col rounded-t-[28px] border-t border-slate-200/90 bg-white/98 backdrop-blur-2xl shadow-2xl shadow-slate-900/25 focus:outline-none sm:hidden"
       >
-        <div className="bg-white/98 backdrop-blur-2xl border-t border-slate-200/90 rounded-t-[28px] shadow-2xl shadow-slate-900/20 p-3 pt-2 flex flex-col gap-2">
-          {/* Drawer Trigger Header */}
-          <DrawerTrigger asChild>
+        {/* PEEK SECTION (~148px total height) */}
+        <div className="shrink-0 px-3 pt-1 pb-2 select-none">
+          {/* Header Bar */}
+          <div
+            onClick={toggleSnap}
+            className="w-full flex items-center justify-between py-1 px-1 cursor-pointer active:opacity-75 transition-opacity"
+          >
+            <div className="flex items-center gap-1.5">
+              <DrawerTitle className="text-xs font-bold text-slate-900 tracking-tight flex items-center gap-1.5">
+                <span>Explorar Pavilhão</span>
+                <Badge
+                  variant="outline"
+                  className="text-[9px] px-1.5 py-0 text-teal-700 bg-teal-50 border-teal-200 font-bold"
+                >
+                  FIAP NEXT
+                </Badge>
+              </DrawerTitle>
+              <DrawerDescription className="sr-only">
+                Menu de navegação e exploração de estandes, palcos e serviços
+              </DrawerDescription>
+            </div>
+
             <button
               type="button"
-              className="w-full flex flex-col items-center cursor-pointer select-none active:bg-slate-50/80 rounded-xl py-1 transition-colors group"
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleSnap();
+              }}
+              className="flex items-center gap-1 text-[11px] font-semibold text-blue-600 active:text-blue-800"
             >
-              <div className="w-12 h-1.5 bg-slate-300 rounded-full mb-1.5 group-hover:bg-slate-400 transition-colors" />
-              <div className="w-full flex items-center justify-between px-1">
-                <span className="text-xs font-bold text-slate-900 tracking-tight flex items-center gap-1.5">
-                  <span>Explorar Pavilhão</span>
-                  <Badge
-                    variant="outline"
-                    className="text-[9px] px-1.5 py-0 text-teal-700 bg-teal-50 border-teal-200 font-bold"
-                  >
-                    FIAP NEXT
-                  </Badge>
-                </span>
-                <span className="text-[11px] font-semibold text-blue-600 flex items-center gap-1">
-                  <span>Ver Menu</span>
-                  <ChevronUp className="w-3.5 h-3.5" />
-                </span>
-              </div>
+              <span>{isExpanded ? 'Recolher' : 'Ver Mais'}</span>
+              {isExpanded ? (
+                <ChevronDown className="w-3.5 h-3.5" />
+              ) : (
+                <ChevronUp className="w-3.5 h-3.5" />
+              )}
             </button>
-          </DrawerTrigger>
+          </div>
 
-          {/* 4 Quick Action Buttons (Waze-style, always accessible) */}
-          <div className="flex items-center justify-between gap-1.5 shrink-0">
+          {/* 4 Quick Action Buttons (Always visible in peek and expanded states) */}
+          <div className="flex items-center justify-between gap-1.5 mt-1.5">
             {/* Acolhimento */}
             <button
               type="button"
@@ -177,42 +203,10 @@ export function MobileExploreSheet({
             </button>
           </div>
         </div>
-      </aside>
 
-      {/* 2. SHADCN / VAUL DRAWER CONTENT (Smooth open & close animation) */}
-      <DrawerContent className="max-h-[82vh] focus:outline-none sm:hidden flex flex-col">
-        {/* Drawer Header */}
-        <DrawerHeader className="p-4 pb-2 border-b border-slate-100 flex flex-row items-center justify-between text-left shrink-0">
-          <div>
-            <DrawerTitle className="text-base font-bold text-slate-900 flex items-center gap-2">
-              <span>Explorar Pavilhão</span>
-              <Badge
-                variant="outline"
-                className="text-[10px] px-1.5 py-0 text-teal-700 bg-teal-50 border-teal-200 font-bold"
-              >
-                FIAP NEXT 2026
-              </Badge>
-            </DrawerTitle>
-            <DrawerDescription className="text-xs text-slate-500 mt-0.5">
-              Ações rápidas, categorias de estandes e eventos ao vivo
-            </DrawerDescription>
-          </div>
-
-          <DrawerClose asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="w-8 h-8 rounded-full hover:bg-slate-100 text-slate-500 shrink-0"
-            >
-              <X className="w-4 h-4" />
-              <span className="sr-only">Fechar</span>
-            </Button>
-          </DrawerClose>
-        </DrawerHeader>
-
-        {/* Scrollable Drawer Body */}
-        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-5">
-          {/* Seção 1: Ações Rápidas de Segurança & Acessibilidade */}
+        {/* EXPANDED CONTENT (Scrollable inside the same physical sheet) */}
+        <div className="flex-1 overflow-y-auto px-4 py-3 space-y-5">
+          {/* Seção 1: Recursos & Operação */}
           <div>
             <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-2.5 flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-blue-600" />
@@ -220,83 +214,11 @@ export function MobileExploreSheet({
             </h4>
 
             <div className="grid grid-cols-2 gap-2">
-              {/* Acolhimento */}
-              <button
-                type="button"
-                onClick={() => {
-                  setIsOpen(false);
-                  onGoToQuietRoom();
-                }}
-                className="flex items-center gap-2.5 p-3 rounded-2xl bg-teal-50/80 hover:bg-teal-100/80 border border-teal-200/80 text-left transition-all active:scale-98"
-              >
-                <div className="w-8 h-8 rounded-xl bg-teal-600 text-white flex items-center justify-center shrink-0 shadow-sm">
-                  <HeartHandshake className="w-4 h-4" />
-                </div>
-                <div className="min-w-0">
-                  <div className="text-xs font-bold text-teal-900 truncate">Acolhimento</div>
-                  <div className="text-[10px] text-teal-700 truncate">Sala sensorial</div>
-                </div>
-              </button>
-
-              {/* Evacuação */}
-              <button
-                type="button"
-                onClick={() => {
-                  setIsOpen(false);
-                  onEmergencyEvacuation();
-                }}
-                className="flex items-center gap-2.5 p-3 rounded-2xl bg-rose-50/80 hover:bg-rose-100/80 border border-rose-200/80 text-left transition-all active:scale-98"
-              >
-                <div className="w-8 h-8 rounded-xl bg-rose-600 text-white flex items-center justify-center shrink-0 shadow-sm">
-                  <ShieldAlert className="w-4 h-4" />
-                </div>
-                <div className="min-w-0">
-                  <div className="text-xs font-bold text-rose-900 truncate">Evacuação</div>
-                  <div className="text-[10px] text-rose-700 truncate">Saída acessível</div>
-                </div>
-              </button>
-
-              {/* Assistente IA */}
-              <button
-                type="button"
-                onClick={() => {
-                  setIsOpen(false);
-                  onOpenChat();
-                }}
-                className="flex items-center gap-2.5 p-3 rounded-2xl bg-indigo-50/80 hover:bg-indigo-100/80 border border-indigo-200/80 text-left transition-all active:scale-98"
-              >
-                <div className="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-sm">
-                  <Bot className="w-4 h-4" />
-                </div>
-                <div className="min-w-0">
-                  <div className="text-xs font-bold text-indigo-900 truncate">Assistente IA</div>
-                  <div className="text-[10px] text-indigo-700 truncate">Dúvidas e rotas</div>
-                </div>
-              </button>
-
-              {/* Reportar */}
-              <button
-                type="button"
-                onClick={() => {
-                  setIsOpen(false);
-                  onOpenReportModal();
-                }}
-                className="flex items-center gap-2.5 p-3 rounded-2xl bg-amber-50/80 hover:bg-amber-100/80 border border-amber-200/80 text-left transition-all active:scale-98"
-              >
-                <div className="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-sm">
-                  <Flag className="w-4 h-4" />
-                </div>
-                <div className="min-w-0">
-                  <div className="text-xs font-bold text-amber-900 truncate">Reportar</div>
-                  <div className="text-[10px] text-amber-700 truncate">Bloqueios & som</div>
-                </div>
-              </button>
-
               {/* Painel do Organizador */}
               <button
                 type="button"
                 onClick={() => {
-                  setIsOpen(false);
+                  setSnapPoint(SNAP_PEEK);
                   onOpenOrganizer();
                 }}
                 className="flex items-center gap-2.5 p-3 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-left transition-all active:scale-98"
@@ -314,7 +236,7 @@ export function MobileExploreSheet({
               <button
                 type="button"
                 onClick={() => {
-                  setIsOpen(false);
+                  setSnapPoint(SNAP_PEEK);
                   onOpenSchedule();
                 }}
                 className="flex items-center gap-2.5 p-3 rounded-2xl bg-blue-50/70 hover:bg-blue-100/70 border border-blue-200 text-left transition-all active:scale-98"
@@ -397,7 +319,7 @@ export function MobileExploreSheet({
                     key={poi.id}
                     type="button"
                     onClick={() => {
-                      setIsOpen(false);
+                      setSnapPoint(SNAP_PEEK);
                       onSelectPoi(poi);
                     }}
                     className="w-full p-2.5 rounded-2xl bg-white border border-slate-200/90 hover:border-blue-300 flex items-center justify-between text-left transition-all active:bg-slate-50 shadow-xs"
@@ -428,7 +350,7 @@ export function MobileExploreSheet({
 
           {/* Seção 4: Acontecendo Agora (Ao Vivo) */}
           {liveSessions.length > 0 && selectedCategory === 'all' && (
-            <div className="space-y-2 pb-2">
+            <div className="space-y-2 pb-6">
               <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
                 <Radio className="w-3.5 h-3.5 text-emerald-600 animate-pulse" />
                 <span>Acontecendo Agora</span>
@@ -468,7 +390,7 @@ export function MobileExploreSheet({
                         size="sm"
                         type="button"
                         onClick={() => {
-                          setIsOpen(false);
+                          setSnapPoint(SNAP_PEEK);
                           onSelectPoi(session.poi);
                         }}
                         className="h-7 text-[10px] font-bold text-blue-600 hover:text-blue-700 hover:bg-blue-50 px-2 rounded-lg gap-1"

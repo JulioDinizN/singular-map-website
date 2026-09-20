@@ -32,22 +32,27 @@ function DrawerOverlay({
 }
 DrawerOverlay.displayName = DrawerPrimitive.Overlay.displayName;
 
+interface DrawerContentProps extends React.ComponentProps<typeof DrawerPrimitive.Content> {
+  hideOverlay?: boolean;
+}
+
 function DrawerContent({
   className,
   children,
+  hideOverlay = false,
   ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Content>) {
+}: DrawerContentProps) {
   return (
     <DrawerPortal>
-      <DrawerOverlay />
+      {!hideOverlay && <DrawerOverlay />}
       <DrawerPrimitive.Content
         className={cn(
-          'fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[28px] border border-slate-200/90 bg-white/98 backdrop-blur-2xl shadow-2xl focus:outline-none',
+          'fixed inset-x-0 bottom-0 z-30 flex h-auto flex-col rounded-t-[28px] border border-slate-200/90 bg-white/98 backdrop-blur-2xl shadow-2xl focus:outline-none',
           className
         )}
         {...props}
       >
-        <div className="mx-auto mt-3 h-1.5 w-12 rounded-full bg-slate-300" />
+        <DrawerPrimitive.Handle className="mx-auto mt-3 h-1.5 w-12 rounded-full bg-slate-300 cursor-grab active:cursor-grabbing shrink-0" />
         {children}
       </DrawerPrimitive.Content>
     </DrawerPortal>
@@ -110,6 +115,8 @@ function DrawerDescription({
 }
 DrawerDescription.displayName = DrawerPrimitive.Description.displayName;
 
+const DrawerHandle = DrawerPrimitive.Handle;
+
 export {
   Drawer,
   DrawerPortal,
@@ -121,4 +128,5 @@ export {
   DrawerFooter,
   DrawerTitle,
   DrawerDescription,
+  DrawerHandle,
 };
