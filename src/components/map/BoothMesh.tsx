@@ -95,79 +95,238 @@ export function BoothMesh({
       )}
 
       {/* Main Structure Matching Architectural Blueprint */}
-      {isStage ? (
-        // PALCO BRASIL (CURVED WEST STAGE + EXPANSIVE FAN-SHAPED TIERED SEATING)
+      {poi.id === 'A_PALCO' || poi.name.toLowerCase().includes('palco') ? (
+        // =========================================================================
+        // PALCO PRINCIPAL (GRAND KEYNOTE AUDITORIUM - FACING SOUTH TO BOULEVARD NEXT)
+        // =========================================================================
         <group>
-          {/* Base Platform */}
-          <mesh position={[0, -h / 2 + 0.1, 0]} receiveShadow>
-            <boxGeometry args={[w, 0.2, d]} />
-            <meshStandardMaterial color="#1e293b" roughness={0.5} />
+          {/* Base Floor Plinth with Acoustic Carpet */}
+          <mesh position={[0, -h / 2 + 0.05, 0]} receiveShadow>
+            <boxGeometry args={[w, 0.1, d]} />
+            <meshStandardMaterial color="#0f172a" roughness={0.9} />
           </mesh>
 
-          {/* Curved Stage Platform on West Side (facing East) */}
-          <mesh position={[-w * 0.32, 0.3, 0]} castShadow receiveShadow>
-            <cylinderGeometry args={[d * 0.35, d * 0.35, 0.6, 32, 1, false, -Math.PI / 2, Math.PI]} />
-            <meshStandardMaterial color="#1e293b" roughness={0.3} metalness={0.5} />
+          {/* Elevated Stage Deck (North side, facing South towards audience) */}
+          <mesh position={[0, 0.25, -d * 0.25]} castShadow receiveShadow>
+            <boxGeometry args={[w * 0.88, 0.5, d * 0.32]} />
+            <meshStandardMaterial color="#1e293b" roughness={0.3} metalness={0.2} />
           </mesh>
 
-          {/* Panoramic Curved Backstage LED Wall */}
-          <mesh position={[-w * 0.45, h * 0.6, 0]} castShadow>
-            <boxGeometry args={[0.3, h * 1.2, d * 0.72]} />
-            <meshStandardMaterial
-              color={accentColor}
-              emissive={accentColor}
-              emissiveIntensity={isSelected ? 0.9 : 0.45}
-              roughness={0.2}
-            />
+          {/* Glowing Front Edge LED Strip on Stage */}
+          <mesh position={[0, 0.48, -d * 0.09]}>
+            <boxGeometry args={[w * 0.88, 0.04, 0.06]} />
+            <meshBasicMaterial color="#ef4444" />
           </mesh>
 
-          {/* Speaker Podium */}
-          <mesh position={[-w * 0.22, 0.7, 0]} castShadow>
-            <boxGeometry args={[0.8, 0.9, 0.6]} />
-            <meshStandardMaterial color="#0f172a" roughness={0.3} />
-          </mesh>
+          {/* Ultra-Wide Curved Panoramic Backstage LED Wall (16:9 / 21:9 ratio) */}
+          <group position={[0, h * 0.5, -d * 0.42]}>
+            {/* Screen Frame */}
+            <mesh castShadow>
+              <boxGeometry args={[w * 0.82, h * 0.75, 0.25]} />
+              <meshStandardMaterial color="#020617" roughness={0.5} />
+            </mesh>
+            {/* Active Display Panel (Vibrant Keynote Screen) */}
+            <mesh position={[0, 0, 0.14]}>
+              <planeGeometry args={[w * 0.8, h * 0.7]} />
+              <meshStandardMaterial
+                color="#dc2626"
+                emissive="#ef4444"
+                emissiveIntensity={isSelected ? 0.9 : 0.65}
+                roughness={0.2}
+              />
+            </mesh>
+            {/* Keynote Screen Title */}
+            <Text
+              position={[0, h * 0.12, 0.16]}
+              fontSize={0.65}
+              color="#ffffff"
+              anchorX="center"
+              anchorY="middle"
+              outlineWidth={0.04}
+              outlineColor="#7f1d1d"
+            >
+              FIAP NEXT 2026
+            </Text>
+            <Text
+              position={[0, -h * 0.12, 0.16]}
+              fontSize={0.36}
+              color="#fecaca"
+              anchorX="center"
+              anchorY="middle"
+            >
+              KEYNOTE PRINCIPAL • IA QUE AMPLIA PESSOAS
+            </Text>
+          </group>
 
-          {/* Expansive Fan-Shaped Tiered Seating Rows (6 Rows × 3 Wedges) */}
-          {[0, 1, 2, 3, 4, 5].map((row) => {
-            const rx = -w * 0.05 + row * (w * 0.09);
-            const ry = 0.15 + row * 0.25;
-            const rDepth = d * (0.88 - row * 0.06);
+          {/* Overhead Lighting Truss Rig with Spotlights */}
+          <group position={[0, h * 0.95, -d * 0.2]}>
+            {/* Main Truss Bar */}
+            <mesh castShadow>
+              <boxGeometry args={[w * 0.86, 0.15, 0.15]} />
+              <meshStandardMaterial color="#475569" metalness={0.8} roughness={0.2} />
+            </mesh>
+            {/* 6 Stage Spotlights pointing down */}
+            {[-w * 0.35, -w * 0.21, -w * 0.07, w * 0.07, w * 0.21, w * 0.35].map((lx) => (
+              <mesh key={`spot-${lx}`} position={[lx, -0.15, 0]} castShadow>
+                <cylinderGeometry args={[0.1, 0.18, 0.25, 16]} />
+                <meshStandardMaterial color="#020617" roughness={0.3} />
+              </mesh>
+            ))}
+          </group>
+
+          {/* Modern Speaker Lectern / Podium */}
+          <group position={[w * 0.26, 0.5, -d * 0.2]}>
+            <mesh position={[0, 0.45, 0]} castShadow>
+              <boxGeometry args={[0.7, 0.9, 0.5]} />
+              <meshStandardMaterial color="#020617" roughness={0.2} metalness={0.6} />
+            </mesh>
+            {/* Lectern Top with Tablet */}
+            <mesh position={[0, 0.92, 0]} rotation={[0.2, 0, 0]}>
+              <boxGeometry args={[0.75, 0.05, 0.55]} />
+              <meshStandardMaterial color="#1e293b" roughness={0.4} />
+            </mesh>
+          </group>
+
+          {/* Accessible Stage Ramp (NBR 9050 Compliant - Left Side) */}
+          <group position={[-w * 0.42, 0, -d * 0.25]}>
+            <mesh position={[0, 0.15, 0]} rotation={[0, 0, -0.12]} castShadow receiveShadow>
+              <boxGeometry args={[1.2, 0.08, d * 0.28]} />
+              <meshStandardMaterial color="#2563eb" roughness={0.4} />
+            </mesh>
+            <mesh position={[0, 0.35, d * 0.12]}>
+              <boxGeometry args={[1.2, 0.6, 0.05]} />
+              <meshStandardMaterial color="#64748b" metalness={0.7} roughness={0.2} />
+            </mesh>
+          </group>
+
+          {/* Auditorium Seating Rows (Facing North towards stage, with wide central aisle) */}
+          {[0, 1, 2, 3].map((row) => {
+            const rz = -d * 0.02 + row * (d * 0.11);
+            const ry = 0.12 + row * 0.08; // Leve inclinação de anfiteatro
 
             return (
-              <group key={row} position={[rx, ry, 0]}>
-                {/* Left Wedge */}
-                <mesh position={[0, 0, -rDepth * 0.32]} castShadow receiveShadow>
-                  <boxGeometry args={[w * 0.075, 0.3 + row * 0.05, rDepth * 0.28]} />
-                  <meshStandardMaterial color="#475569" roughness={0.6} />
+              <group key={`aud-row-${row}`} position={[0, ry, rz]}>
+                {/* Left Seating Block */}
+                <mesh position={[-w * 0.24, 0.15, 0]} castShadow receiveShadow>
+                  <boxGeometry args={[w * 0.36, 0.3, 0.55]} />
+                  <meshStandardMaterial color="#334155" roughness={0.7} />
                 </mesh>
-                {/* Center Wedge */}
-                <mesh position={[0, 0, 0]} castShadow receiveShadow>
-                  <boxGeometry args={[w * 0.075, 0.3 + row * 0.05, rDepth * 0.26]} />
-                  <meshStandardMaterial color="#334155" roughness={0.6} />
-                </mesh>
-                {/* Right Wedge */}
-                <mesh position={[0, 0, rDepth * 0.32]} castShadow receiveShadow>
-                  <boxGeometry args={[w * 0.075, 0.3 + row * 0.05, rDepth * 0.28]} />
+                {/* Left Seat Cushions */}
+                <mesh position={[-w * 0.24, 0.32, -0.05]} castShadow>
+                  <boxGeometry args={[w * 0.35, 0.08, 0.45]} />
                   <meshStandardMaterial color="#475569" roughness={0.6} />
                 </mesh>
 
-                {/* Violet Cushioned Seats on Top */}
-                <mesh position={[0, 0.18 + row * 0.025, 0]} castShadow>
-                  <boxGeometry args={[w * 0.065, 0.08, rDepth * 0.92]} />
-                  <meshStandardMaterial color="#7c3aed" roughness={0.7} />
+                {/* Right Seating Block */}
+                <mesh position={[w * 0.24, 0.15, 0]} castShadow receiveShadow>
+                  <boxGeometry args={[w * 0.36, 0.3, 0.55]} />
+                  <meshStandardMaterial color="#334155" roughness={0.7} />
+                </mesh>
+                {/* Right Seat Cushions */}
+                <mesh position={[w * 0.24, 0.32, -0.05]} castShadow>
+                  <boxGeometry args={[w * 0.35, 0.08, 0.45]} />
+                  <meshStandardMaterial color="#475569" roughness={0.6} />
                 </mesh>
               </group>
             );
           })}
 
-          {/* Technical Area / Sound & Light Control Booth (South) */}
-          <mesh position={[w * 0.22, 0.5, d * 0.38]} castShadow>
-            <boxGeometry args={[w * 0.45, 1.0, d * 0.18]} />
-            <meshStandardMaterial color="#0f172a" roughness={0.4} />
+          {/* Reserved Accessible Wheelchair Spaces (Front Row, Central Aisle) */}
+          <group position={[0, 0.1, -d * 0.02]}>
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-0.8, 0.02, 0]}>
+              <planeGeometry args={[1.2, 1.2]} />
+              <meshBasicMaterial color="#0284c7" transparent opacity={0.6} />
+            </mesh>
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0.8, 0.02, 0]}>
+              <planeGeometry args={[1.2, 1.2]} />
+              <meshBasicMaterial color="#0284c7" transparent opacity={0.6} />
+            </mesh>
+            <Text position={[0, 0.2, 0]} fontSize={0.28} color="#0284c7">
+              ESPAÇO RESERVADO PCD
+            </Text>
+          </group>
+        </group>
+      ) : poi.id === 'A_ARENA' || poi.name.toLowerCase().includes('arena') ? (
+        // =========================================================================
+        // ARENA TECH4CHANGE (HACKATHON ARENA - CIRCULAR PITCH STAGE & WORKSPACES)
+        // =========================================================================
+        <group>
+          {/* Base Floor Plinth */}
+          <mesh position={[0, -h / 2 + 0.05, 0]} receiveShadow>
+            <boxGeometry args={[w, 0.1, d]} />
+            <meshStandardMaterial color="#0f172a" roughness={0.8} />
           </mesh>
-          <Text position={[w * 0.22, 1.1, d * 0.38]} fontSize={0.32} color="#94a3b8">
-            ÁREA TÉCNICA / SOM & LUZ
-          </Text>
+
+          {/* Central Circular Pitching Stage */}
+          <mesh position={[0, 0.25, -d * 0.12]} castShadow receiveShadow>
+            <cylinderGeometry args={[w * 0.28, w * 0.3, 0.45, 32]} />
+            <meshStandardMaterial color="#1e1b4b" roughness={0.3} metalness={0.4} />
+          </mesh>
+
+          {/* Glowing Purple Stage Ring */}
+          <mesh position={[0, 0.49, -d * 0.12]} rotation={[-Math.PI / 2, 0, 0]}>
+            <ringGeometry args={[w * 0.27, w * 0.29, 32]} />
+            <meshBasicMaterial color="#a855f7" />
+          </mesh>
+
+          {/* Presentation LED Totems (Dual Screens facing Audience) */}
+          <group position={[0, h * 0.55, -d * 0.38]}>
+            <mesh castShadow>
+              <boxGeometry args={[w * 0.65, h * 0.6, 0.2]} />
+              <meshStandardMaterial
+                color="#6b21a8"
+                emissive="#a855f7"
+                emissiveIntensity={isSelected ? 0.9 : 0.6}
+                roughness={0.2}
+              />
+            </mesh>
+            <Text
+              position={[0, 0, 0.12]}
+              fontSize={0.55}
+              color="#ffffff"
+              anchorX="center"
+              anchorY="middle"
+              outlineWidth={0.03}
+              outlineColor="#3b0764"
+            >
+              HACKATHON TECH4CHANGE
+            </Text>
+          </group>
+
+          {/* 4 Hackathon Development Benches with Dual Monitors around the stage */}
+          {[
+            [-w * 0.32, -d * 0.15],
+            [w * 0.32, -d * 0.15],
+            [-w * 0.28, d * 0.22],
+            [w * 0.28, d * 0.22],
+          ].map(([bx, bz], bIdx) => (
+            <group key={`bench-${bIdx}`} position={[bx, 0.1, bz]}>
+              {/* Work Desk */}
+              <mesh position={[0, 0.35, 0]} castShadow receiveShadow>
+                <boxGeometry args={[w * 0.22, 0.7, 0.8]} />
+                <meshStandardMaterial color="#334155" roughness={0.4} />
+              </mesh>
+              {/* 2 Dual Monitors */}
+              {[-0.6, 0.6].map((mx) => (
+                <mesh key={`mon-${mx}`} position={[mx, 0.85, 0]} castShadow>
+                  <boxGeometry args={[0.55, 0.35, 0.05]} />
+                  <meshStandardMaterial color="#0284c7" emissive="#0284c7" emissiveIntensity={0.5} />
+                </mesh>
+              ))}
+            </group>
+          ))}
+
+          {/* Spectator Seating Benches at the South Side */}
+          <group position={[0, 0.2, d * 0.38]}>
+            <mesh castShadow receiveShadow>
+              <boxGeometry args={[w * 0.8, 0.35, 0.7]} />
+              <meshStandardMaterial color="#334155" roughness={0.7} />
+            </mesh>
+            <mesh position={[0, 0.2, 0]} castShadow>
+              <boxGeometry args={[w * 0.78, 0.08, 0.65]} />
+              <meshStandardMaterial color="#9333ea" roughness={0.6} />
+            </mesh>
+          </group>
         </group>
       ) : isFoodCourt ? (
         // PRAÇA GASTRONÔMICA (FOOD COURT WITH NORTH/SOUTH TABLES & CENTRAL COMMUNAL COUNTER)
