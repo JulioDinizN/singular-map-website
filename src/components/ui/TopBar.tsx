@@ -9,6 +9,8 @@ import {
   HeartHandshake,
   AlertTriangle,
   Flag,
+  Bot,
+  LayoutDashboard,
 } from 'lucide-react';
 import { POI_LIST } from '@/data/eventData';
 import type { POI, PoiCategory, AccessibilityProfile } from '@/data/eventData';
@@ -27,6 +29,8 @@ interface TopBarProps {
   onGoToQuietRoom: () => void;
   onEmergencyEvacuation: () => void;
   onOpenReportModal: () => void;
+  onOpenChat: () => void;
+  onOpenOrganizer: () => void;
 }
 
 const CATEGORIES: { id: PoiCategory | 'all'; label: string }[] = [
@@ -51,6 +55,8 @@ export function TopBar({
   onGoToQuietRoom,
   onEmergencyEvacuation,
   onOpenReportModal,
+  onOpenChat,
+  onOpenOrganizer,
 }: TopBarProps) {
   const [query, setQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
@@ -259,6 +265,32 @@ export function TopBar({
         >
           <Flag className="w-3.5 h-3.5 text-amber-600" />
           <span>Reportar</span>
+        </Button>
+
+        {/* Assistente IA */}
+        <Button
+          variant="outline"
+          size="sm"
+          type="button"
+          onClick={onOpenChat}
+          className="shrink-0 rounded-xl text-xs font-semibold bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border-indigo-200 shadow-sm min-h-[40px] gap-1.5"
+          title="Fazer perguntas à assistente de acessibilidade"
+        >
+          <Bot className="w-3.5 h-3.5 text-indigo-600" />
+          <span>Assistente IA</span>
+        </Button>
+
+        {/* Painel do Organizador */}
+        <Button
+          variant="outline"
+          size="sm"
+          type="button"
+          onClick={onOpenOrganizer}
+          className="shrink-0 rounded-xl text-xs font-semibold bg-slate-50 hover:bg-slate-100 text-slate-800 border-slate-200 shadow-sm min-h-[40px] gap-1.5"
+          title="Visualizar indicadores e métricas do evento"
+        >
+          <LayoutDashboard className="w-3.5 h-3.5 text-slate-600" />
+          <span>Painel</span>
         </Button>
 
         <div className="h-4 w-px bg-slate-300 shrink-0 mx-1" />

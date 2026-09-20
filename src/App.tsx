@@ -28,6 +28,8 @@ import { ProfileSelector } from './components/ui/ProfileSelector';
 import { ProfileComparisonModal } from './components/ui/ProfileComparisonModal';
 import { ReportModal } from './components/ui/ReportModal';
 import type { ReportType } from './components/ui/ReportModal';
+import { ChatModal } from './components/ui/ChatModal';
+import { OrganizerModal } from './components/ui/OrganizerModal';
 
 // Starting user location: Main Entrance
 const INITIAL_USER_POS: [number, number, number] = [0, 0.4, 27];
@@ -67,6 +69,8 @@ export default function App() {
   const [isProfileSelectorOpen, setIsProfileSelectorOpen] = useState<boolean>(false);
   const [isCompareModalOpen, setIsCompareModalOpen] = useState<boolean>(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState<boolean>(false);
+  const [isChatModalOpen, setIsChatModalOpen] = useState<boolean>(false);
+  const [isOrganizerModalOpen, setIsOrganizerModalOpen] = useState<boolean>(false);
 
   const [cameraTargetTrigger, setCameraTargetTrigger] = useState<number>(0);
   const [cameraTargetPos, setCameraTargetPos] = useState<[number, number, number] | null>(null);
@@ -390,6 +394,8 @@ export default function App() {
         onGoToQuietRoom={handleGoToQuietRoom}
         onEmergencyEvacuation={handleEmergencyEvacuation}
         onOpenReportModal={() => setIsReportModalOpen(true)}
+        onOpenChat={() => setIsChatModalOpen(true)}
+        onOpenOrganizer={() => setIsOrganizerModalOpen(true)}
       />
 
       {/* Floating Map Controls (Floor, 2D/3D, Reset, Locate) */}
@@ -456,6 +462,21 @@ export default function App() {
         isOpen={isReportModalOpen}
         onClose={() => setIsReportModalOpen(false)}
         onSubmitReport={handleSubmitReport}
+      />
+
+      {/* Conversational Assistant / Chat Modal */}
+      <ChatModal
+        isOpen={isChatModalOpen}
+        onClose={() => setIsChatModalOpen(false)}
+        onNavigateToPoi={handleNavigateToPoi}
+        onEmergencyExit={handleEmergencyEvacuation}
+      />
+
+      {/* Organizer Dashboard & Emergency Panel */}
+      <OrganizerModal
+        isOpen={isOrganizerModalOpen}
+        onClose={() => setIsOrganizerModalOpen(false)}
+        onTriggerEvacuation={handleEmergencyEvacuation}
       />
     </div>
   );
