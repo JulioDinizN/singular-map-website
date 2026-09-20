@@ -31,8 +31,8 @@ import type { ReportType } from './components/ui/ReportModal';
 import { ChatModal } from './components/ui/ChatModal';
 import { OrganizerModal } from './components/ui/OrganizerModal';
 
-// Starting user location: Main Entrance
-const INITIAL_USER_POS: [number, number, number] = [0, 0.4, 27];
+// Starting user location: Main Entrance (ENT from API NEXT26)
+const INITIAL_USER_POS: [number, number, number] = [-32.5, 0.4, 0];
 
 export default function App() {
   const [activeFloor, setActiveFloor] = useState<1 | 2>(1);
@@ -159,9 +159,9 @@ export default function App() {
     setSimulationProgress(0);
   }, []);
 
-  // Quick Action: Go to Sala de Acolhimento (Sensory Relief Room)
+  // Quick Action: Go to Sala de Acolhimento (Sensory Relief Room from API)
   const handleGoToQuietRoom = useCallback(() => {
-    const quietPoi = POI_LIST.find((p) => p.id === 'sala-acolhimento');
+    const quietPoi = POI_LIST.find((p) => p.id === 'A_ACOLH' || p.category === 'quiet_room');
     if (quietPoi) {
       handleNavigateToPoi(quietPoi);
     }
@@ -380,6 +380,7 @@ export default function App() {
         cameraTargetTrigger={cameraTargetTrigger}
         cameraTargetPos={cameraTargetPos}
         selectedCategory={selectedCategory}
+        dynamicOverrides={dynamicOverrides}
       />
 
       {/* Top Header, Search, Profile & Quick Actions */}

@@ -10,6 +10,8 @@ import { VenueEnvironment } from './VenueEnvironment';
 import { BoothMesh } from './BoothMesh';
 import { NavigationPath3D } from './NavigationPath3D';
 import { LiveUserMarker } from './LiveUserMarker';
+import { ApiCorridors3D } from './ApiCorridors3D';
+import type { WaypointEdge } from '../../data/eventData';
 
 interface EventMapCanvasProps {
   activeFloor: 1 | 2;
@@ -25,6 +27,7 @@ interface EventMapCanvasProps {
   cameraTargetTrigger: number;
   cameraTargetPos: [number, number, number] | null;
   selectedCategory?: PoiCategory | 'all';
+  dynamicOverrides?: Map<string, Partial<WaypointEdge>>;
 }
 
 // Internal Camera & Controls Controller (Google Maps / Waze Style)
@@ -155,6 +158,7 @@ export function EventMapCanvas({
   cameraTargetTrigger,
   cameraTargetPos,
   selectedCategory = 'all',
+  dynamicOverrides,
 }: EventMapCanvasProps) {
   const isNavigating = !!route;
 
@@ -192,7 +196,13 @@ export function EventMapCanvas({
         {/* 3D Venue Structure & Lighting */}
         <VenueEnvironment activeFloor={activeFloor} />
 
-        {/* 3D Booths & POIs (Strict Floor Isolation) */}
+        {/* 3D Corridors & Heatmap Walkways directly from API trechos */}
+        <ApiCorridors3D
+          eventoCodigo="NEXT26"
+          dynamicOverrides={dynamicOverrides}
+        />
+
+        {/* 3D Booths & POIs formulated from API data */}
         <group>
           {POI_LIST.filter((poi) => poi.floor === activeFloor).map((poi) => {
             const isSelected = selectedPoi?.id === poi.id;
