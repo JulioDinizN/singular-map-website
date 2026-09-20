@@ -160,7 +160,7 @@ export const API_CONVERSA_FAQS: FaqItem[] = [
     id: 101,
     keywords: ['acolhimento', 'sensorial', 'silencio', 'calmo', 'barulho', 'crise', 'autism', 'abafador', 'descans', 'sobrecarga'],
     intencao: 'LOCALIZAR_ACOLHIMENTO',
-    resposta: 'A Sala de Acolhimento Sensorial fica no Mezanino (Piso 2). É um ambiente com isolamento acústico, iluminação suave, fones abafadores e suporte especializado.',
+    resposta: 'A Sala de Acolhimento Sensorial fica no Pavilhão Principal (Rua Sul, próximo ao Stand da Oracle e Banheiro Adaptado). É um ambiente com isolamento acústico, iluminação suave, fones abafadores e suporte especializado.',
     acao: {
       tipo: 'TRACAR_ROTA',
       destino: 'poi-quiet-room',
@@ -190,7 +190,7 @@ export const API_CONVERSA_FAQS: FaqItem[] = [
     id: 103,
     keywords: ['banheiro', 'sanitario', 'toalete', 'wc', 'pcd', 'adaptado'],
     intencao: 'LOCALIZAR_BANHEIRO_PCD',
-    resposta: 'Os sanitários acessíveis NBR 9050 estão disponíveis no Lobby Principal (térreo) e junto ao Mezanino de Workshops.',
+    resposta: 'Os sanitários acessíveis NBR 9050 estão disponíveis no Pavilhão Principal (Rua Sul / Av. B, ao lado da Sala de Acolhimento).',
     acao: {
       tipo: 'TRACAR_ROTA',
       destino: 'lobby-reception',

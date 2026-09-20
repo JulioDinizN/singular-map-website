@@ -142,8 +142,7 @@ export interface WaypointEdge {
 }
 
 export const VENUE_FLOORS = [
-  { id: 1, name: 'Piso 1 - Pavilhão Principal & Palcos', shortName: '1F' },
-  { id: 2, name: 'Piso 2 - Mezanino de Workshops & VIP', shortName: '2F' },
+  { id: 1, name: 'Pavilhão Principal', shortName: '1F' },
 ] as const;
 
 export const VENUE_ZONES = [

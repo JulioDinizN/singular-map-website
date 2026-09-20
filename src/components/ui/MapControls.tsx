@@ -1,5 +1,4 @@
-import { Layers, Box, Square, Compass, Navigation } from 'lucide-react';
-import { VENUE_FLOORS } from '@/data/eventData';
+import { Box, Square, Compass, Navigation } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Tooltip,
@@ -9,8 +8,8 @@ import {
 } from '@/components/ui/tooltip';
 
 interface MapControlsProps {
-  activeFloor: 1 | 2;
-  onChangeFloor: (floor: 1 | 2) => void;
+  activeFloor?: 1 | 2;
+  onChangeFloor?: (floor: 1 | 2) => void;
   is2DView: boolean;
   onToggle2DView: () => void;
   onResetView: () => void;
@@ -18,8 +17,6 @@ interface MapControlsProps {
 }
 
 export function MapControls({
-  activeFloor,
-  onChangeFloor,
   is2DView,
   onToggle2DView,
   onResetView,
@@ -31,38 +28,6 @@ export function MapControls({
         aria-label="Controles do Mapa"
         className="absolute right-2.5 sm:right-5 top-28 sm:top-24 z-10 flex flex-col items-center gap-2 pointer-events-none"
       >
-        {/* Floor Switcher */}
-        <div className="pointer-events-auto flex flex-col bg-white/95 backdrop-blur-xl p-1 rounded-2xl border border-slate-200/90 shadow-xl shadow-slate-900/10">
-          <div className="px-2 py-1 text-[10px] font-bold text-slate-500 text-center uppercase tracking-wider flex items-center justify-center gap-1">
-            <Layers className="w-3 h-3 text-blue-600" />
-            <span>Piso</span>
-          </div>
-          <div className="flex flex-col gap-1">
-            {VENUE_FLOORS.map((f) => {
-              const isActive = activeFloor === f.id;
-              return (
-                <Tooltip key={f.id}>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant={isActive ? 'primary' : 'ghost'}
-                      size="icon"
-                      type="button"
-                      onClick={() => onChangeFloor(f.id as 1 | 2)}
-                      className={`min-w-[44px] min-h-[44px] rounded-xl font-bold text-xs ${
-                        isActive ? 'shadow-md shadow-blue-500/30 scale-105' : ''
-                      }`}
-                    >
-                      <span>{f.shortName}</span>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="left">
-                    <p>{f.name}</p>
-                  </TooltipContent>
-                </Tooltip>
-              );
-            })}
-          </div>
-        </div>
 
         {/* 2D / 3D Toggle */}
         <div className="pointer-events-auto bg-white/95 backdrop-blur-xl p-1 rounded-2xl border border-slate-200/90 shadow-xl shadow-slate-900/10">
