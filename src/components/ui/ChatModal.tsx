@@ -1,8 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import {
   Send,
-  Sparkles,
-  Bot,
   User,
   Navigation,
   ShieldAlert,
@@ -42,10 +40,10 @@ const INITIAL_MESSAGES: Message[] = [
   {
     id: 'welcome',
     sender: 'assistant',
-    text: 'Olá! Sou a assistente de acessibilidade do evento. Como posso te ajudar a navegar pelo pavilhão hoje?',
+    text: 'Olá! Sou a assistente do Rotas Acessíveis no FIAP NEXT 2026. Como posso te ajudar a navegar pelo pavilhão hoje?',
     time: 'Agora',
     response: {
-      resposta: 'Olá! Sou a assistente de acessibilidade do evento.',
+      resposta: 'Olá! Sou a assistente do Rotas Acessíveis no FIAP NEXT 2026.',
       explicacao: { metodo: 'REGRAS_LOCAIS' },
       sugestoes: [
         'Onde fica a Sala de Acolhimento?',
@@ -133,18 +131,20 @@ export function ChatModal({
         {/* Header */}
         <DialogHeader className="p-4 sm:p-5 border-b border-slate-100 flex flex-row items-center justify-between space-y-0 pr-12 bg-slate-50/50">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/25 shrink-0">
-              <Bot className="w-5 h-5" />
-            </div>
+            <img
+              src="/brand/rotas-acessiveis-icone-app.svg"
+              alt="Rotas Acessíveis"
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl shadow-md shrink-0"
+            />
             <div>
               <DialogTitle className="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
-                <span>Assistente Acessível</span>
-                <Badge variant="secondary" className="text-[10px] bg-blue-100 text-blue-700 font-bold border-blue-200">
+                <span>Assistente Rotas Acessíveis</span>
+                <Badge variant="secondary" className="text-[10px] bg-teal-100 text-teal-800 font-bold border-teal-200">
                   IA Local
                 </Badge>
               </DialogTitle>
               <DialogDescription className="text-xs text-slate-500">
-                Respostas sobre lugares, programação e rotas sem degraus
+                Cada pessoa, a sua rota • Navegação e acessibilidade NBR 9050
               </DialogDescription>
             </div>
           </div>
@@ -160,9 +160,11 @@ export function ChatModal({
                 className={`flex gap-3 ${isBot ? 'items-start' : 'items-end justify-end'}`}
               >
                 {isBot && (
-                  <div className="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 mt-0.5">
-                    <Sparkles className="w-4 h-4" />
-                  </div>
+                  <img
+                    src="/brand/rotas-acessiveis-icone-app.svg"
+                    alt="Assistente"
+                    className="w-8 h-8 rounded-xl shadow-sm shrink-0 mt-0.5"
+                  />
                 )}
 
                 <div

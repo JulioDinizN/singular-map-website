@@ -4,7 +4,6 @@ import {
   X,
   Radio,
   MapPin,
-  Compass,
   Accessibility,
   HeartHandshake,
   AlertTriangle,
@@ -100,18 +99,20 @@ export function TopBar({
       <div className="hidden sm:flex items-center justify-between gap-2 max-w-7xl mx-auto w-full">
         {/* Brand & App Title */}
         <div className="pointer-events-auto flex items-center gap-2.5 bg-white/95 backdrop-blur-xl px-3.5 py-1.5 rounded-2xl border border-slate-200/90 shadow-lg shadow-slate-900/5 min-h-[44px]">
-          <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-md shadow-blue-500/30">
-            <Compass className="w-5 h-5 animate-pulse" />
-          </div>
+          <img
+            src="/brand/rotas-acessiveis-icone-app.svg"
+            alt="Rotas Acessíveis"
+            className="w-8 h-8 rounded-xl shadow-md shadow-teal-900/15 shrink-0"
+          />
           <div>
             <h1 className="text-sm font-bold tracking-tight text-slate-900 flex items-center gap-1.5">
-              <span>FIAP NEXT 2026</span>
-              <Badge variant="success" className="text-[9px] uppercase px-1.5 py-0">
-                MAPA 3D
+              <span>Rotas Acessíveis</span>
+              <Badge variant="default" className="text-[9px] bg-teal-600 hover:bg-teal-700 text-white uppercase px-1.5 py-0 font-bold">
+                FIAP NEXT 3D
               </Badge>
             </h1>
             <p className="text-[10px] text-slate-500">
-              Pavilhão Principal • Navegação Acessível NBR 9050
+              Cada pessoa, a sua rota • Pavilhão Principal NBR 9050
             </p>
           </div>
         </div>
@@ -233,14 +234,19 @@ export function TopBar({
       <div className="flex sm:hidden items-center justify-between gap-2 w-full">
         {/* Brand (Compact) */}
         <div className="pointer-events-auto flex items-center gap-2 bg-white/95 backdrop-blur-xl px-2.5 py-1 rounded-2xl border border-slate-200/90 shadow-md shadow-slate-900/5 min-h-[40px]">
-          <div className="w-7 h-7 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-sm">
-            <Compass className="w-4 h-4 animate-pulse" />
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="text-xs font-bold tracking-tight text-slate-900">FIAP NEXT</span>
-            <Badge variant="success" className="text-[8px] uppercase px-1 py-0 font-bold">
-              3D
-            </Badge>
+          <img
+            src="/brand/rotas-acessiveis-icone-app.svg"
+            alt="Rotas Acessíveis"
+            className="w-7 h-7 rounded-xl shadow-sm shrink-0"
+          />
+          <div className="flex flex-col">
+            <div className="flex items-center gap-1">
+              <span className="text-xs font-bold tracking-tight text-slate-900">Rotas</span>
+              <Badge variant="default" className="text-[8px] bg-teal-600 text-white uppercase px-1 py-0 font-bold">
+                3D
+              </Badge>
+            </div>
+            <span className="text-[9px] text-slate-500 leading-none">FIAP NEXT</span>
           </div>
         </div>
 

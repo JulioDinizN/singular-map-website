@@ -71,11 +71,11 @@ export function OrganizerModal({
               <DialogTitle className="text-sm sm:text-lg font-bold text-slate-900 flex items-center gap-2 flex-wrap">
                 <span>Painel do Organizador</span>
                 <Badge variant="secondary" className="text-[10px] bg-amber-100 text-amber-800 font-bold border-amber-200">
-                  Métricas em Tempo Real
+                  Rotas Acessíveis Ops
                 </Badge>
               </DialogTitle>
               <DialogDescription className="text-xs text-slate-500">
-                Monitoramento de fluxo, acessibilidade e controle de emergência
+                Rotas Acessíveis • FIAP NEXT 2026 — Monitoramento de fluxo, acessibilidade e controle de emergência
               </DialogDescription>
             </div>
           </div>

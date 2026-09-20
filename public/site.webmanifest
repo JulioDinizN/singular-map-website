@@ -1,0 +1,21 @@
+{
+  "name": "Rotas Acessíveis • FIAP NEXT 2026",
+  "short_name": "Rotas Acessíveis",
+  "description": "Navegação 3D acessível e inclusiva para o pavilhão FIAP NEXT 2026 com conformidade NBR 9050.",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#070b16",
+  "background_color": "#070b16"
+}
