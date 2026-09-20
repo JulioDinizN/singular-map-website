@@ -67,7 +67,7 @@ export function NavigationPanel({
   return (
     <aside
       aria-label="Navegação Ativa"
-      className="fixed inset-x-0 bottom-0 sm:bottom-auto sm:top-24 sm:left-6 sm:w-96 z-30 pointer-events-auto transition-all animate-in fade-in slide-in-from-bottom sm:slide-in-from-left duration-300"
+      className="hidden sm:block fixed sm:top-24 sm:left-6 sm:w-96 z-30 pointer-events-auto transition-all animate-in fade-in sm:slide-in-from-left duration-300"
     >
       <div className="bg-white/98 backdrop-blur-2xl border border-slate-200/90 rounded-t-3xl sm:rounded-3xl shadow-2xl shadow-slate-900/15 flex flex-col overflow-hidden max-h-[70vh] sm:max-h-[80vh]">
         {/* Mobile Drag Indicator */}

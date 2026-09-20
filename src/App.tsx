@@ -30,7 +30,7 @@ import { ReportModal } from './components/ui/ReportModal';
 import type { ReportType } from './components/ui/ReportModal';
 import { ChatModal } from './components/ui/ChatModal';
 import { OrganizerModal } from './components/ui/OrganizerModal';
-import { MobileExploreSheet } from './components/ui/MobileExploreSheet';
+import { MobileBottomSheet } from './components/ui/MobileBottomSheet';
 
 // Starting user location: Main Entrance (ENT from API NEXT26)
 const INITIAL_USER_POS: [number, number, number] = [-32.5, 0.4, 0];
@@ -414,21 +414,31 @@ export default function App() {
         onToggleSensors={() => setShowSensors(!showSensors)}
       />
 
-      {/* Mobile Waze-Inspired Explore Bottom Sheet */}
-      {!selectedPoi && !route && (
-        <MobileExploreSheet
-          selectedCategory={selectedCategory}
-          onSelectCategory={setSelectedCategory}
-          onSelectPoi={handleSelectPoi}
-          onGoToQuietRoom={handleGoToQuietRoom}
-          onEmergencyEvacuation={handleEmergencyEvacuation}
-          onOpenChat={() => setIsChatModalOpen(true)}
-          onOpenReportModal={() => setIsReportModalOpen(true)}
-          onOpenOrganizer={() => setIsOrganizerModalOpen(true)}
-          onOpenSchedule={() => setIsScheduleOpen(true)}
-          liveSessionsCount={liveSessionsCount}
-        />
-      )}
+      {/* Unified Mobile Bottom Sheet (Single continuous sheet, dynamically swaps internal content) */}
+      <MobileBottomSheet
+        selectedPoi={selectedPoi}
+        onClosePoi={() => setSelectedPoi(null)}
+        onNavigateHere={handleNavigateToPoi}
+        route={route}
+        onClearRoute={handleClearRoute}
+        isSimulating={isSimulating}
+        onToggleSimulation={() => setIsSimulating(!isSimulating)}
+        onResetSimulation={handleResetSimulation}
+        simulationProgress={simulationProgress}
+        simulationSpeed={simulationSpeed}
+        onChangeSpeed={setSimulationSpeed}
+        onOpenCompare={() => setIsCompareModalOpen(true)}
+        selectedCategory={selectedCategory}
+        onSelectCategory={setSelectedCategory}
+        onSelectPoi={handleSelectPoi}
+        onGoToQuietRoom={handleGoToQuietRoom}
+        onEmergencyEvacuation={handleEmergencyEvacuation}
+        onOpenChat={() => setIsChatModalOpen(true)}
+        onOpenReportModal={() => setIsReportModalOpen(true)}
+        onOpenOrganizer={() => setIsOrganizerModalOpen(true)}
+        onOpenSchedule={() => setIsScheduleOpen(true)}
+        liveSessionsCount={liveSessionsCount}
+      />
 
       {/* POI / Booth Details Drawer */}
       {selectedPoi && !route && (
