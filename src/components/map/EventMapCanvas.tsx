@@ -11,6 +11,7 @@ import { BoothMesh } from './BoothMesh';
 import { NavigationPath3D } from './NavigationPath3D';
 import { LiveUserMarker } from './LiveUserMarker';
 import { ApiCorridors3D } from './ApiCorridors3D';
+import { CrowdFlux3D } from './CrowdFlux3D';
 import type { WaypointEdge } from '../../data/eventData';
 
 interface EventMapCanvasProps {
@@ -201,6 +202,9 @@ export function EventMapCanvas({
           eventoCodigo="NEXT26"
           dynamicOverrides={dynamicOverrides}
         />
+
+        {/* 3D Crowd Flux of little people walking along API walkways */}
+        <CrowdFlux3D eventoCodigo="NEXT26" />
 
         {/* 3D Booths & POIs formulated from API data */}
         <group>

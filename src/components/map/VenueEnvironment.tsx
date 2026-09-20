@@ -1,23 +1,19 @@
-import { Text } from '@react-three/drei';
-import { AllArchitecturalDoors } from './ArchitecturalDoors';
-import { StartupAlley } from './StartupAlley';
-
 interface VenueEnvironmentProps {
-  activeFloor: 1 | 2;
+  activeFloor?: 1 | 2;
 }
 
-// Exact dimensions calculated from 1376x768 blueprint:
-export const VENUE_PLANE_WIDTH = 84.0;
-export const VENUE_PLANE_DEPTH = (84.0 * 768.0) / 1376.0; // 46.8837
+// 1400px x 1000px from NEXT26.json scaled by MAP_3D_SCALE (0.05) = 70m x 50m
+export const VENUE_PLANE_WIDTH = 70.0;
+export const VENUE_PLANE_DEPTH = 50.0;
 
-export function VenueEnvironment({ activeFloor }: VenueEnvironmentProps) {
+export function VenueEnvironment(_props?: VenueEnvironmentProps) {
   return (
     <group>
       {/* Warm Natural Exhibition Daylight Lighting */}
-      <ambientLight intensity={1.9} color="#ffffff" />
+      <ambientLight intensity={1.8} color="#ffffff" />
       <directionalLight
-        position={[35, 55, 25]}
-        intensity={2.2}
+        position={[35, 50, 25]}
+        intensity={2.0}
         color="#fffef7"
         castShadow
         shadow-mapSize-width={2048}
@@ -31,268 +27,34 @@ export function VenueEnvironment({ activeFloor }: VenueEnvironmentProps) {
       />
       <directionalLight
         position={[-30, 45, -25]}
-        intensity={0.9}
+        intensity={0.8}
         color="#e0f2fe"
       />
 
-      {/* ================= FLOOR 1 (GROUND EXPO) ================= */}
-      <group position={[0, 0, 0]}>
-        {/* Clean Modern Exhibition Floor */}
-        <mesh
-          rotation={[-Math.PI / 2, 0, 0]}
-          position={[0, 0, 0]}
-          receiveShadow
-        >
-          <planeGeometry args={[VENUE_PLANE_WIDTH, VENUE_PLANE_DEPTH]} />
-          <meshStandardMaterial
-            color="#f8fafc"
-            roughness={0.9}
-            metalness={0.02}
-          />
-        </mesh>
+      {/* Main Exhibition Floor (exact bounds of NEXT26 API map: 70m x 50m) */}
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, 0, 0]}
+        receiveShadow
+      >
+        <planeGeometry args={[VENUE_PLANE_WIDTH, VENUE_PLANE_DEPTH]} />
+        <meshStandardMaterial
+          color="#f8fafc"
+          roughness={0.9}
+          metalness={0.02}
+        />
+      </mesh>
 
-        {/* Outer Background Border Base */}
-        <mesh
-          rotation={[-Math.PI / 2, 0, 0]}
-          position={[0, -0.05, 0]}
-          receiveShadow
-        >
-          <planeGeometry args={[96, 58]} />
-          <meshStandardMaterial color="#cbd5e1" roughness={0.8} />
-        </mesh>
-
-        {/* ================= PERIMETER STRUCTURAL WALLS ================= */}
-        {/* Main Hall North Outer Wall */}
-        <mesh position={[0.64, 1.8, -20.88]} castShadow receiveShadow>
-          <boxGeometry args={[72.1, 3.6, 0.35]} />
-          <meshStandardMaterial color="#64748b" roughness={0.5} />
-        </mesh>
-
-        {/* North Rooms Inner Wall (dividing service rooms from Avenida dos Palcos) */}
-        {/* Left Segment */}
-        <mesh position={[-18.5, 1.6, -18.68]} castShadow receiveShadow>
-          <boxGeometry args={[32.0, 3.2, 0.25]} />
-          <meshStandardMaterial color="#94a3b8" roughness={0.5} />
-        </mesh>
-        {/* Right Segment */}
-        <mesh position={[14.5, 1.6, -18.68]} castShadow receiveShadow>
-          <boxGeometry args={[22.0, 3.2, 0.25]} />
-          <meshStandardMaterial color="#94a3b8" roughness={0.5} />
-        </mesh>
-
-        {/* North Room Partition Walls */}
-        {[-25.0, -12.0, -2.0, 2.0, 12.0].map((px) => (
-          <mesh key={px} position={[px, 1.6, -19.78]} castShadow receiveShadow>
-            <boxGeometry args={[0.2, 3.2, 2.2]} />
-            <meshStandardMaterial color="#94a3b8" roughness={0.5} />
-          </mesh>
-        ))}
-
-        {/* Main Hall West Wall */}
-        <mesh position={[-35.41, 1.8, -3.42]} castShadow receiveShadow>
-          <boxGeometry args={[0.35, 3.6, 34.92]} />
-          <meshStandardMaterial color="#64748b" roughness={0.5} />
-        </mesh>
-
-        {/* Main Hall East Wall */}
-        <mesh position={[36.69, 1.8, -3.42]} castShadow receiveShadow>
-          <boxGeometry args={[0.35, 3.6, 34.92]} />
-          <meshStandardMaterial color="#64748b" roughness={0.5} />
-        </mesh>
-
-        {/* Main Hall South Wall Left (west of lobby) */}
-        <mesh position={[-24.69, 1.8, 14.04]} castShadow receiveShadow>
-          <boxGeometry args={[21.43, 3.6, 0.35]} />
-          <meshStandardMaterial color="#64748b" roughness={0.5} />
-        </mesh>
-
-        {/* Main Hall South Wall Right (east of lobby) */}
-        <mesh position={[25.42, 1.8, 14.04]} castShadow receiveShadow>
-          <boxGeometry args={[22.53, 3.6, 0.35]} />
-          <meshStandardMaterial color="#64748b" roughness={0.5} />
-        </mesh>
-
-        {/* ================= LOBBY ENCLOSURE & INTERIOR ================= */}
-        {/* Lobby West Wall */}
-        <mesh position={[-13.98, 1.8, 16.63]} castShadow receiveShadow>
-          <boxGeometry args={[0.35, 3.6, 5.19]} />
-          <meshStandardMaterial color="#64748b" roughness={0.5} />
-        </mesh>
-
-        {/* Lobby East Wall */}
-        <mesh position={[14.16, 1.8, 16.63]} castShadow receiveShadow>
-          <boxGeometry args={[0.35, 3.6, 5.19]} />
-          <meshStandardMaterial color="#64748b" roughness={0.5} />
-        </mesh>
-
-        {/* Lobby South Wall Left & Right of Entrance Doors */}
-        <mesh position={[-8.5, 1.8, 19.23]} castShadow receiveShadow>
-          <boxGeometry args={[10.5, 3.6, 0.35]} />
-          <meshStandardMaterial color="#64748b" roughness={0.5} />
-        </mesh>
-        <mesh position={[8.5, 1.8, 19.23]} castShadow receiveShadow>
-          <boxGeometry args={[10.5, 3.6, 0.35]} />
-          <meshStandardMaterial color="#64748b" roughness={0.5} />
-        </mesh>
-
-        {/* Lobby Inner Wall (dividing Lobby from Boulevard Central, with wide open portal) */}
-        <mesh position={[-7.5, 1.8, 14.04]} castShadow receiveShadow>
-          <boxGeometry args={[12.0, 3.6, 0.35]} />
-          <meshStandardMaterial color="#64748b" roughness={0.5} />
-        </mesh>
-        <mesh position={[7.5, 1.8, 14.04]} castShadow receiveShadow>
-          <boxGeometry args={[12.0, 3.6, 0.35]} />
-          <meshStandardMaterial color="#64748b" roughness={0.5} />
-        </mesh>
-
-        {/* Lobby Reception Counter with 4 Stools */}
-        <group position={[-5.5, 0, 16.63]}>
-          <mesh position={[0, 0.55, 0]} castShadow receiveShadow>
-            <boxGeometry args={[6.5, 1.1, 0.9]} />
-            <meshStandardMaterial color="#0284c7" roughness={0.3} />
-          </mesh>
-          {/* Counter Top */}
-          <mesh position={[0, 1.12, 0]} castShadow>
-            <boxGeometry args={[6.8, 0.08, 1.05]} />
-            <meshStandardMaterial color="#f8fafc" roughness={0.2} metalness={0.1} />
-          </mesh>
-          {/* 4 Circular Reception Stools */}
-          {[-2.2, -0.7, 0.7, 2.2].map((sx) => (
-            <mesh key={sx} position={[sx, 0.35, 0.8]} castShadow>
-              <cylinderGeometry args={[0.22, 0.22, 0.65, 16]} />
-              <meshStandardMaterial color="#64748b" roughness={0.4} />
-            </mesh>
-          ))}
-          <Text position={[0, 1.4, 0]} fontSize={0.35} color="#0f172a">
-            CREDENCIAMENTO & LIBRAS
-          </Text>
-        </group>
-
-        {/* 8 Turnstiles / Catracas with Guide Barriers */}
-        <group position={[0.0, 0, 16.63]}>
-          {[-2.4, -1.7, -1.0, -0.3, 0.4, 1.1, 1.8, 2.5].map((tx) => (
-            <group key={tx} position={[tx, 0, 0]}>
-              {/* Turnstile Body */}
-              <mesh position={[0, 0.5, 0]} castShadow>
-                <boxGeometry args={[0.22, 1.0, 0.7]} />
-                <meshStandardMaterial color="#334155" metalness={0.8} roughness={0.2} />
-              </mesh>
-              {/* Rotating Arm */}
-              <mesh position={[0.15, 0.7, 0]} rotation={[0, 0, Math.PI / 4]}>
-                <boxGeometry args={[0.05, 0.4, 0.05]} />
-                <meshStandardMaterial color="#94a3b8" metalness={0.9} roughness={0.1} />
-              </mesh>
-            </group>
-          ))}
-        </group>
-
-        {/* ================= EAST WING (FOOD COURT & CAFETERIA ROOMS) ================= */}
-        {/* Main Food Court Dividing Wall */}
-        <mesh position={[26.56, 1.6, -3.42]} castShadow receiveShadow>
-          <boxGeometry args={[0.25, 3.2, 34.92]} />
-          <meshStandardMaterial color="#94a3b8" transparent opacity={0.35} />
-        </mesh>
-
-        {/* Cafeteria Room Dividing Wall (X = 31.8) */}
-        <mesh position={[31.8, 1.6, -11.23]} castShadow receiveShadow>
-          <boxGeometry args={[0.25, 3.2, 8.55]} />
-          <meshStandardMaterial color="#94a3b8" roughness={0.5} />
-        </mesh>
-
-        {/* East Restrooms Dividing Wall (X = 31.8) */}
-        <mesh position={[31.8, 1.6, 10.5]} castShadow receiveShadow>
-          <boxGeometry args={[0.25, 3.2, 6.84]} />
-          <meshStandardMaterial color="#94a3b8" roughness={0.5} />
-        </mesh>
-
-
-        {/* ================= LOBBY ENCLOSED STAIRWELLS ================= */}
-        {/* Left Enclosed Stairwell */}
-        <group position={[-12.43, 0, 16.63]}>
-          <mesh position={[0, 1.6, 0]} castShadow receiveShadow>
-            <boxGeometry args={[2.8, 3.2, 4.8]} />
-            <meshStandardMaterial color="#cbd5e1" roughness={0.6} />
-          </mesh>
-          <Text position={[0, 3.3, 0]} rotation={[-Math.PI / 2, 0, 0]} fontSize={0.35} color="#334155">
-            ESCADA 2F
-          </Text>
-        </group>
-
-        {/* Right Enclosed Stairwell */}
-        <group position={[12.57, 0, 16.63]}>
-          <mesh position={[0, 1.6, 0]} castShadow receiveShadow>
-            <boxGeometry args={[2.8, 3.2, 4.8]} />
-            <meshStandardMaterial color="#cbd5e1" roughness={0.6} />
-          </mesh>
-          <Text position={[0, 3.3, 0]} rotation={[-Math.PI / 2, 0, 0]} fontSize={0.35} color="#334155">
-            ESCADA 2F
-          </Text>
-        </group>
-
-        {/* Glass Elevator Tower in Lobby */}
-        <group position={[2.5, 0, 15.5]}>
-          <mesh position={[0, 3.5, 0]} castShadow receiveShadow>
-            <boxGeometry args={[2.5, 7, 2.5]} />
-            <meshStandardMaterial
-              color="#38bdf8"
-              transparent
-              opacity={0.35}
-              roughness={0.1}
-              metalness={0.8}
-            />
-          </mesh>
-          <mesh position={[0, 1.6, 0]} castShadow>
-            <boxGeometry args={[2.0, 3, 2.0]} />
-            <meshStandardMaterial color="#f8fafc" metalness={0.3} roughness={0.4} />
-          </mesh>
-        </group>
-
-        {/* ================= ALL 3D ARCHITECTURAL DOORS ================= */}
-        <AllArchitecturalDoors />
-
-        {/* ================= ALL 16 MODULAR STARTUP BOOTHS ================= */}
-        <StartupAlley />
-      </group>
-
-      {/* ================= FLOOR 2 (MEZZANINE / WORKSHOPS) - STRICT VISIBILITY ================= */}
-      <group position={[0, 6.5, 0]} visible={activeFloor === 2}>
-        {/* Mezzanine Surface overlooking the Boulevard */}
-        <mesh
-          rotation={[-Math.PI / 2, 0, 0]}
-          position={[0, 0, 16.63]}
-          receiveShadow
-        >
-          <planeGeometry args={[28, 5.2]} />
-          <meshStandardMaterial
-            color="#f8fafc"
-            roughness={0.6}
-          />
-        </mesh>
-
-        {/* North Mezzanine Gallery over Palcos */}
-        <mesh
-          rotation={[-Math.PI / 2, 0, 0]}
-          position={[0, 0, -15.0]}
-          receiveShadow
-        >
-          <planeGeometry args={[56, 8.0]} />
-          <meshStandardMaterial
-            color="#f8fafc"
-            roughness={0.6}
-          />
-        </mesh>
-
-        {/* Glass Safety Railing */}
-        <mesh position={[0, 0.5, 14.1]}>
-          <boxGeometry args={[28, 1.0, 0.08]} />
-          <meshStandardMaterial
-            color="#93c5fd"
-            transparent
-            opacity={0.4}
-            roughness={0.1}
-          />
-        </mesh>
-      </group>
+      {/* Outer Ground Border Base */}
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -0.05, 0]}
+        receiveShadow
+      >
+        <planeGeometry args={[VENUE_PLANE_WIDTH + 8, VENUE_PLANE_DEPTH + 8]} />
+        <meshStandardMaterial color="#e2e8f0" roughness={0.8} />
+      </mesh>
     </group>
   );
 }
+
