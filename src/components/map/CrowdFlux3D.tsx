@@ -154,10 +154,10 @@ export function CrowdFlux3D({ eventoCodigo = 'NEXT26', count = 180 }: CrowdFlux3
       });
     }
 
-    // 4. Grupo no Stand da Oracle (Demo AI Vector Search: X: 18, Z: 0)
+    // 4. Grupo no Stand da Oracle (Demo AI Vector Search: X: 12.75, Z: 3.5)
     for (let i = 0; i < 12; i++) {
-      const rx = 18.0 + (Math.random() - 0.5) * 4.0;
-      const rz = 0.0 + (Math.random() - 0.5) * 2.5;
+      const rx = 12.75 + (Math.random() - 0.5) * 3.5;
+      const rz = 3.5 + (Math.random() - 0.5) * 2.0;
       people.push({
         x: rx,
         z: rz,
