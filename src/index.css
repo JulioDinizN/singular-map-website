@@ -64,3 +64,20 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Mobile BottomSheet Left-to-Right Transition */
+@keyframes slideLeftToRight {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-left-to-right {
+  animation: slideLeftToRight 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}

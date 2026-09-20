@@ -115,6 +115,7 @@ export default function App() {
   const handleSelectPoi = useCallback(
     (poi: POI | null) => {
       setSelectedPoi(poi);
+      setIsChatModalOpen(false);
       if (poi) {
         if (poi.floor !== activeFloor) {
           setActiveFloor(poi.floor);
@@ -129,6 +130,7 @@ export default function App() {
   // Handle Start Navigation to POI
   const handleNavigateToPoi = useCallback(
     (poi: POI) => {
+      setIsChatModalOpen(false);
       const computedRoute = calculateRoute(
         userPosition,
         userFloor,
@@ -171,6 +173,7 @@ export default function App() {
 
   // Quick Action: Emergency Evacuation
   const handleEmergencyEvacuation = useCallback(() => {
+    setIsChatModalOpen(false);
     const evacuationRoute = findClosestEmergencyExit(
       userPosition,
       userFloor,
@@ -428,12 +431,14 @@ export default function App() {
         simulationSpeed={simulationSpeed}
         onChangeSpeed={setSimulationSpeed}
         onOpenCompare={() => setIsCompareModalOpen(true)}
+        isChatOpen={isChatModalOpen}
+        onOpenChat={() => setIsChatModalOpen(true)}
+        onCloseChat={() => setIsChatModalOpen(false)}
         selectedCategory={selectedCategory}
         onSelectCategory={setSelectedCategory}
         onSelectPoi={handleSelectPoi}
         onGoToQuietRoom={handleGoToQuietRoom}
         onEmergencyEvacuation={handleEmergencyEvacuation}
-        onOpenChat={() => setIsChatModalOpen(true)}
         onOpenReportModal={() => setIsReportModalOpen(true)}
         onOpenOrganizer={() => setIsOrganizerModalOpen(true)}
         onOpenSchedule={() => setIsScheduleOpen(true)}
