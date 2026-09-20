@@ -80,11 +80,11 @@ function CameraManager({
     } else if (selectedPoi) {
       const [px, py, pz] = selectedPoi.position;
       targetCamPos.current.set(px + 12, py + 16, pz + 16);
-      targetLookAt.current.set(px, py, pz);
+      targetLookAt.current.set(px, py, pz - 1.5);
     } else {
       const baseY = activeFloor === 2 ? 7 : 0;
-      targetCamPos.current.set(24, 30 + baseY, 34);
-      targetLookAt.current.set(0, baseY, 0);
+      targetCamPos.current.set(22, 28 + baseY, 30);
+      targetLookAt.current.set(0, baseY, -2.5);
     }
   }, [is2DView, selectedPoi, cameraTargetTrigger, activeFloor, cameraTargetPos]);
 

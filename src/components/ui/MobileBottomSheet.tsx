@@ -143,25 +143,8 @@ export function MobileBottomSheet({
   const [bookmarked, setBookmarked] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(false);
 
-  // When mode changes:
-  // - If entering chat, expand so conversation and input are ready
-  // - If the sheet was ALREADY expanded, KEEP IT EXPANDED (never collapse when selecting a feature!)
-  // - If the sheet was at peek, keep it at peek
-  useEffect(() => {
-    if (mode === 'chat') {
-      setSnapPoint(snapExpanded);
-    } else {
-      setSnapPoint((prev) => {
-        const wasExpanded =
-          prev === snapExpanded ||
-          prev === 0.85 ||
-          prev === '85%' ||
-          prev === 0.8 ||
-          prev === 1;
-        return wasExpanded ? snapExpanded : snapPeek;
-      });
-    }
-  }, [mode]);
+  // Height is strictly user-controlled via drag or the Ver Mais / Recolher button.
+  // Neither mode changes nor modal triggers will programmatically alter the sheet height.
 
   const isExpanded =
     snapPoint === snapExpanded ||
@@ -684,7 +667,6 @@ export function MobileBottomSheet({
                       <button
                         type="button"
                         onClick={() => {
-                          setSnapPoint(snapPeek);
                           onOpenOrganizer();
                         }}
                         className="flex items-center gap-2.5 p-3 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-left transition-all active:scale-98"
@@ -701,7 +683,6 @@ export function MobileBottomSheet({
                       <button
                         type="button"
                         onClick={() => {
-                          setSnapPoint(snapPeek);
                           onOpenSchedule();
                         }}
                         className="flex items-center gap-2.5 p-3 rounded-2xl bg-blue-50/70 hover:bg-blue-100/70 border border-blue-200 text-left transition-all active:scale-98"

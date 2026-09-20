@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
-import { Billboard, Text, Html } from '@react-three/drei';
+import { Text, Html } from '@react-three/drei';
 import type { POI } from '../../data/eventData';
 
 interface BoothMeshProps {
@@ -43,7 +43,6 @@ export function BoothMesh({
     }
   });
 
-  const isStage = poi.category === 'stage';
   const isQuietRoom = poi.category === 'quiet_room';
   const isEmergencyExit = poi.category === 'exit' || poi.isEmergencyExit;
   const isRestroom = poi.category === 'restroom';
@@ -52,9 +51,6 @@ export function BoothMesh({
   const isCafeteria = poi.id === 'cafeteria';
   const isNubank = poi.id === 'booth-nubank';
   const isEve = poi.id === 'booth-eve';
-
-  const isMajorLandmark = isStage || isQuietRoom || isEntrance || isEmergencyExit;
-  const showBadge = isSelected || isHovered || internalHover;
 
   const opacity = isDimmed ? 0.3 : 1;
   const accentColor = poi.accentColor || poi.color;
@@ -762,63 +758,45 @@ export function BoothMesh({
         </group>
       )}
 
-      {/* 3D Billboard Text Label */}
-      <Billboard position={[0, h + 0.5, 0]} follow lockX={false} lockY={false} lockZ={false}>
-        <Text
-          fontSize={isMajorLandmark ? 0.85 : 0.6}
-          color={isSelected ? '#0284c7' : '#0f172a'}
-          anchorX="center"
-          anchorY="middle"
-          outlineWidth={0.07}
-          outlineColor="#ffffff"
+      {/* Minimal Floating Badge Pill on Top of 3D Building (Same Title as Inspect Drawer) */}
+      <Html
+        position={[0, h + 0.45, 0]}
+        center
+        distanceFactor={38}
+        zIndexRange={[1, 10]}
+        style={{ pointerEvents: 'none', userSelect: 'none' }}
+      >
+        <div
+          className={`px-2 py-0.5 rounded-full text-[10px] sm:text-[11px] font-medium whitespace-nowrap flex items-center gap-1.5 transition-all select-none shadow-xs border ${
+            isSelected
+              ? 'bg-blue-600 text-white border-blue-500 shadow-md font-bold ring-2 ring-blue-400/30 scale-105'
+              : isHovered || internalHover
+              ? 'bg-white text-slate-900 border-slate-300 shadow-sm font-semibold scale-102'
+              : 'bg-white/92 backdrop-blur-xs text-slate-800 border-slate-200/90 hover:border-slate-300'
+          }`}
         >
-          {poi.shortName || poi.name}
-        </Text>
-        {poi.boothNumber && (
-          <Text
-            position={[0, -0.6, 0]}
-            fontSize={0.42}
-            color="#64748b"
-            anchorX="center"
-            anchorY="middle"
-            outlineWidth={0.05}
-            outlineColor="#ffffff"
-          >
-            {poi.boothNumber}
-          </Text>
-        )}
-      </Billboard>
-
-      {/* Hovered/Selected Clean Tooltip */}
-      {showBadge && (
-        <Html
-          position={[0, h + 1.5, 0]}
-          center
-          distanceFactor={35}
-          zIndexRange={[1, 1]}
-          style={{
-            pointerEvents: 'none',
-            userSelect: 'none',
-            transition: 'opacity 0.2s ease',
-          }}
-        >
-          <div className="px-3 py-1.5 rounded-xl text-xs font-bold text-slate-900 bg-white/95 border border-slate-200 shadow-xl shadow-slate-900/10 flex items-center gap-2 whitespace-nowrap">
+          <span
+            className="w-1.5 h-1.5 rounded-full shrink-0"
+            style={{
+              backgroundColor: isSelected
+                ? '#ffffff'
+                : poi.sessions?.some((s) => s.isLiveNow)
+                ? '#16a34a'
+                : accentColor,
+            }}
+          />
+          <span className="truncate max-w-[120px] sm:max-w-[160px]">{poi.name}</span>
+          {poi.boothNumber && (
             <span
-              className="w-2.5 h-2.5 rounded-full shrink-0"
-              style={{
-                backgroundColor:
-                  poi.sessions?.some((s) => s.isLiveNow) ? '#16a34a' : accentColor,
-              }}
-            />
-            <span>{poi.name}</span>
-            {poi.isAccessible && (
-              <span className="text-[10px] bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded border border-blue-200">
-                Acessível
-              </span>
-            )}
-          </div>
-        </Html>
-      )}
+              className={`text-[9px] font-mono px-1 rounded ${
+                isSelected ? 'bg-blue-700 text-blue-100' : 'bg-slate-100 text-slate-500'
+              }`}
+            >
+              {poi.boothNumber}
+            </span>
+          )}
+        </div>
+      </Html>
     </group>
   );
 }
