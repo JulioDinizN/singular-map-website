@@ -6,6 +6,15 @@ import type {
   AccessibilityProfile,
   AccessibilityProfileId,
 } from '../../data/eventData';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
+import { Card } from '@/components/ui/card';
 
 interface ProfileSelectorProps {
   currentProfile: AccessibilityProfile;
@@ -20,34 +29,25 @@ export function ProfileSelector({
   isOpen,
   onClose,
 }: ProfileSelectorProps) {
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white border border-slate-200 rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col">
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="max-w-lg max-h-[85vh] p-0 gap-0 overflow-hidden rounded-3xl bg-white border-slate-200">
         {/* Header */}
-        <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
+        <DialogHeader className="p-4 sm:p-5 border-b border-slate-100 flex flex-row items-center justify-between space-y-0 pr-12">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600">
               <Accessibility className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-slate-900">
+              <DialogTitle className="text-base font-bold text-slate-900">
                 Perfil de Acessibilidade
-              </h2>
-              <p className="text-xs text-slate-500">
+              </DialogTitle>
+              <DialogDescription className="text-xs text-slate-500">
                 Adapte as rotas e alertas às suas necessidades
-              </p>
+              </DialogDescription>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-xs font-semibold text-slate-500 hover:text-slate-900 px-3 py-1.5 rounded-xl hover:bg-slate-100 min-h-[36px]"
-          >
-            Fechar
-          </button>
-        </div>
+        </DialogHeader>
 
         {/* Profile Options */}
         <div className="p-4 sm:p-5 space-y-3 overflow-y-auto max-h-[70vh]">
@@ -56,14 +56,22 @@ export function ProfileSelector({
             const isSelected = currentProfile.id === profile.id;
 
             return (
-              <button
+              <Card
                 key={profile.id}
-                type="button"
+                role="button"
+                tabIndex={0}
                 onClick={() => {
                   onSelectProfile(profile);
                   onClose();
                 }}
-                className={`w-full text-left p-4 rounded-2xl border transition-all flex items-start justify-between gap-3 min-h-[44px] ${
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    onSelectProfile(profile);
+                    onClose();
+                  }
+                }}
+                className={`w-full text-left p-4 rounded-2xl border transition-all flex items-start justify-between gap-3 cursor-pointer min-h-[44px] ${
                   isSelected
                     ? 'bg-blue-50/70 border-blue-500 ring-2 ring-blue-500/20 shadow-sm'
                     : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50'
@@ -78,9 +86,9 @@ export function ProfileSelector({
                       {profile.name}
                     </span>
                     {profile.evitaEscada && (
-                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
+                      <Badge variant="success" className="text-[10px] py-0.5">
                         100% Sem Escadas
-                      </span>
+                      </Badge>
                     )}
                     {profile.id === 'NEURODIVERGENTE' && (
                       <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-purple-50 text-purple-700 border border-purple-200">
@@ -110,11 +118,11 @@ export function ProfileSelector({
                     <Check className="w-4 h-4 stroke-[3]" />
                   </div>
                 )}
-              </button>
+              </Card>
             );
           })}
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

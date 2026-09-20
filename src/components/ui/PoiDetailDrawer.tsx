@@ -10,6 +10,9 @@ import {
   Check,
 } from 'lucide-react';
 import type { POI } from '../../data/eventData';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Card } from '@/components/ui/card';
 
 interface PoiDetailDrawerProps {
   poi: POI | null;
@@ -70,9 +73,9 @@ export function PoiDetailDrawer({
                 Piso {poi.floor}
               </span>
               {poi.boothNumber && (
-                <span className="text-xs text-blue-700 font-mono font-semibold bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+                <Badge variant="secondary" className="text-xs text-blue-700 font-mono font-semibold bg-blue-50 border border-blue-200">
                   Estande {poi.boothNumber}
-                </span>
+                </Badge>
               )}
             </div>
             <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-snug">
@@ -84,14 +87,15 @@ export function PoiDetailDrawer({
             </div>
           </div>
 
-          <button
-            type="button"
+          <Button
+            variant="ghost"
+            size="iconSm"
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-slate-700 rounded-full hover:bg-slate-100 transition-colors shrink-0 min-w-[44px] min-h-[44px] flex items-center justify-center"
+            className="text-slate-400 hover:text-slate-700 rounded-full"
             title="Fechar detalhes"
           >
             <X className="w-5 h-5" />
-          </button>
+          </Button>
         </div>
 
         {/* Scrollable Body */}
@@ -109,7 +113,7 @@ export function PoiDetailDrawer({
               </h3>
               <div className="space-y-2">
                 {poi.sessions.map((session) => (
-                  <div
+                  <Card
                     key={session.id}
                     className={`p-3 rounded-2xl border transition-all ${
                       session.isLiveNow
@@ -123,10 +127,10 @@ export function PoiDetailDrawer({
                         {session.time}
                       </span>
                       {session.isLiveNow && (
-                        <span className="flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full border border-emerald-300">
+                        <Badge variant="live" className="gap-1 text-[10px]">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-ping" />
                           AO VIVO
-                        </span>
+                        </Badge>
                       )}
                     </div>
                     <div className="text-xs sm:text-sm font-bold text-slate-900">
@@ -136,7 +140,7 @@ export function PoiDetailDrawer({
                       <User className="w-3 h-3 text-blue-600 shrink-0" />
                       <span>{session.speaker}</span>
                     </div>
-                  </div>
+                  </Card>
                 ))}
               </div>
             </div>
@@ -145,19 +149,19 @@ export function PoiDetailDrawer({
 
         {/* Footer Actions */}
         <div className="p-4 sm:p-5 border-t border-slate-100 bg-slate-50 flex items-center gap-2.5">
-          <button
-            type="button"
+          <Button
             onClick={() => onNavigateHere(poi)}
-            className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-2xl shadow-lg shadow-blue-500/25 text-xs sm:text-sm transition-all active:scale-[0.98] min-h-[44px]"
+            className="flex-1 gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl shadow-lg shadow-blue-500/25 text-xs sm:text-sm min-h-[44px]"
           >
             <Navigation className="w-4 h-4" />
             <span>Como Chegar (Rota Acessível)</span>
-          </button>
+          </Button>
 
-          <button
-            type="button"
+          <Button
+            variant="outline"
+            size="icon"
             onClick={() => setBookmarked(!bookmarked)}
-            className={`p-3 rounded-2xl border transition-all min-w-[44px] min-h-[44px] flex items-center justify-center ${
+            className={`rounded-2xl min-w-[44px] min-h-[44px] ${
               bookmarked
                 ? 'bg-amber-50 text-amber-600 border-amber-300'
                 : 'bg-white text-slate-600 hover:text-slate-900 border-slate-200'
@@ -165,16 +169,17 @@ export function PoiDetailDrawer({
             title="Salvar nos Favoritos"
           >
             <Bookmark className="w-4 h-4" />
-          </button>
+          </Button>
 
-          <button
-            type="button"
+          <Button
+            variant="outline"
+            size="icon"
             onClick={handleShare}
-            className="p-3 rounded-2xl bg-white text-slate-600 hover:text-slate-900 border border-slate-200 transition-all min-w-[44px] min-h-[44px] flex items-center justify-center shadow-sm"
+            className="rounded-2xl bg-white text-slate-600 hover:text-slate-900 border-slate-200 min-w-[44px] min-h-[44px] shadow-sm"
             title="Compartilhar Localização"
           >
             {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Share2 className="w-4 h-4" />}
-          </button>
+          </Button>
         </div>
       </div>
     </aside>

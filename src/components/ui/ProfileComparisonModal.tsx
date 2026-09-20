@@ -1,7 +1,17 @@
-import { X, ArrowRight, ShieldCheck, VolumeX, Users, Footprints, Clock } from 'lucide-react';
+import { ArrowRight, ShieldCheck, VolumeX, Users, Footprints, Clock } from 'lucide-react';
 import type { ProfileComparisonResult } from '../../utils/pathfinding';
 import { ACCESSIBILITY_PROFILES } from '../../data/eventData';
 import type { AccessibilityProfile } from '../../data/eventData';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 
 interface ProfileComparisonModalProps {
   isOpen: boolean;
@@ -18,29 +28,18 @@ export function ProfileComparisonModal({
   activeProfile,
   onSelectProfile,
 }: ProfileComparisonModalProps) {
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white border border-slate-200 rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[85vh]">
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="max-w-2xl max-h-[85vh] p-0 gap-0 overflow-hidden rounded-3xl bg-white border-slate-200">
         {/* Header */}
-        <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
-          <div>
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
-              <span>Comparação de Rotas por Perfil</span>
-            </h2>
-            <p className="text-xs text-slate-500">
-              Veja como cada perfil adapta o trajeto para evitar barreiras, escadas e sobrecargas
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="p-2 text-slate-400 hover:text-slate-700 rounded-full hover:bg-slate-100 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+        <DialogHeader className="p-4 sm:p-5 border-b border-slate-100 pr-12">
+          <DialogTitle className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+            Comparação de Rotas por Perfil
+          </DialogTitle>
+          <DialogDescription className="text-xs text-slate-500">
+            Veja como cada perfil adapta o trajeto para evitar barreiras, escadas e sobrecargas
+          </DialogDescription>
+        </DialogHeader>
 
         {/* Comparison Cards */}
         <div className="p-4 sm:p-6 overflow-y-auto space-y-3 flex-1">
@@ -49,7 +48,7 @@ export function ProfileComparisonModal({
             const isCurrent = activeProfile.id === item.profileId;
 
             return (
-              <div
+              <Card
                 key={item.profileId}
                 className={`p-4 rounded-2xl border transition-all ${
                   isCurrent
@@ -66,9 +65,9 @@ export function ProfileComparisonModal({
                       {item.profileName}
                     </span>
                     {isCurrent && (
-                      <span className="text-[10px] font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded border border-blue-200">
+                      <Badge variant="secondary" className="text-[10px] font-bold text-blue-700 bg-blue-100 border border-blue-200">
                         Ativo
-                      </span>
+                      </Badge>
                     )}
                   </div>
 
@@ -91,10 +90,10 @@ export function ProfileComparisonModal({
                 {/* Badges */}
                 <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-slate-100">
                   {profile.evitaEscada && (
-                    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                    <Badge variant="success" className="gap-1 text-[11px] font-medium">
                       <ShieldCheck className="w-3 h-3 text-emerald-600" />
                       Livre de degraus (usa elevador/rampa)
-                    </span>
+                    </Badge>
                   )}
                   {item.avoidedNoise && (
                     <span className="inline-flex items-center gap-1 text-[11px] font-medium text-purple-700 bg-purple-50 px-2 py-0.5 rounded-md border border-purple-200">
@@ -110,24 +109,25 @@ export function ProfileComparisonModal({
                   )}
 
                   {!isCurrent && (
-                    <button
-                      type="button"
+                    <Button
+                      variant="outline"
+                      size="sm"
                       onClick={() => {
                         onSelectProfile(profile);
                         onClose();
                       }}
-                      className="ml-auto flex items-center gap-1 text-xs font-bold text-blue-600 hover:text-blue-700 hover:bg-blue-50 px-3 py-1.5 rounded-xl transition-all border border-blue-200 min-h-[36px]"
+                      className="ml-auto text-xs font-bold text-blue-600 hover:text-blue-700 hover:bg-blue-50 border-blue-200 gap-1 rounded-xl min-h-[36px]"
                     >
                       <span>Aplicar este perfil</span>
                       <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
+                    </Button>
                   )}
                 </div>
-              </div>
+              </Card>
             );
           })}
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

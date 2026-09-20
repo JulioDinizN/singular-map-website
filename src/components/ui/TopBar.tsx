@@ -10,8 +10,11 @@ import {
   AlertTriangle,
   Flag,
 } from 'lucide-react';
-import { POI_LIST } from '../../data/eventData';
-import type { POI, PoiCategory, AccessibilityProfile } from '../../data/eventData';
+import { POI_LIST } from '@/data/eventData';
+import type { POI, PoiCategory, AccessibilityProfile } from '@/data/eventData';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 
 interface TopBarProps {
   onSelectPoi: (poi: POI) => void;
@@ -87,7 +90,7 @@ export function TopBar({
   return (
     <header className="absolute top-0 left-0 right-0 z-20 pointer-events-none p-2.5 sm:p-4 flex flex-col gap-2">
       <div className="flex items-center justify-between gap-2 max-w-7xl mx-auto w-full">
-        {/* Brand & App Title (Apple Maps style card) */}
+        {/* Brand & App Title (shadcn card style) */}
         <div className="pointer-events-auto flex items-center gap-2.5 bg-white/95 backdrop-blur-xl px-3.5 py-1.5 rounded-2xl border border-slate-200/90 shadow-lg shadow-slate-900/5 min-h-[44px]">
           <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-md shadow-blue-500/30">
             <Compass className="w-5 h-5 animate-pulse" />
@@ -95,9 +98,9 @@ export function TopBar({
           <div>
             <h1 className="text-xs sm:text-sm font-bold tracking-tight text-slate-900 flex items-center gap-1.5">
               <span>BRASIL TECH SUMMIT</span>
-              <span className="text-[9px] uppercase px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">
+              <Badge variant="success" className="text-[9px] uppercase px-1.5 py-0">
                 MAPA 3D
-              </span>
+              </Badge>
             </h1>
             <p className="text-[10px] text-slate-500 hidden sm:block">
               São Paulo Expo • Navegação Acessível NBR 9050
@@ -105,14 +108,14 @@ export function TopBar({
           </div>
         </div>
 
-        {/* Search Bar (Clean Apple Maps style search pill) */}
+        {/* Search Bar (shadcn input) */}
         <div
           ref={searchContainerRef}
           className="pointer-events-auto relative flex-1 max-w-md mx-auto"
         >
           <div className="relative flex items-center bg-white/95 backdrop-blur-xl rounded-2xl border border-slate-200/90 shadow-lg shadow-slate-900/5 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 transition-all min-h-[44px]">
             <Search className="w-4 h-4 text-slate-400 ml-3.5 shrink-0" />
-            <input
+            <Input
               type="text"
               value={query}
               onChange={(e) => {
@@ -121,19 +124,21 @@ export function TopBar({
               }}
               onFocus={() => setIsOpen(true)}
               placeholder="Buscar estandes, palcos, facilidades, café..."
-              className="w-full bg-transparent px-3 py-2 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none"
+              className="border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 px-3 py-2 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 h-auto"
             />
             {query && (
-              <button
+              <Button
+                variant="ghost"
+                size="iconSm"
                 type="button"
                 onClick={() => {
                   setQuery('');
                   setIsOpen(false);
                 }}
-                className="p-1.5 mr-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100"
+                className="mr-2 text-slate-400 hover:text-slate-600"
               >
                 <X className="w-3.5 h-3.5" />
-              </button>
+              </Button>
             )}
           </div>
 
@@ -181,10 +186,12 @@ export function TopBar({
         </div>
 
         {/* Accessibility Profile Selector Button */}
-        <button
+        <Button
+          variant="outline"
+          size="default"
           type="button"
           onClick={onOpenProfileSelector}
-          className="pointer-events-auto shrink-0 flex items-center gap-1.5 bg-white/95 hover:bg-slate-50 px-3 py-2 rounded-2xl text-xs sm:text-sm font-semibold backdrop-blur-xl shadow-lg shadow-slate-900/5 border border-slate-200/90 transition-all active:scale-95 min-h-[44px]"
+          className="pointer-events-auto shrink-0 bg-white/95 hover:bg-slate-50 backdrop-blur-xl shadow-lg shadow-slate-900/5 border-slate-200/90 rounded-2xl min-h-[44px] gap-1.5"
           title="Trocar Perfil de Acessibilidade"
         >
           <Accessibility className="w-4 h-4 text-blue-600" />
@@ -195,56 +202,64 @@ export function TopBar({
           >
             {activeProfile.shortName}
           </span>
-        </button>
+        </Button>
 
         {/* Live Agenda Button */}
-        <button
+        <Button
+          variant="primary"
+          size="default"
           type="button"
           onClick={onOpenSchedule}
-          className="pointer-events-auto shrink-0 flex items-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded-2xl text-xs sm:text-sm font-medium backdrop-blur-xl shadow-lg shadow-blue-600/20 border border-blue-500/30 transition-all active:scale-95 min-h-[44px]"
+          className="pointer-events-auto shrink-0 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl shadow-lg shadow-blue-600/20 border-blue-500/30 min-h-[44px] gap-1.5"
         >
           <Radio className="w-3.5 h-3.5 text-emerald-300 animate-pulse" />
           <span className="hidden sm:inline">Ao Vivo</span>
-          <span className="px-1.5 py-0.2 rounded-full bg-blue-800 text-[10px] font-bold text-emerald-300">
+          <Badge variant="success" className="px-1.5 py-0 text-[10px] font-bold bg-blue-800 text-emerald-300 border-0">
             {liveSessionsCount}
-          </span>
-        </button>
+          </Badge>
+        </Button>
       </div>
 
-      {/* Action Pills & Categories (Clean Apple Maps style pills) */}
+      {/* Action Pills & Categories */}
       <div className="pointer-events-auto flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-7xl mx-auto w-full py-0.5">
         {/* Quick Sala de Acolhimento */}
-        <button
+        <Button
+          variant="outline"
+          size="sm"
           type="button"
           onClick={onGoToQuietRoom}
-          className="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 shadow-sm min-h-[40px] transition-all active:scale-95"
+          className="shrink-0 rounded-xl text-xs font-semibold bg-teal-50 hover:bg-teal-100 text-teal-800 border-teal-200 shadow-sm min-h-[40px] gap-1.5"
           title="Espaço calmo para descompressão sensorial"
         >
           <HeartHandshake className="w-3.5 h-3.5 text-teal-600" />
           <span>Acolhimento</span>
-        </button>
+        </Button>
 
         {/* Quick Emergency Evacuation */}
-        <button
+        <Button
+          variant="outline"
+          size="sm"
           type="button"
           onClick={onEmergencyEvacuation}
-          className="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-red-50 hover:bg-red-100 text-red-800 border border-red-200 shadow-sm min-h-[40px] transition-all active:scale-95"
+          className="shrink-0 rounded-xl text-xs font-semibold bg-red-50 hover:bg-red-100 text-red-800 border-red-200 shadow-sm min-h-[40px] gap-1.5"
           title="Calcular rota para a saída viável mais próxima"
         >
           <AlertTriangle className="w-3.5 h-3.5 text-red-600" />
           <span>Rota de Saída</span>
-        </button>
+        </Button>
 
         {/* Quick Report */}
-        <button
+        <Button
+          variant="outline"
+          size="sm"
           type="button"
           onClick={onOpenReportModal}
-          className="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 shadow-sm min-h-[40px] transition-all active:scale-95"
+          className="shrink-0 rounded-xl text-xs font-semibold bg-amber-50 hover:bg-amber-100 text-amber-800 border-amber-200 shadow-sm min-h-[40px] gap-1.5"
           title="Reportar bloqueio, lotação ou barulho"
         >
           <Flag className="w-3.5 h-3.5 text-amber-600" />
           <span>Reportar</span>
-        </button>
+        </Button>
 
         <div className="h-4 w-px bg-slate-300 shrink-0 mx-1" />
 
@@ -252,18 +267,20 @@ export function TopBar({
         {CATEGORIES.map((cat) => {
           const isActive = selectedCategory === cat.id;
           return (
-            <button
+            <Button
               key={cat.id}
+              variant={isActive ? 'primary' : 'outline'}
+              size="sm"
               type="button"
               onClick={() => onSelectCategory(cat.id)}
-              className={`shrink-0 px-3 py-2 rounded-xl text-xs font-semibold border transition-all min-h-[40px] ${
+              className={`shrink-0 rounded-xl text-xs font-semibold min-h-[40px] ${
                 isActive
-                  ? 'bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-500/20 scale-105'
-                  : 'bg-white/95 text-slate-700 border-slate-200 hover:bg-slate-100 hover:text-slate-900 shadow-sm'
+                  ? 'shadow-md shadow-blue-500/20 scale-105'
+                  : 'bg-white/95 text-slate-700 hover:bg-slate-100 hover:text-slate-900 shadow-sm'
               }`}
             >
               {cat.label}
-            </button>
+            </Button>
           );
         })}
       </div>

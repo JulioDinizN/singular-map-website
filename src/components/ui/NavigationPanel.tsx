@@ -17,6 +17,8 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 import type { NavigationRoute } from '../../utils/pathfinding';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 interface NavigationPanelProps {
   route: NavigationRoute | null;
@@ -89,14 +91,15 @@ export function NavigationPanel({
                 </>
               )}
             </div>
-            <button
-              type="button"
+            <Button
+              variant="ghost"
+              size="iconSm"
               onClick={onClearRoute}
-              className="p-2 text-slate-400 hover:text-slate-700 rounded-full hover:bg-slate-100 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+              className="text-slate-400 hover:text-slate-700 rounded-full"
               title="Encerrar Rota"
             >
               <X className="w-4 h-4" />
-            </button>
+            </Button>
           </div>
 
           <h3 className="text-base sm:text-lg font-bold text-slate-900 truncate">
@@ -116,10 +119,10 @@ export function NavigationPanel({
                 {route.profile.shortName}
               </span>
               {route.avoidedStairs && (
-                <span className="flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                <Badge variant="success" className="gap-1 text-[10px] py-0.5 px-1.5 font-semibold">
                   <ShieldCheck className="w-3 h-3" />
                   Sem escadas
-                </span>
+                </Badge>
               )}
               {route.avoidedNoise && (
                 <span className="flex items-center gap-1 text-[10px] font-semibold text-purple-700 bg-purple-50 px-1.5 py-0.5 rounded border border-purple-200">
@@ -130,14 +133,15 @@ export function NavigationPanel({
             </div>
 
             {/* Compare Profiles Button */}
-            <button
-              type="button"
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={onOpenCompare}
-              className="flex items-center gap-1 text-xs font-bold text-blue-600 hover:text-blue-700 hover:underline min-h-[36px] px-2"
+              className="flex items-center gap-1 text-xs font-bold text-blue-600 hover:text-blue-700 hover:bg-blue-50 h-auto py-1 px-2 rounded-lg"
             >
               <GitCompare className="w-3.5 h-3.5" />
               <span>Comparar</span>
-            </button>
+            </Button>
           </div>
 
           {/* Quick Metrics (Google Maps / Apple Maps style) */}
@@ -169,10 +173,9 @@ export function NavigationPanel({
 
         {/* Live Simulation Controls & Voice */}
         <div className="p-3 sm:p-4 bg-slate-50 border-b border-slate-100 flex items-center justify-between gap-2">
-          <button
-            type="button"
+          <Button
             onClick={onToggleSimulation}
-            className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm shadow-md transition-all active:scale-95 min-h-[44px] ${
+            className={`flex-1 gap-2 font-bold text-xs sm:text-sm shadow-md transition-all active:scale-95 min-h-[44px] rounded-xl ${
               isSimulating
                 ? 'bg-amber-500 hover:bg-amber-600 text-white'
                 : 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-500/20'
@@ -180,11 +183,12 @@ export function NavigationPanel({
           >
             {isSimulating ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-white" />}
             <span>{isSimulating ? 'Pausar' : 'Iniciar Passo a Passo'}</span>
-          </button>
+          </Button>
 
           {/* Voice Text-to-Speech Toggle */}
-          <button
-            type="button"
+          <Button
+            variant="outline"
+            size="icon"
             onClick={() => {
               const next = !voiceEnabled;
               setVoiceEnabled(next);
@@ -192,7 +196,7 @@ export function NavigationPanel({
                 speakInstruction(route.steps[0].instruction);
               }
             }}
-            className={`p-2 rounded-xl border text-xs transition-all min-w-[44px] min-h-[44px] flex items-center justify-center ${
+            className={`rounded-xl min-w-[44px] min-h-[44px] ${
               voiceEnabled
                 ? 'bg-blue-50 text-blue-600 border-blue-300 ring-2 ring-blue-500/20'
                 : 'bg-white text-slate-600 hover:text-slate-900 border-slate-200'
@@ -200,32 +204,33 @@ export function NavigationPanel({
             title={voiceEnabled ? 'Instruções em voz ativadas' : 'Ativar leitura em voz alta'}
           >
             <Volume2 className="w-4 h-4" />
-          </button>
+          </Button>
 
           {/* Speed Toggle */}
-          <button
-            type="button"
+          <Button
+            variant="outline"
             onClick={() => {
               const speeds = [1, 2, 4];
               const next = speeds[(speeds.indexOf(simulationSpeed) + 1) % speeds.length];
               onChangeSpeed(next);
             }}
-            className="flex items-center gap-1 px-3 py-2 bg-white text-slate-700 hover:text-slate-900 rounded-xl text-xs font-mono font-bold border border-slate-200 min-h-[44px] shadow-sm"
+            className="gap-1 px-3 bg-white text-slate-700 hover:text-slate-900 rounded-xl text-xs font-mono font-bold border-slate-200 min-h-[44px] shadow-sm"
             title="Velocidade de Simulação"
           >
             <FastForward className="w-3.5 h-3.5 text-blue-600" />
             <span>{simulationSpeed}x</span>
-          </button>
+          </Button>
 
           {/* Reset Walk */}
-          <button
-            type="button"
+          <Button
+            variant="outline"
+            size="icon"
             onClick={onResetSimulation}
-            className="p-2 bg-white text-slate-600 hover:text-slate-900 rounded-xl border border-slate-200 min-w-[44px] min-h-[44px] flex items-center justify-center shadow-sm"
+            className="bg-white text-slate-600 hover:text-slate-900 rounded-xl border-slate-200 min-w-[44px] min-h-[44px] shadow-sm"
             title="Reiniciar ao Início"
           >
             <RotateCcw className="w-4 h-4" />
-          </button>
+          </Button>
         </div>
 
         {/* Turn-by-Turn Collapsible Section */}
