@@ -26,6 +26,9 @@ import {
   VolumeX,
   GitCompare,
   Footprints,
+  CornerUpRight,
+  CornerUpLeft,
+  ArrowUp,
 } from 'lucide-react';
 import { POI_LIST } from '@/data/eventData';
 import type { POI, PoiCategory } from '@/data/eventData';
@@ -98,6 +101,26 @@ const CATEGORY_LABELS: Record<string, string> = {
   exit: 'Saída de Emergência',
 };
 
+function getManeuverIcon(instruction: string) {
+  const lower = instruction.toLowerCase();
+  if (lower.includes('direita')) {
+    return <CornerUpRight className="w-5 h-5 stroke-[2.5]" />;
+  }
+  if (lower.includes('esquerda')) {
+    return <CornerUpLeft className="w-5 h-5 stroke-[2.5]" />;
+  }
+  if (lower.includes('cheg') || lower.includes('destino') || lower.includes('estande')) {
+    return <MapPin className="w-5 h-5 stroke-[2.5]" />;
+  }
+  return <ArrowUp className="w-5 h-5 stroke-[2.5]" />;
+}
+
+function getArrivalTime(minutes: number) {
+  const now = new Date();
+  now.setMinutes(now.getMinutes() + Math.max(1, Math.round(minutes)));
+  return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
 export function MobileBottomSheet({
   selectedPoi,
   onClosePoi,
@@ -145,6 +168,15 @@ export function MobileBottomSheet({
   const [voiceEnabled, setVoiceEnabled] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Current navigation active step
+  const currentStepIdx = useMemo(() => {
+    if (!route || route.steps.length === 0) return 0;
+    return Math.min(
+      route.steps.length - 1,
+      Math.floor(simulationProgress * route.steps.length)
+    );
+  }, [route, simulationProgress]);
+
   // Height is strictly user-controlled via drag or the Ver Mais / Recolher button.
   // Neither mode changes nor modal triggers will programmatically alter the sheet height.
 
@@ -168,11 +200,14 @@ export function MobileBottomSheet({
   useEffect(() => {
     if (voiceEnabled && route && route.steps.length > 0 && 'speechSynthesis' in window) {
       window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(route.steps[0].instruction);
-      utterance.lang = 'pt-BR';
-      window.speechSynthesis.speak(utterance);
+      const currentStep = route.steps[currentStepIdx];
+      if (currentStep) {
+        const utterance = new SpeechSynthesisUtterance(currentStep.instruction);
+        utterance.lang = 'pt-BR';
+        window.speechSynthesis.speak(utterance);
+      }
     }
-  }, [voiceEnabled, route]);
+  }, [voiceEnabled, route, currentStepIdx]);
 
   // Search results for explore mode
   const searchResults = useMemo(() => {
@@ -241,197 +276,341 @@ export function MobileBottomSheet({
   }, []);
 
   return (
-    <Drawer
-      open={true}
-      dismissible={false}
-      modal={false}
-      shouldScaleBackground={false}
-      snapPoints={[snapPeek, snapExpanded]}
-      activeSnapPoint={snapPoint}
-      setActiveSnapPoint={setSnapPoint}
-    >
-      <DrawerContent
-        hideOverlay
-        className="fixed inset-x-0 top-0 bottom-0 z-30 flex flex-col rounded-t-[28px] border-t border-slate-200/90 bg-white/98 backdrop-blur-2xl shadow-2xl shadow-slate-900/25 focus:outline-none sm:hidden overflow-hidden"
-      >
-        {/* Animated Container: Keyed by mode/POI to trigger left-to-right transition on change */}
-        <div className="flex-1 overflow-hidden relative flex flex-col min-h-0">
-          <div
-            key={mode === 'poi' ? `poi-${selectedPoi?.id}` : mode}
-            className="flex flex-col h-[85dvh] max-h-[85dvh] animate-slide-left-to-right"
-          >
-            {/* ========================================================= */}
-            {/* MODE 1: NAVIGATION (Turn-by-turn guidance) */}
-            {/* ========================================================= */}
-            {mode === 'navigation' && route && (
-              <div className="flex flex-col h-full">
-                {/* Peek Section (~200px) */}
-                <div className="shrink-0 px-3.5 pt-1 pb-2.5 select-none border-b border-slate-100">
-                  {/* Header: Destination & Close */}
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-1.5 min-w-0">
-                      <div className="w-6 h-6 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0">
-                        <Navigation className="w-3.5 h-3.5 animate-pulse" />
-                      </div>
-                      <div className="min-w-0">
-                        <div className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">
-                          {route.isEmergencyExitRoute ? 'Rota de Evacuação' : 'Navegando para'}
-                        </div>
-                        <DrawerTitle className="text-sm font-bold text-slate-900 truncate">
-                          {route.toPoi?.name || 'Destino'}
-                        </DrawerTitle>
-                        <DrawerDescription className="sr-only">
-                          Navegação assistida com instruções passo a passo
-                        </DrawerDescription>
-                      </div>
-                    </div>
+    <>
+      {/* Waze Floating Top Maneuver Card on Mobile */}
+      {route && (
+        <div className="fixed top-3 inset-x-3 z-40 sm:hidden pointer-events-auto animate-in fade-in slide-in-from-top duration-300">
+          <div className="bg-slate-900/96 text-white backdrop-blur-xl border border-slate-700/80 rounded-2xl p-3 shadow-2xl shadow-black/50 flex items-center gap-3">
+            {/* Big Maneuver Icon */}
+            <div className="w-11 h-11 rounded-xl bg-emerald-500 text-white flex flex-col items-center justify-center shrink-0 shadow-md shadow-emerald-500/30">
+              {getManeuverIcon(route.steps[currentStepIdx]?.instruction || '')}
+              <span className="text-[9px] font-black uppercase tracking-tight mt-0.5">
+                {route.steps[currentStepIdx]?.distanceMeters > 0
+                  ? `${Math.round(route.steps[currentStepIdx].distanceMeters)}m`
+                  : 'Agora'}
+              </span>
+            </div>
 
-                    <div className="flex items-center gap-1 shrink-0">
-                      <button
-                        type="button"
-                        onClick={toggleSnap}
-                        className="flex items-center gap-0.5 text-[11px] font-semibold text-blue-600 px-2 py-1 rounded-lg hover:bg-blue-50"
-                      >
-                        <span>{isExpanded ? 'Recolher' : 'Passos'}</span>
-                        {isExpanded ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronUp className="w-3.5 h-3.5" />}
-                      </button>
-                      <Button
-                        variant="ghost"
-                        size="iconSm"
-                        onClick={onClearRoute}
-                        className="text-slate-400 hover:text-slate-700 rounded-full w-7 h-7"
-                        title="Encerrar Rota"
-                      >
-                        <X className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </div>
-
-                  {/* Stats & Next Step */}
-                  <div className="mt-2 grid grid-cols-3 gap-2 bg-slate-50/90 p-2 rounded-xl border border-slate-100 text-center">
-                    <div>
-                      <div className="text-[10px] text-slate-500 font-medium">Distância</div>
-                      <div className="text-xs font-bold text-slate-900">{route.totalDistanceMeters.toFixed(0)}m</div>
-                    </div>
-                    <div>
-                      <div className="text-[10px] text-slate-500 font-medium">Tempo Est.</div>
-                      <div className="text-xs font-bold text-slate-900">{route.estimatedMinutes} min</div>
-                    </div>
-                    <div>
-                      <div className="text-[10px] text-slate-500 font-medium">Passos</div>
-                      <div className="text-xs font-bold text-slate-900">{route.steps.length}</div>
-                    </div>
-                  </div>
-
-                  {/* Controls: Play/Pause, Reset, Voice, Compare */}
-                  <div className="mt-2 flex items-center justify-between gap-1.5">
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      onClick={onToggleSimulation}
-                      className="flex-1 rounded-xl text-xs font-bold min-h-[38px] gap-1.5 bg-blue-600 hover:bg-blue-700 text-white"
-                    >
-                      {isSimulating ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-current" />}
-                      <span>{isSimulating ? 'Pausar' : 'Iniciar'}</span>
-                    </Button>
-
-                    <Button
-                      variant="outline"
-                      size="iconSm"
-                      onClick={onResetSimulation}
-                      className="rounded-xl min-w-[38px] min-h-[38px] border-slate-200"
-                      title="Reiniciar Simulação"
-                    >
-                      <RotateCcw className="w-3.5 h-3.5 text-slate-600" />
-                    </Button>
-
-                    <Button
-                      variant="outline"
-                      size="iconSm"
-                      onClick={() => setVoiceEnabled(!voiceEnabled)}
-                      className={`rounded-xl min-w-[38px] min-h-[38px] border-slate-200 ${
-                        voiceEnabled ? 'bg-blue-50 text-blue-600 border-blue-300' : 'text-slate-600'
-                      }`}
-                      title="Instruções de Voz"
-                    >
-                      {voiceEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
-                    </Button>
-
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={onOpenCompare}
-                      className="rounded-xl text-xs font-bold text-blue-600 border-blue-200 bg-blue-50/60 min-h-[38px] px-2.5 gap-1"
-                    >
-                      <GitCompare className="w-3.5 h-3.5" />
-                      <span>Perfis</span>
-                    </Button>
-                  </div>
+            {/* Maneuver Instruction */}
+            <div className="flex-1 min-w-0">
+              <div className="text-[10px] font-semibold text-emerald-400 uppercase tracking-wider flex items-center gap-1">
+                <span>{route.steps[currentStepIdx]?.distanceMeters > 0 ? `Em ${Math.round(route.steps[currentStepIdx].distanceMeters)}m` : 'Em frente'}</span>
+                <span>•</span>
+                <span className="text-slate-300 truncate">{route.toPoi?.name || 'Destino'}</span>
+              </div>
+              <div className="text-xs font-bold text-white leading-tight truncate">
+                {route.steps[currentStepIdx]?.instruction || 'Siga a rota indicada'}
+              </div>
+              {route.steps[currentStepIdx + 1] && (
+                <div className="text-[10px] text-slate-400 truncate mt-0.5">
+                  Depois: {route.steps[currentStepIdx + 1].instruction}
                 </div>
+              )}
+            </div>
 
-                {/* Expanded Content: Turn-by-turn steps */}
-                <div className="flex-1 overflow-y-auto px-4 pt-3 pb-12 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
-                      <Footprints className="w-3.5 h-3.5 text-blue-600" />
-                      <span>Instruções Passo a Passo</span>
-                    </h4>
-                    <div className="flex items-center gap-1">
-                      <span className="text-[10px] text-slate-500">Velocidade:</span>
-                      {[1, 2, 4].map((speed) => (
-                        <button
-                          key={speed}
-                          type="button"
-                          onClick={() => onChangeSpeed(speed)}
-                          className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
-                            simulationSpeed === speed
-                              ? 'bg-blue-600 text-white'
-                              : 'bg-slate-100 text-slate-600'
-                          }`}
-                        >
-                          {speed}x
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+            {/* Voice Toggle & Quick End */}
+            <div className="flex items-center gap-0.5 shrink-0">
+              <Button
+                variant="ghost"
+                size="iconSm"
+                onClick={() => setVoiceEnabled(!voiceEnabled)}
+                className={`rounded-xl text-white hover:bg-white/10 ${voiceEnabled ? 'text-emerald-400' : 'text-slate-400'}`}
+                title={voiceEnabled ? 'Desativar voz' : 'Ativar voz'}
+              >
+                {voiceEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+              </Button>
+              <Button
+                variant="ghost"
+                size="iconSm"
+                onClick={onClearRoute}
+                className="rounded-xl text-slate-400 hover:text-red-400 hover:bg-white/10"
+                title="Encerrar rota"
+              >
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
-                  <div className="space-y-2">
-                    {route.steps.map((step, idx) => {
-                      const isActive =
-                        Math.floor(simulationProgress * route.steps.length) === idx;
-                      return (
-                        <div
-                          key={idx}
-                          className={`p-3 rounded-2xl border transition-all text-left flex items-start gap-2.5 ${
-                            isActive
-                              ? 'bg-blue-50/80 border-blue-300 ring-2 ring-blue-500/20 shadow-sm'
-                              : 'bg-white border-slate-200/80'
-                          }`}
-                        >
-                          <div
-                            className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5 text-xs font-bold ${
-                              isActive ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600'
+      <Drawer
+        open={true}
+        dismissible={false}
+        modal={false}
+        shouldScaleBackground={false}
+        snapPoints={[snapPeek, snapExpanded]}
+        activeSnapPoint={snapPoint}
+        setActiveSnapPoint={setSnapPoint}
+      >
+        <DrawerContent
+          hideOverlay
+          className="fixed inset-x-0 top-0 bottom-0 z-30 flex flex-col rounded-t-[28px] border-t border-slate-200/90 bg-white/98 backdrop-blur-2xl shadow-2xl shadow-slate-900/25 focus:outline-none sm:hidden overflow-hidden"
+        >
+          {/* Animated Container: Keyed by mode/POI to trigger left-to-right transition on change */}
+          <div className="flex-1 overflow-hidden relative flex flex-col min-h-0">
+            <div
+              key={mode === 'poi' ? `poi-${selectedPoi?.id}` : mode}
+              className="flex flex-col h-[85dvh] max-h-[85dvh] animate-slide-left-to-right"
+            >
+              {/* ========================================================= */}
+              {/* MODE 1: NAVIGATION (Turn-by-turn guidance) */}
+              {/* ========================================================= */}
+              {mode === 'navigation' && route && (
+                <div className="flex flex-col h-full">
+                  {/* Peek Section */}
+                  <div className="shrink-0 px-3.5 pt-1.5 pb-2.5 select-none border-b border-slate-100">
+                    {/* Google Maps / Waze: Route Preview State vs Active Guidance State */}
+                    {!isSimulating && simulationProgress === 0 ? (
+                      /* STATE A: ROUTE PREVIEW (Google Maps Style) */
+                      <div>
+                        {/* Destination Header */}
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-1.5 min-w-0">
+                            <div className="w-6 h-6 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                              <Navigation className="w-3.5 h-3.5" />
+                            </div>
+                            <div className="min-w-0">
+                              <div className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">
+                                {route.isEmergencyExitRoute ? 'Rota de Emergência' : 'Destino Selecionado'}
+                              </div>
+                              <DrawerTitle className="text-sm font-bold text-slate-900 truncate">
+                                {route.toPoi?.name || 'Destino'}
+                              </DrawerTitle>
+                              <DrawerDescription className="sr-only">
+                                Visão geral da rota e navegação
+                              </DrawerDescription>
+                            </div>
+                          </div>
+
+                          <Button
+                            variant="ghost"
+                            size="iconSm"
+                            onClick={onClearRoute}
+                            className="text-slate-400 hover:text-slate-700 rounded-full w-7 h-7"
+                            title="Cancelar Rota"
+                          >
+                            <X className="w-4 h-4" />
+                          </Button>
+                        </div>
+
+                        {/* Google Maps Metrics & ETA Card */}
+                        <div className="mt-2.5 flex items-center justify-between bg-emerald-50/80 border border-emerald-200/80 rounded-2xl px-3 py-2">
+                          <div className="flex items-baseline gap-1.5">
+                            <span className="text-xl font-black text-emerald-700 font-mono tracking-tight">
+                              ~{route.estimatedMinutes} min
+                            </span>
+                            <span className="text-xs text-slate-600 font-medium">
+                              ({route.totalDistanceMeters.toFixed(0)} m)
+                            </span>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-[10px] font-semibold text-emerald-800 uppercase tracking-wider">
+                              Chegada às
+                            </div>
+                            <div className="text-xs font-bold text-slate-900 font-mono">
+                              {getArrivalTime(route.estimatedMinutes)}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Prominent Google Maps "Iniciar Navegação" Button */}
+                        <div className="mt-2.5 flex items-center gap-2">
+                          <Button
+                            onClick={onToggleSimulation}
+                            className="flex-1 gap-2 font-bold text-xs min-h-[44px] rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/30 active:scale-98 transition-transform"
+                          >
+                            <Play className="w-4 h-4 fill-white" />
+                            <span>Iniciar Navegação</span>
+                          </Button>
+
+                          <Button
+                            variant="outline"
+                            onClick={toggleSnap}
+                            className="px-3 min-h-[44px] rounded-2xl text-xs font-semibold border-slate-200 text-slate-700 hover:bg-slate-50"
+                          >
+                            <span>{isExpanded ? 'Recolher' : 'Passos'}</span>
+                            {isExpanded ? <ChevronDown className="w-3.5 h-3.5 ml-1" /> : <ChevronUp className="w-3.5 h-3.5 ml-1" />}
+                          </Button>
+
+                          <Button
+                            variant="outline"
+                            size="iconSm"
+                            onClick={onOpenCompare}
+                            className="rounded-2xl min-w-[44px] min-h-[44px] border-slate-200 text-blue-600 hover:bg-blue-50"
+                            title="Comparar Perfis de Rota"
+                          >
+                            <GitCompare className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      /* STATE B: ACTIVE GUIDANCE (Waze / Google Maps Style) */
+                      <div>
+                        {/* Active Metrics Bar: ETA, Arrival Time, Distance Remaining */}
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-2">
+                            <span className="px-2.5 py-1 rounded-xl bg-emerald-600 text-white font-black text-sm font-mono shadow-xs">
+                              ~{Math.max(1, Math.round(route.estimatedMinutes * (1 - simulationProgress)))} min
+                            </span>
+                            <div>
+                              <div className="text-xs font-bold text-slate-900">
+                                {Math.round((1 - simulationProgress) * route.totalDistanceMeters)}m restantes
+                              </div>
+                              <div className="text-[10px] text-slate-500">
+                                Chegada às {getArrivalTime(Math.max(1, Math.round(route.estimatedMinutes * (1 - simulationProgress))))}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* End Navigation (Red Button) */}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={onClearRoute}
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50 text-xs font-bold px-2.5 py-1 rounded-xl gap-1 h-auto"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                            <span>Encerrar</span>
+                          </Button>
+                        </div>
+
+                        {/* Progress Bar */}
+                        <div className="mt-2.5">
+                          <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden border border-slate-200/60">
+                            <div
+                              className="h-full bg-emerald-600 transition-all duration-200"
+                              style={{ width: `${Math.round(simulationProgress * 100)}%` }}
+                            />
+                          </div>
+                        </div>
+
+                        {/* Navigation Controls: Play/Pause, Speed, Reset, Voice */}
+                        <div className="mt-2.5 flex items-center justify-between gap-1.5">
+                          <Button
+                            variant="primary"
+                            size="sm"
+                            onClick={onToggleSimulation}
+                            className={`flex-1 rounded-xl text-xs font-bold min-h-[40px] gap-1.5 ${
+                              isSimulating
+                                ? 'bg-amber-500 hover:bg-amber-600 text-white'
+                                : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-500/20'
                             }`}
                           >
-                            {idx + 1}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="text-xs font-semibold text-slate-900 leading-snug">
-                              {step.instruction}
-                            </div>
-                            {step.distanceMeters > 0 && (
-                              <div className="text-[10px] text-slate-500 mt-0.5">
-                                {step.distanceMeters.toFixed(0)}m
-                              </div>
-                            )}
-                          </div>
+                            {isSimulating ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-current" />}
+                            <span>{isSimulating ? 'Pausar' : 'Continuar'}</span>
+                          </Button>
+
+                          {/* Speed Toggle */}
+                          <Button
+                            variant="outline"
+                            onClick={() => {
+                              const speeds = [1, 2, 4];
+                              const next = speeds[(speeds.indexOf(simulationSpeed) + 1) % speeds.length];
+                              onChangeSpeed(next);
+                            }}
+                            className="gap-0.5 px-2 bg-white text-slate-700 hover:text-slate-900 rounded-xl text-xs font-mono font-bold border-slate-200 min-h-[40px] shrink-0"
+                            title="Velocidade de Simulação"
+                          >
+                            <span>{simulationSpeed}x</span>
+                          </Button>
+
+                          <Button
+                            variant="outline"
+                            size="iconSm"
+                            onClick={onResetSimulation}
+                            className="rounded-xl min-w-[40px] min-h-[40px] border-slate-200"
+                            title="Reiniciar ao Início"
+                          >
+                            <RotateCcw className="w-3.5 h-3.5 text-slate-600" />
+                          </Button>
+
+                          <Button
+                            variant="outline"
+                            size="iconSm"
+                            onClick={() => setVoiceEnabled(!voiceEnabled)}
+                            className={`rounded-xl min-w-[40px] min-h-[40px] border-slate-200 ${
+                              voiceEnabled ? 'bg-blue-50 text-blue-600 border-blue-300' : 'text-slate-600'
+                            }`}
+                            title="Instruções de Voz"
+                          >
+                            {voiceEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
+                          </Button>
+
+                          <button
+                            type="button"
+                            onClick={toggleSnap}
+                            className="flex items-center gap-0.5 text-xs font-semibold text-slate-600 hover:text-slate-900 px-2 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 min-h-[40px]"
+                          >
+                            <span>{isExpanded ? 'Recolher' : 'Passos'}</span>
+                            {isExpanded ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronUp className="w-3.5 h-3.5" />}
+                          </button>
                         </div>
-                      );
-                    })}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Expanded Content: Turn-by-turn steps */}
+                  <div className="flex-1 overflow-y-auto px-4 pt-3 pb-12 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                        <Footprints className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>Instruções Passo a Passo</span>
+                      </h4>
+                      <div className="flex items-center gap-1">
+                        <span className="text-[10px] text-slate-500">Velocidade:</span>
+                        {[1, 2, 4].map((speed) => (
+                          <button
+                            key={speed}
+                            type="button"
+                            onClick={() => onChangeSpeed(speed)}
+                            className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                              simulationSpeed === speed
+                                ? 'bg-emerald-600 text-white'
+                                : 'bg-slate-100 text-slate-600'
+                            }`}
+                          >
+                            {speed}x
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      {route.steps.map((step, idx) => {
+                        const isActive = currentStepIdx === idx;
+                        return (
+                          <div
+                            key={idx}
+                            className={`p-3 rounded-2xl border transition-all text-left flex items-start gap-2.5 ${
+                              isActive
+                                ? 'bg-emerald-50 border-emerald-300 ring-2 ring-emerald-500/20 shadow-sm'
+                                : 'bg-white border-slate-200/80'
+                            }`}
+                          >
+                            <div
+                              className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 mt-0.5 text-xs font-bold ${
+                                isActive ? 'bg-emerald-600 text-white shadow-xs' : 'bg-slate-100 text-slate-600'
+                              }`}
+                            >
+                              {getManeuverIcon(step.instruction)}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="text-xs font-semibold text-slate-900 leading-snug">
+                                {step.instruction}
+                              </div>
+                              {step.distanceMeters > 0 && (
+                                <div className="text-[10px] text-slate-500 mt-0.5 font-mono">
+                                  {step.distanceMeters.toFixed(0)}m
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
             {/* ========================================================= */}
             {/* MODE 2: POI DETAIL (Selected Location) */}
@@ -1051,5 +1230,6 @@ export function MobileBottomSheet({
         </div>
       </DrawerContent>
     </Drawer>
+    </>
   );
 }

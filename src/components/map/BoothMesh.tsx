@@ -503,64 +503,169 @@ export function BoothMesh({
           </mesh>
         </group>
       ) : poi.tier === 'startup' ? (
-        // ESTANDES MODULARES PADRONIZADOS (VILA DAS STARTUPS)
+        // =========================================================================
+        // ESTANDES MODULARES CONTEMPORÂNEOS (VILA DAS STARTUPS)
+        // =========================================================================
         <group>
-          {/* Plinth */}
+          {/* Dark Architectural Plinth */}
           <mesh position={[0, -h / 2 + 0.08, 0]} receiveShadow>
             <boxGeometry args={[w, 0.15, d]} />
-            <meshStandardMaterial color="#f1f5f9" roughness={0.5} />
+            <meshStandardMaterial color="#0f172a" roughness={0.7} metalness={0.2} />
           </mesh>
-          {/* Back Wall */}
-          <mesh position={[0, 0, -d / 2 + 0.1]} castShadow>
-            <boxGeometry args={[w * 0.96, h, 0.12]} />
-            <meshStandardMaterial color="#ffffff" roughness={0.4} />
-          </mesh>
-          {/* Branded Fascia Beam */}
-          <mesh position={[0, h / 2 + 0.15, 0]} castShadow>
-            <boxGeometry args={[w * 0.98, 0.3, d * 0.98]} />
-            <meshStandardMaterial color={accentColor} roughness={0.3} />
-          </mesh>
-          {/* Front Bistro Counter */}
-          <mesh position={[0, -h / 4, d / 2 - 0.3]} castShadow>
-            <boxGeometry args={[w * 0.6, h * 0.5, 0.4]} />
-            <meshStandardMaterial color="#ffffff" roughness={0.3} />
-          </mesh>
+          {/* Sleek Anodized Front Columns */}
+          {[-w * 0.46, w * 0.46].map((px) => (
+            <mesh key={`sp-${px}`} position={[px, 0, d * 0.44]} castShadow>
+              <boxGeometry args={[0.12, h, 0.12]} />
+              <meshStandardMaterial color="#334155" metalness={0.8} roughness={0.2} />
+            </mesh>
+          ))}
+          {/* Back Acoustic Wood-Slat Wall */}
+          <group position={[0, 0, -d / 2 + 0.1]}>
+            <mesh castShadow receiveShadow>
+              <boxGeometry args={[w * 0.94, h, 0.12]} />
+              <meshStandardMaterial color="#1e293b" roughness={0.5} />
+            </mesh>
+            {/* Warm Oak Slat Lines */}
+            {[-w * 0.35, -w * 0.18, 0, w * 0.18, w * 0.35].map((sx) => (
+              <mesh key={`slat-${sx}`} position={[sx, 0, 0.07]}>
+                <boxGeometry args={[0.04, h * 0.95, 0.02]} />
+                <meshStandardMaterial color="#d97706" roughness={0.6} />
+              </mesh>
+            ))}
+          </group>
+          {/* Floating Architectural Pergola Canopy (Open Frame) */}
+          <group position={[0, h / 2 + 0.12, 0]}>
+            {/* 4 Perimeter Beams */}
+            <mesh position={[0, 0, d * 0.46]} castShadow>
+              <boxGeometry args={[w * 0.96, 0.18, 0.22]} />
+              <meshStandardMaterial color={accentColor} roughness={0.3} metalness={0.2} />
+            </mesh>
+            <mesh position={[0, 0, -d * 0.46]} castShadow>
+              <boxGeometry args={[w * 0.96, 0.18, 0.22]} />
+              <meshStandardMaterial color={accentColor} roughness={0.3} metalness={0.2} />
+            </mesh>
+            <mesh position={[-w * 0.46, 0, 0]} castShadow>
+              <boxGeometry args={[0.22, 0.18, d * 0.88]} />
+              <meshStandardMaterial color={accentColor} roughness={0.3} metalness={0.2} />
+            </mesh>
+            <mesh position={[w * 0.46, 0, 0]} castShadow>
+              <boxGeometry args={[0.22, 0.18, d * 0.88]} />
+              <meshStandardMaterial color={accentColor} roughness={0.3} metalness={0.2} />
+            </mesh>
+            {/* Open Slats */}
+            {[-d * 0.25, 0, d * 0.25].map((sz) => (
+              <mesh key={`c-slat-${sz}`} position={[0, 0, sz]} castShadow>
+                <boxGeometry args={[w * 0.88, 0.1, 0.08]} />
+                <meshStandardMaterial color="#0f172a" roughness={0.5} />
+              </mesh>
+            ))}
+          </group>
+          {/* Front High Bistro Counter */}
+          <group position={[0, -h / 4, d / 2 - 0.3]}>
+            <mesh castShadow receiveShadow>
+              <boxGeometry args={[w * 0.55, h * 0.5, 0.35]} />
+              <meshStandardMaterial color="#f8fafc" roughness={0.3} />
+            </mesh>
+            <mesh position={[0, h * 0.26, 0]} castShadow>
+              <boxGeometry args={[w * 0.58, 0.05, 0.42]} />
+              <meshStandardMaterial color="#0f172a" roughness={0.2} metalness={0.4} />
+            </mesh>
+          </group>
         </group>
       ) : (
-        // ARCHITECTURAL BOOTHS (NUBANK, IFOOD, ITAU, TOTVS, MERCADO LIVRE, EMBRAER EVE)
+        // =========================================================================
+        // PAVILHÕES ARQUITETÔNICOS ABERTOS (TECH GIANTS & SPONSORS)
+        // =========================================================================
         <group>
-          {/* Base Plinth */}
-          <mesh position={[0, -h / 2 + 0.1, 0]} castShadow receiveShadow>
-            <boxGeometry args={[w, 0.2, d]} />
-            <meshStandardMaterial
-              color="#e2e8f0"
-              roughness={0.6}
-              transparent
-              opacity={opacity}
-            />
+          {/* 1. Base Deck Arquitetônico com Underglow de LED */}
+          <mesh position={[0, -h / 2 + 0.08, 0]} receiveShadow castShadow>
+            <boxGeometry args={[w, 0.16, d]} />
+            <meshStandardMaterial color="#0f172a" roughness={0.7} metalness={0.3} />
+          </mesh>
+          <mesh position={[0, -h / 2 + 0.02, 0]}>
+            <boxGeometry args={[w * 1.02, 0.04, d * 1.02]} />
+            <meshBasicMaterial color={accentColor} />
           </mesh>
 
-          {/* Crisp White Architectural Body */}
-          <mesh position={[0, 0, 0]} castShadow receiveShadow>
-            <boxGeometry args={[w * 0.94, h, d * 0.94]} />
-            <meshStandardMaterial
-              color="#ffffff"
-              roughness={0.4}
-              metalness={0.05}
-              transparent
-              opacity={opacity}
-            />
-          </mesh>
+          {/* 2. 4 Pilares Estruturais nos Cantos em Alumínio Escuro */}
+          {[
+            [-w * 0.46, -d * 0.46],
+            [w * 0.46, -d * 0.46],
+            [-w * 0.46, d * 0.46],
+            [w * 0.46, d * 0.46],
+          ].map(([cx, cz], ci) => (
+            <mesh key={`col-${ci}`} position={[cx, 0, cz]} castShadow>
+              <boxGeometry args={[0.22, h, 0.22]} />
+              <meshStandardMaterial color="#1e293b" roughness={0.3} metalness={0.8} />
+            </mesh>
+          ))}
 
-          {/* Brand Colored Fascia Beam */}
-          <mesh position={[0, h / 2 + 0.2, 0]} castShadow>
-            <boxGeometry args={[w * 0.96, 0.4, d * 0.96]} />
-            <meshStandardMaterial
-              color={accentColor}
-              roughness={0.3}
-              metalness={0.1}
-            />
-          </mesh>
+          {/* 3. Parede de Fundo Arquitetônica com Painel Digital LED */}
+          <group position={[0, 0, -d * 0.45]}>
+            <mesh castShadow receiveShadow>
+              <boxGeometry args={[w * 0.88, h, 0.14]} />
+              <meshStandardMaterial color="#1e293b" roughness={0.4} />
+            </mesh>
+            {/* Faixa Vertical de Destaque da Marca */}
+            <mesh position={[0, 0, 0.08]}>
+              <boxGeometry args={[w * 0.2, h * 0.95, 0.04]} />
+              <meshStandardMaterial color={accentColor} roughness={0.3} />
+            </mesh>
+            {/* Tela Digital Interativa Emissiva */}
+            <mesh position={[0, h * 0.1, 0.09]}>
+              <planeGeometry args={[w * 0.55, h * 0.45]} />
+              <meshStandardMaterial
+                color="#0f172a"
+                emissive={accentColor}
+                emissiveIntensity={isSelected ? 0.85 : 0.45}
+                roughness={0.2}
+              />
+            </mesh>
+          </group>
+
+          {/* 4. Vitrines Laterais de Vidro Translúcido (Permite ver o interior) */}
+          {[-w * 0.46, w * 0.46].map((gx) => (
+            <mesh key={`glass-${gx}`} position={[gx, 0, 0]} castShadow>
+              <boxGeometry args={[0.06, h * 0.85, d * 0.75]} />
+              <meshStandardMaterial
+                color="#e2e8f0"
+                transparent
+                opacity={0.32}
+                roughness={0.1}
+                metalness={0.2}
+              />
+            </mesh>
+          ))}
+
+          {/* 5. Teto Vazado Arquitetônico (Pérgola Aberta com Fascia Ring e Louvers) */}
+          <group position={[0, h / 2 + 0.15, 0]}>
+            {/* Fascia Frontal com Cor da Marca */}
+            <mesh position={[0, 0, d * 0.46]} castShadow>
+              <boxGeometry args={[w * 0.98, 0.26, 0.32]} />
+              <meshStandardMaterial color={accentColor} roughness={0.25} metalness={0.3} />
+            </mesh>
+            {/* Fascia Traseira */}
+            <mesh position={[0, 0, -d * 0.46]} castShadow>
+              <boxGeometry args={[w * 0.98, 0.26, 0.32]} />
+              <meshStandardMaterial color={accentColor} roughness={0.25} metalness={0.3} />
+            </mesh>
+            {/* Vigas Laterais em Alumínio Escuro */}
+            <mesh position={[-w * 0.46, 0, 0]} castShadow>
+              <boxGeometry args={[0.32, 0.26, d * 0.88]} />
+              <meshStandardMaterial color="#1e293b" roughness={0.3} metalness={0.7} />
+            </mesh>
+            <mesh position={[w * 0.46, 0, 0]} castShadow>
+              <boxGeometry args={[0.32, 0.26, d * 0.88]} />
+              <meshStandardMaterial color="#1e293b" roughness={0.3} metalness={0.7} />
+            </mesh>
+            {/* Louvers / Ripas Vazadas (Permitem ver o interior do estande) */}
+            {[-d * 0.3, -d * 0.15, 0, d * 0.15, d * 0.3].map((sz, si) => (
+              <mesh key={`slat-${si}`} position={[0, 0.02, sz]} castShadow>
+                <boxGeometry args={[w * 0.88, 0.12, 0.08]} />
+                <meshStandardMaterial color="#334155" roughness={0.4} metalness={0.5} />
+              </mesh>
+            ))}
+          </group>
 
           {/* NUBANK SPECIFIC: Curved signature reception counters & center display tables */}
           {isNubank && (
@@ -748,12 +853,24 @@ export function BoothMesh({
             </group>
           )}
 
-          {/* Standard Reception Desk */}
+          {/* Standard Reception Desk with Brand Accent */}
           {!isRestroom && !isNubank && !isEve && poi.id !== 'booth-ifood' && poi.id !== 'booth-itau' && poi.id !== 'booth-totvs' && poi.id !== 'booth-mercadolivre' && (
-            <mesh position={[0, -h / 4, d / 2 - 0.4]} castShadow>
-              <boxGeometry args={[Math.min(w * 0.4, 4), h * 0.5, 0.5]} />
-              <meshStandardMaterial color="#f1f5f9" roughness={0.3} />
-            </mesh>
+            <group position={[0, -h / 4, d / 2 - 0.6]}>
+              <mesh castShadow>
+                <boxGeometry args={[Math.min(w * 0.4, 4), h * 0.45, 0.6]} />
+                <meshStandardMaterial color="#0f172a" roughness={0.4} />
+              </mesh>
+              {/* Desk Front Accent Light Strip */}
+              <mesh position={[0, 0.1, 0.31]}>
+                <boxGeometry args={[Math.min(w * 0.36, 3.8), 0.05, 0.02]} />
+                <meshBasicMaterial color={accentColor} />
+              </mesh>
+              {/* Desk Top Surface */}
+              <mesh position={[0, h * 0.225 + 0.02, 0]} castShadow>
+                <boxGeometry args={[Math.min(w * 0.42, 4.2), 0.04, 0.7]} />
+                <meshStandardMaterial color="#f8fafc" roughness={0.2} />
+              </mesh>
+            </group>
           )}
         </group>
       )}
