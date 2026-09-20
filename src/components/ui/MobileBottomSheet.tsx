@@ -242,7 +242,9 @@ export function MobileBottomSheet({
         <div className="flex-1 overflow-hidden relative flex flex-col min-h-0">
           <div
             key={mode === 'poi' ? `poi-${selectedPoi?.id}` : mode}
-            className="flex flex-col h-full animate-slide-left-to-right"
+            className={`flex flex-col ${
+              mode === 'chat' ? 'h-[88dvh] max-h-[88dvh]' : 'h-[80dvh] max-h-[80dvh]'
+            } animate-slide-left-to-right`}
           >
             {/* ========================================================= */}
             {/* MODE 1: NAVIGATION (Turn-by-turn guidance) */}
@@ -354,7 +356,7 @@ export function MobileBottomSheet({
                 </div>
 
                 {/* Expanded Content: Turn-by-turn steps */}
-                <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4">
+                <div className="flex-1 overflow-y-auto px-4 pt-3 pb-12 space-y-4">
                   <div className="flex items-center justify-between">
                     <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
                       <Footprints className="w-3.5 h-3.5 text-blue-600" />
@@ -513,7 +515,7 @@ export function MobileBottomSheet({
                 </div>
 
                 {/* Expanded Content: Description & Sessions */}
-                <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4">
+                <div className="flex-1 overflow-y-auto px-4 pt-3 pb-12 space-y-4">
                   <p className="text-xs text-slate-700 leading-relaxed">
                     {selectedPoi.description}
                   </p>
@@ -672,7 +674,7 @@ export function MobileBottomSheet({
                 </div>
 
                 {/* Expanded Content */}
-                <div className="flex-1 overflow-y-auto px-4 py-3 space-y-5">
+                <div className="flex-1 overflow-y-auto px-4 pt-3 pb-14 space-y-5">
                   {/* Seção 1: Recursos & Operação */}
                   <div>
                     <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-2.5 flex items-center gap-1.5">
@@ -813,7 +815,7 @@ export function MobileBottomSheet({
 
                   {/* Seção 4: Acontecendo Agora */}
                   {liveSessions.length > 0 && selectedCategory === 'all' && (
-                    <div className="space-y-2 pb-6">
+                    <div className="space-y-2">
                       <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
                         <Radio className="w-3.5 h-3.5 text-emerald-600 animate-pulse" />
                         <span>Acontecendo Agora</span>
