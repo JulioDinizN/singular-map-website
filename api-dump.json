@@ -1,0 +1,1435 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Rotas Acessíveis · ORDS REST API (Módulo rotas.v1)",
+    "version": "1.0.0",
+    "description": "Mapeamento completo e dump de dados da API REST do projeto Rotas Acessíveis (Tech4Change 2026 - FIAP). O back-end executa dentro do Oracle Autonomous AI Database 26ai (OCI São Paulo, schema ACESSO_APP) via Oracle REST Data Services (ORDS). Este arquivo permite o funcionamento e simulação completa do front-end mesmo quando a API remota estiver indisponível (modo offline).",
+    "contact": {
+      "name": "Tech4Change 2026 - FIAP",
+      "url": "https://github.com/leonardopetruncko/rotas-acessiveis"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://oracle-autonomous.oci.sa-saopaulo-1.oraclecloud.com/ords/acesso_app/api/v1",
+      "description": "Oracle Autonomous AI Database 26ai - ORDS Production Endpoint"
+    },
+    {
+      "url": "http://localhost:8080/ords/acesso_app/api/v1",
+      "description": "Ambiente de Desenvolvimento Local"
+    }
+  ],
+  "metadata": {
+    "database": "Oracle Autonomous AI Database 26ai (23.26.3.3.0, OCI São Paulo)",
+    "schema": "ACESSO_APP",
+    "base_path": "/ords/acesso_app/api/v1/",
+    "total_handlers": 18,
+    "demonstration_pin": "2026",
+    "offline_fallback": {
+      "fetch_timeout_ms": 5000,
+      "local_engine": "motorLocal.js / pathfinding.ts (espelho de AC_ROTAS em PL/SQL)",
+      "storage": "LocalStorage / IndexedDB / JSON Snapshot"
+    },
+    "ai_embedding_model": {
+      "name": "DOC_MODEL (all_MiniLM_L12_v2)",
+      "format": "ONNX",
+      "dimensions": 384,
+      "distance_metric": "COSINE",
+      "operators": [
+        "VECTOR_EMBEDDING(doc_model USING :t AS data)",
+        "VECTOR_DISTANCE(a, b, COSINE)"
+      ]
+    },
+    "optional_llm": {
+      "provider": "OCI Generative AI",
+      "model": "meta.llama-3.3-70b-instruct",
+      "region": "sa-saopaulo-1"
+    }
+  },
+  "endpoints": {
+    "GET /eventos": {
+      "handler": 1,
+      "metodo": "GET",
+      "caminho": "/eventos",
+      "descricao": "Lista todos os eventos cadastrados no sistema com dimensões e metadados",
+      "autenticacao": "Publico",
+      "parametros": [],
+      "exemplo_resposta": {
+        "items": [
+          {
+            "codigo": "NEXT26",
+            "nome": "FIAP NEXT 2026",
+            "descricao": "Festival de Inovação, Tecnologia e Empreendedorismo FIAP",
+            "largura_px": 1200,
+            "altura_px": 800,
+            "escala_m_px": 0.1,
+            "largura_corredor_m": 4.0,
+            "origem_padrao": "wp_entrance_main",
+            "total_areas": 18,
+            "total_pontos": 35,
+            "total_trechos": 42,
+            "total_programacao": 10,
+            "evacuacao_ativa": false
+          },
+          {
+            "codigo": "EXPO26",
+            "nome": "Expo Inclusão 2026 (São Paulo Expo)",
+            "descricao": "Feira Internacional de Tecnologias Assistivas, Mobilidade e Inclusão",
+            "largura_px": 1000,
+            "altura_px": 700,
+            "escala_m_px": 0.12,
+            "largura_corredor_m": 4.5,
+            "origem_padrao": "entrance-main",
+            "total_areas": 11,
+            "total_pontos": 27,
+            "total_trechos": 34,
+            "total_programacao": 0,
+            "evacuacao_ativa": false
+          }
+        ]
+      }
+    },
+    "GET /eventos/{evento}": {
+      "handler": 2,
+      "metodo": "GET",
+      "caminho": "/eventos/{evento}",
+      "descricao": "Retorna a planta completa, áreas, perfis com pesos e limites, pontos (nós), trechos com ruído/lotação atuais, programação, evacuação ativa e reportes recentes",
+      "autenticacao": "Publico",
+      "parametros": [
+        {
+          "nome": "evento",
+          "tipo": "path",
+          "obrigatorio": true,
+          "exemplo": "NEXT26"
+        }
+      ],
+      "exemplo_resposta": {
+        "evento": {
+          "codigo": "NEXT26",
+          "nome": "FIAP NEXT 2026",
+          "descricao": "Festival de Inovação e Tecnologia FIAP",
+          "largura_px": 1200,
+          "altura_px": 800,
+          "escala_m_px": 0.1,
+          "largura_corredor_m": 4.0,
+          "origem_padrao": "wp_entrance_main"
+        },
+        "evacuacao": {
+          "ativa": false,
+          "mensagem": null,
+          "iniciada_em": null
+        },
+        "perfis": {
+          "PADRAO": {
+            "codigo": "PADRAO",
+            "nome": "Perfil Padrão",
+            "descricao": "Rota mais rápida e direta, transpondo escadas convencionais.",
+            "evita_escada": false,
+            "peso_ruido": 1,
+            "peso_lotacao": 1,
+            "limite_lotacao": null,
+            "limite_ruido": null,
+            "fator_excesso": 2,
+            "velocidade_m_min": 72
+          },
+          "CADEIRANTE": {
+            "codigo": "CADEIRANTE",
+            "nome": "Pessoa em Cadeira de Rodas",
+            "descricao": "Totalmente livre de degraus. Prioriza rampas, elevadores e corredores amplos livres de multidões.",
+            "evita_escada": true,
+            "peso_ruido": 1,
+            "peso_lotacao": 4,
+            "limite_lotacao": 3,
+            "limite_ruido": null,
+            "fator_excesso": 4,
+            "velocidade_m_min": 55
+          },
+          "MOBILIDADE": {
+            "codigo": "MOBILIDADE",
+            "nome": "Mobilidade Reduzida",
+            "descricao": "Para quem usa bengala, muletas ou idosos. Sem degraus, priorizando o trajeto mais curto viável.",
+            "evita_escada": true,
+            "peso_ruido": 1,
+            "peso_lotacao": 3,
+            "limite_lotacao": 3,
+            "limite_ruido": null,
+            "fator_excesso": 3,
+            "velocidade_m_min": 50
+          },
+          "NEURODIVERGENTE": {
+            "codigo": "NEURODIVERGENTE",
+            "nome": "Neurodivergente & Sensorial",
+            "descricao": "Para pessoas no espectro autista ou com sobrecarga sensorial. Desvia ativamente de ruído intenso e aglomerações.",
+            "evita_escada": false,
+            "peso_ruido": 6,
+            "peso_lotacao": 5,
+            "limite_lotacao": 3,
+            "limite_ruido": 3,
+            "fator_excesso": 4,
+            "velocidade_m_min": 65
+          }
+        },
+        "areas": [
+          {
+            "codigo": "STAND_ORACLE",
+            "nome": "Stand Oracle Autonomous 26ai",
+            "subtitulo": "Arena de Dados & IA",
+            "descricao": "Demonstração de IA in-database, vetores e roteamento acessível",
+            "cor": "#F80000",
+            "piso": 1,
+            "x": 18.2,
+            "y": -2.5,
+            "largura": 8.0,
+            "profundidade": 6.0
+          },
+          {
+            "codigo": "SALA_ACOLHIMENTO",
+            "nome": "Sala de Acolhimento Sensorial",
+            "subtitulo": "Zona de Baixo Estímulo",
+            "descricao": "Ambiente silencioso, iluminação difusa, abafadores de ruído e suporte especializado",
+            "cor": "#10b981",
+            "piso": 2,
+            "x": -22.5,
+            "y": 8.0,
+            "largura": 6.0,
+            "profundidade": 5.0
+          },
+          {
+            "codigo": "PALCO_PRINCIPAL",
+            "nome": "Palco Principal Keynote",
+            "subtitulo": "Arena Central",
+            "descricao": "Palestras magnas, tradução em Libras e legendagem em tempo real",
+            "cor": "#8b5cf6",
+            "piso": 1,
+            "x": 0.0,
+            "y": -22.0,
+            "largura": 16.0,
+            "profundidade": 10.0
+          }
+        ],
+        "pontos": [
+          {
+            "id": "wp_entrance_main",
+            "nome": "Pórtico de Entrada",
+            "tipo": "ENTRADA",
+            "piso": 1,
+            "x": 0.0,
+            "y": 27.0,
+            "bloqueado": false,
+            "busca_texto": "entrada portico lobby credenciamento"
+          },
+          {
+            "id": "wp_lobby_center",
+            "nome": "Lobby Central",
+            "tipo": "CRUZAMENTO",
+            "piso": 1,
+            "x": 0.0,
+            "y": 18.0,
+            "bloqueado": false,
+            "busca_texto": "lobby recepcao info balcao"
+          },
+          {
+            "id": "wp_ramp_1",
+            "nome": "Rampa de Acesso Mezanino",
+            "tipo": "RAMPA",
+            "piso": 1,
+            "x": -12.0,
+            "y": 14.0,
+            "bloqueado": false,
+            "busca_texto": "rampa acessivel subida descida mezanino"
+          },
+          {
+            "id": "wp_stairs_f1",
+            "nome": "Escadaria Central (Piso 1)",
+            "tipo": "ESCADA",
+            "piso": 1,
+            "x": 0.0,
+            "y": 10.0,
+            "bloqueado": false,
+            "busca_texto": "escada degraus mezanino subida"
+          },
+          {
+            "id": "wp_elevator_f1",
+            "nome": "Elevador Acessível (Piso 1)",
+            "tipo": "ELEVADOR",
+            "piso": 1,
+            "x": 8.0,
+            "y": 10.0,
+            "bloqueado": false,
+            "busca_texto": "elevador pcd cadeirante acessivel"
+          },
+          {
+            "id": "wp_corredor_100",
+            "nome": "Alameda 100",
+            "tipo": "CORREDOR",
+            "piso": 1,
+            "x": -15.0,
+            "y": 0.0,
+            "bloqueado": false,
+            "busca_texto": "alameda 100 corredor inovacao"
+          },
+          {
+            "id": "wp_corredor_200",
+            "nome": "Alameda 200",
+            "tipo": "CORREDOR",
+            "piso": 1,
+            "x": -5.0,
+            "y": 0.0,
+            "bloqueado": false,
+            "busca_texto": "alameda 200 corredor robotica fintech"
+          },
+          {
+            "id": "wp_corredor_300",
+            "nome": "Alameda 300",
+            "tipo": "CORREDOR",
+            "piso": 1,
+            "x": 5.0,
+            "y": 0.0,
+            "bloqueado": false,
+            "busca_texto": "alameda 300 corredor logistica erp"
+          },
+          {
+            "id": "wp_corredor_400",
+            "nome": "Alameda 400",
+            "tipo": "CORREDOR",
+            "piso": 1,
+            "x": 15.0,
+            "y": 0.0,
+            "bloqueado": false,
+            "busca_texto": "alameda 400 corredor dados ia"
+          },
+          {
+            "id": "poi_oracle",
+            "nome": "Stand Oracle",
+            "tipo": "STAND",
+            "piso": 1,
+            "x": 18.2,
+            "y": -2.5,
+            "bloqueado": false,
+            "busca_texto": "stand oracle autonomous database ia 26ai"
+          },
+          {
+            "id": "poi_main_stage",
+            "nome": "Palco Principal",
+            "tipo": "PALCO",
+            "piso": 1,
+            "x": 0.0,
+            "y": -22.0,
+            "bloqueado": false,
+            "busca_texto": "palco principal keynote arena palestras"
+          },
+          {
+            "id": "poi_quiet_room",
+            "nome": "Sala de Acolhimento Sensorial",
+            "tipo": "SERVICO",
+            "piso": 2,
+            "x": -22.5,
+            "y": 8.0,
+            "bloqueado": false,
+            "busca_texto": "sala acolhimento sensorial descanso silencio autismo fone"
+          },
+          {
+            "id": "exit_south",
+            "nome": "Saída de Emergência Sul",
+            "tipo": "SAIDA",
+            "piso": 1,
+            "x": 0.0,
+            "y": 28.5,
+            "bloqueado": false,
+            "busca_texto": "saida sul emergencia evacuacao"
+          },
+          {
+            "id": "exit_west",
+            "nome": "Saída de Emergência Oeste",
+            "tipo": "SAIDA",
+            "piso": 1,
+            "x": -30.0,
+            "y": 0.0,
+            "bloqueado": false,
+            "busca_texto": "saida oeste lateral emergencia rampa"
+          },
+          {
+            "id": "exit_north",
+            "nome": "Saída de Emergência Norte",
+            "tipo": "SAIDA",
+            "piso": 1,
+            "x": 0.0,
+            "y": -28.0,
+            "bloqueado": false,
+            "busca_texto": "saida norte palcos fundos emergencia"
+          }
+        ],
+        "trechos": [
+          {
+            "de": "wp_entrance_main",
+            "para": "wp_lobby_center",
+            "distancia_m": 9.0,
+            "escada": false,
+            "ruido": 2,
+            "lotacao": 2,
+            "bloqueado": false
+          },
+          {
+            "de": "wp_lobby_center",
+            "para": "wp_stairs_f1",
+            "distancia_m": 8.0,
+            "escada": true,
+            "ruido": 3,
+            "lotacao": 3,
+            "bloqueado": false
+          },
+          {
+            "de": "wp_lobby_center",
+            "para": "wp_elevator_f1",
+            "distancia_m": 12.0,
+            "escada": false,
+            "ruido": 2,
+            "lotacao": 2,
+            "bloqueado": false
+          },
+          {
+            "de": "wp_lobby_center",
+            "para": "wp_ramp_1",
+            "distancia_m": 14.0,
+            "escada": false,
+            "ruido": 1,
+            "lotacao": 1,
+            "bloqueado": false
+          },
+          {
+            "de": "wp_lobby_center",
+            "para": "wp_corredor_200",
+            "distancia_m": 18.0,
+            "escada": false,
+            "ruido": 3,
+            "lotacao": 4,
+            "bloqueado": false
+          },
+          {
+            "de": "wp_lobby_center",
+            "para": "wp_corredor_400",
+            "distancia_m": 22.0,
+            "escada": false,
+            "ruido": 2,
+            "lotacao": 2,
+            "bloqueado": false
+          },
+          {
+            "de": "wp_corredor_400",
+            "para": "poi_oracle",
+            "distancia_m": 6.0,
+            "escada": false,
+            "ruido": 2,
+            "lotacao": 2,
+            "bloqueado": false
+          },
+          {
+            "de": "wp_corredor_200",
+            "para": "poi_main_stage",
+            "distancia_m": 22.0,
+            "escada": false,
+            "ruido": 5,
+            "lotacao": 5,
+            "bloqueado": false
+          },
+          {
+            "de": "wp_ramp_1",
+            "para": "poi_quiet_room",
+            "distancia_m": 18.0,
+            "escada": false,
+            "ruido": 1,
+            "lotacao": 1,
+            "bloqueado": false
+          },
+          {
+            "de": "wp_elevator_f1",
+            "para": "poi_quiet_room",
+            "distancia_m": 25.0,
+            "escada": false,
+            "ruido": 1,
+            "lotacao": 1,
+            "bloqueado": false
+          },
+          {
+            "de": "wp_entrance_main",
+            "para": "exit_south",
+            "distancia_m": 3.0,
+            "escada": false,
+            "ruido": 1,
+            "lotacao": 1,
+            "bloqueado": false
+          },
+          {
+            "de": "wp_corredor_100",
+            "para": "exit_west",
+            "distancia_m": 15.0,
+            "escada": false,
+            "ruido": 1,
+            "lotacao": 1,
+            "bloqueado": false
+          }
+        ],
+        "programacao": [
+          {
+            "id": "prog_1",
+            "lugar": "poi_main_stage",
+            "titulo": "Abertura: O Futuro da IA Acessível",
+            "palestrante": "Keynote Speaker",
+            "horario_inicio": "10:00",
+            "horario_fim": "11:30",
+            "ruido_previsto": 5,
+            "ao_vivo": true
+          },
+          {
+            "id": "prog_2",
+            "lugar": "poi_oracle",
+            "titulo": "Hands-on: Oracle 26ai Vector Search na Prática",
+            "palestrante": "Engenharia Oracle",
+            "horario_inicio": "11:30",
+            "horario_fim": "12:30",
+            "ruido_previsto": 3,
+            "ao_vivo": false
+          },
+          {
+            "id": "prog_3",
+            "lugar": "poi_quiet_room",
+            "titulo": "Sessão de Descompressão Sensorial Guiada",
+            "palestrante": "Especialistas em Neurodiversidade",
+            "horario_inicio": "14:00",
+            "horario_fim": "15:00",
+            "ruido_previsto": 1,
+            "ao_vivo": false
+          }
+        ]
+      }
+    },
+    "GET /eventos/{evento}/rota": {
+      "handler": 3,
+      "metodo": "GET",
+      "caminho": "/eventos/{evento}/rota?perfil={perfil}&origem={origem}&destino={destino}",
+      "descricao": "Calcula a rota personalizada ótima usando o algoritmo Dijkstra ponderado in-database (AC_ROTAS), respeitando tolerâncias e barreiras de cada perfil",
+      "autenticacao": "Publico",
+      "parametros": [
+        {
+          "nome": "evento",
+          "tipo": "path",
+          "obrigatorio": true,
+          "exemplo": "NEXT26"
+        },
+        {
+          "nome": "perfil",
+          "tipo": "query",
+          "obrigatorio": true,
+          "exemplo": "CADEIRANTE"
+        },
+        {
+          "nome": "origem",
+          "tipo": "query",
+          "obrigatorio": true,
+          "exemplo": "poi_oracle"
+        },
+        {
+          "nome": "destino",
+          "tipo": "query",
+          "obrigatorio": true,
+          "exemplo": "poi_quiet_room"
+        }
+      ],
+      "exemplo_resposta": {
+        "sucesso": true,
+        "evento": "NEXT26",
+        "perfil": "CADEIRANTE",
+        "origem": "poi_oracle",
+        "destino": "poi_quiet_room",
+        "distancia_m": 152.0,
+        "tempo_estimado_min": 2.8,
+        "custo_ponderado": 214.6,
+        "caminho": [
+          "poi_oracle",
+          "wp_corredor_400",
+          "wp_lobby_center",
+          "wp_elevator_f1",
+          "poi_quiet_room"
+        ],
+        "multidao_m": 0.0,
+        "ruido_max": 2,
+        "degraus_evitados": 24,
+        "explicacao": "Trajeto 100% livre de degraus. Utiliza o elevador acessível no lobby central e desvia do corredor 200 (superlotado, nível 4).",
+        "instrucoes": [
+          {
+            "passo": 1,
+            "texto": "Saia do Stand Oracle e siga pela Alameda 400 por 6 metros.",
+            "distancia_m": 6.0,
+            "icone": "straight"
+          },
+          {
+            "passo": 2,
+            "texto": "Vire à direita em direção ao Lobby Central e avance 22 metros.",
+            "distancia_m": 22.0,
+            "icone": "turn-right"
+          },
+          {
+            "passo": 3,
+            "texto": "Dirija-se ao Elevador Acessível (Piso 1).",
+            "distancia_m": 12.0,
+            "icone": "elevator"
+          },
+          {
+            "passo": 4,
+            "texto": "Suba até o Mezanino (Piso 2).",
+            "distancia_m": 4.0,
+            "icone": "elevator-up"
+          },
+          {
+            "passo": 5,
+            "texto": "Ao sair do elevador, siga reto por 25 metros até a Sala de Acolhimento Sensorial.",
+            "distancia_m": 25.0,
+            "icone": "arrival"
+          }
+        ],
+        "alertas": [
+          "Corredor 200 evitado devido a aglomeração e escadaria central sem rampa."
+        ]
+      }
+    },
+    "GET /eventos/{evento}/comparar": {
+      "handler": 4,
+      "metodo": "GET",
+      "caminho": "/eventos/{evento}/comparar?origem={origem}&destino={destino}",
+      "descricao": "Calcula e compara o mesmo trajeto simultaneamente entre os quatro perfis de acessibilidade (PADRAO, CADEIRANTE, MOBILIDADE, NEURODIVERGENTE)",
+      "autenticacao": "Publico",
+      "parametros": [
+        {
+          "nome": "evento",
+          "tipo": "path",
+          "obrigatorio": true,
+          "exemplo": "NEXT26"
+        },
+        {
+          "nome": "origem",
+          "tipo": "query",
+          "obrigatorio": true,
+          "exemplo": "poi_oracle"
+        },
+        {
+          "nome": "destino",
+          "tipo": "query",
+          "obrigatorio": true,
+          "exemplo": "poi_quiet_room"
+        }
+      ],
+      "exemplo_resposta": {
+        "origem": "poi_oracle",
+        "destino": "poi_quiet_room",
+        "comparacoes": [
+          {
+            "perfil": "PADRAO",
+            "nome": "Perfil Padrão",
+            "distancia_m": 84.0,
+            "tempo_min": 1.2,
+            "custo": 92.4,
+            "multidao_m": 18.0,
+            "ruido_max": 4,
+            "evita_escada": false,
+            "caminho": [
+              "poi_oracle",
+              "wp_corredor_400",
+              "wp_stairs_f1",
+              "poi_quiet_room"
+            ],
+            "diferencial": "Rota mais curta e direta, utilizando a escadaria central."
+          },
+          {
+            "perfil": "CADEIRANTE",
+            "nome": "Pessoa em Cadeira de Rodas",
+            "distancia_m": 152.0,
+            "tempo_min": 2.8,
+            "custo": 214.6,
+            "multidao_m": 0.0,
+            "ruido_max": 2,
+            "evita_escada": true,
+            "caminho": [
+              "poi_oracle",
+              "wp_corredor_400",
+              "wp_lobby_center",
+              "wp_elevator_f1",
+              "poi_quiet_room"
+            ],
+            "diferencial": "Livre de degraus, desvia da multidão e utiliza elevador acessível (+68m)."
+          },
+          {
+            "perfil": "MOBILIDADE",
+            "nome": "Mobilidade Reduzida",
+            "distancia_m": 84.0,
+            "tempo_min": 1.7,
+            "custo": 105.0,
+            "multidao_m": 0.0,
+            "ruido_max": 3,
+            "evita_escada": true,
+            "caminho": [
+              "poi_oracle",
+              "wp_corredor_400",
+              "wp_elevator_f1",
+              "poi_quiet_room"
+            ],
+            "diferencial": "Sem escadas, minimizando esforço físico e distância viável."
+          },
+          {
+            "perfil": "NEURODIVERGENTE",
+            "nome": "Neurodivergente & Sensorial",
+            "distancia_m": 112.0,
+            "tempo_min": 1.7,
+            "custo": 168.0,
+            "multidao_m": 0.0,
+            "ruido_max": 2,
+            "evita_escada": false,
+            "caminho": [
+              "poi_oracle",
+              "wp_corredor_400",
+              "wp_ramp_1",
+              "poi_quiet_room"
+            ],
+            "diferencial": "Desvia de pontos com ruído >= 3 e aglomeração, priorizando corredor tranquilo e rampa silenciosa."
+          }
+        ]
+      }
+    },
+    "GET /eventos/{evento}/saida": {
+      "handler": 5,
+      "metodo": "GET",
+      "caminho": "/eventos/{evento}/saida?perfil={perfil}&origem={origem}",
+      "descricao": "Calcula a rota de evacuação / saída de emergência mais rápida e segura para o perfil especificado",
+      "autenticacao": "Publico",
+      "parametros": [
+        {
+          "nome": "evento",
+          "tipo": "path",
+          "obrigatorio": true,
+          "exemplo": "NEXT26"
+        },
+        {
+          "nome": "perfil",
+          "tipo": "query",
+          "obrigatorio": true,
+          "exemplo": "CADEIRANTE"
+        },
+        {
+          "nome": "origem",
+          "tipo": "query",
+          "obrigatorio": true,
+          "exemplo": "poi_main_stage"
+        }
+      ],
+      "exemplo_resposta": {
+        "saida_sugerida": {
+          "ponto_id": "exit_west",
+          "nome": "Saída de Emergência Oeste (com Rampa Suave)",
+          "distancia_m": 35.0,
+          "tempo_estimado_min": 0.6,
+          "acessivel_cadeirante": true,
+          "caminho": [
+            "poi_main_stage",
+            "wp_corredor_100",
+            "exit_west"
+          ],
+          "instrucoes": [
+            {
+              "passo": 1,
+              "texto": "Siga em direção à lateral esquerda (Alameda 100).",
+              "distancia_m": 20.0
+            },
+            {
+              "passo": 2,
+              "texto": "Acesse a Saída de Emergência Oeste com rampa de declive suave.",
+              "distancia_m": 15.0
+            }
+          ]
+        },
+        "alternativas": [
+          {
+            "ponto_id": "exit_south",
+            "nome": "Saída Principal Sul (Lobby)",
+            "distancia_m": 48.0,
+            "acessivel_cadeirante": true,
+            "bloqueada": false
+          }
+        ],
+        "saidas_indisponiveis": [
+          {
+            "ponto_id": "exit_north",
+            "nome": "Saída Norte (Fundos do Palco)",
+            "motivo": "Apenas escada de emergência metálica sem rampa NBR 9050."
+          }
+        ]
+      }
+    },
+    "POST /eventos/{evento}/conversa": {
+      "handler": 6,
+      "metodo": "POST",
+      "caminho": "/eventos/{evento}/conversa",
+      "descricao": "Assistente conversacional in-database (AC_CONVERSA) com busca semântica vetorial (AI Vector Search / ONNX) e fallback para OCI Generative AI (Llama 3.3)",
+      "autenticacao": "Publico",
+      "parametros": [
+        {
+          "nome": "evento",
+          "tipo": "path",
+          "obrigatorio": true,
+          "exemplo": "NEXT26"
+        }
+      ],
+      "request_body": {
+        "tipo": "application/json",
+        "schema": {
+          "texto": "string (obrigatorio)",
+          "origem": "string (opcional)",
+          "perfil": "string (opcional)",
+          "registrar": "boolean (opcional, default: true)"
+        },
+        "exemplo": {
+          "texto": "Onde encontro um local calmo para descansar da sobrecarga de som?",
+          "origem": "poi_main_stage",
+          "perfil": "NEURODIVERGENTE",
+          "registrar": true
+        }
+      },
+      "exemplo_resposta": {
+        "resposta": "A Sala de Acolhimento Sensorial fica no Piso 2 (Mezanino). É um ambiente silencioso, com iluminação suave, fones abafadores e apoio de equipe treinada.",
+        "intencao": "LOCALIZAR_ACOLHIMENTO",
+        "faq_id": 104,
+        "confianca": 0.96,
+        "explicacao": {
+          "metodo": "VECTOR_SEARCH",
+          "distancia_vetorial": 0.14,
+          "apoio_ia_generativa": false,
+          "ordem_decisao": "1. Regra Segura -> 2. Vector Search (Match 0.14 < 0.42)"
+        },
+        "acao": {
+          "tipo": "TRACAR_ROTA",
+          "destino": "poi_quiet_room",
+          "automatica": false
+        },
+        "sugestoes": [
+          "Como chego lá pelo caminho mais silencioso?",
+          "Tem fone abafador disponível?",
+          "Onde tem banheiro acessível próximo?"
+        ]
+      }
+    },
+    "POST /eventos/{evento}/assistente": {
+      "handler": 7,
+      "metodo": "POST",
+      "caminho": "/eventos/{evento}/assistente",
+      "descricao": "NLU e classificador semântico (AC_ASSISTENTE) para extrair necessidades de acessibilidade, intenções, perfil sugerido, origem e destino de frases livres",
+      "autenticacao": "Publico",
+      "parametros": [
+        {
+          "nome": "evento",
+          "tipo": "path",
+          "obrigatorio": true,
+          "exemplo": "NEXT26"
+        }
+      ],
+      "request_body": {
+        "tipo": "application/json",
+        "schema": {
+          "texto": "string (obrigatorio)"
+        },
+        "exemplo": {
+          "texto": "Uso cadeira de rodas e preciso ir do stand da Oracle até a sala de acolhimento"
+        }
+      },
+      "exemplo_resposta": {
+        "necessidade": "CADEIRANTE_SEM_DEGRAUS",
+        "perfil_sugerido": "CADEIRANTE",
+        "origem_detectada": "poi_oracle",
+        "destino_detectado": "poi_quiet_room",
+        "confianca": 0.93,
+        "frase_parecida": "cadeirante quer ir do stand oracle para o acolhimento",
+        "metodo": "VECTOR_SEARCH"
+      }
+    },
+    "POST /eventos/{evento}/reportes": {
+      "handler": 8,
+      "metodo": "POST",
+      "caminho": "/eventos/{evento}/reportes",
+      "descricao": "Registra crowdsourcing de incidentes e condições em tempo real (CHEIO, BARULHO, BLOQUEIO, LIBERADO) e recalcula dinamicamente trechos vizinhos",
+      "autenticacao": "Publico",
+      "parametros": [
+        {
+          "nome": "evento",
+          "tipo": "path",
+          "obrigatorio": true,
+          "exemplo": "NEXT26"
+        }
+      ],
+      "request_body": {
+        "tipo": "application/json",
+        "schema": {
+          "ponto": "string (obrigatorio)",
+          "tipo": "string (CHEIO | BARULHO | BLOQUEIO | LIBERADO)",
+          "descricao": "string (opcional)"
+        },
+        "exemplo": {
+          "ponto": "wp_stairs_f1",
+          "tipo": "BLOQUEIO",
+          "descricao": "Degrau com fiação exposta e passagem interditada por segurança"
+        }
+      },
+      "exemplo_resposta": {
+        "status": "SUCESSO",
+        "reporte_id": 1084,
+        "ponto": "wp_stairs_f1",
+        "tipo": "BLOQUEIO",
+        "trechos_atualizados": 2,
+        "mensagem": "Incidente registrado com sucesso. Rotas de todos os clientes recalculadas automaticamente.",
+        "timestamp": "2026-09-20T14:50:30Z"
+      }
+    },
+    "POST /eventos/{evento}/sensores": {
+      "handler": 9,
+      "metodo": "POST",
+      "caminho": "/eventos/{evento}/sensores",
+      "descricao": "Recebe contagem de fluxo de pessoas por trecho, computa densidade por m² (corredor padrão de 4m) e ajusta o nível de lotação 1 a 5 (AC_SENSORES)",
+      "autenticacao": "PIN_ORGANIZADOR (Header ou Body)",
+      "parametros": [
+        {
+          "nome": "evento",
+          "tipo": "path",
+          "obrigatorio": true,
+          "exemplo": "NEXT26"
+        }
+      ],
+      "request_body": {
+        "tipo": "application/json",
+        "schema": {
+          "pin": "string (obrigatorio, ex: '2026')",
+          "leituras": [
+            {
+              "trecho": "string",
+              "pessoas": "number"
+            }
+          ]
+        },
+        "exemplo": {
+          "pin": "2026",
+          "leituras": [
+            {
+              "trecho": "tr_corredor_200",
+              "pessoas": 32
+            },
+            {
+              "trecho": "tr_boulevard_central",
+              "pessoas": 50
+            }
+          ]
+        }
+      },
+      "exemplo_resposta": {
+        "processados": 2,
+        "mudancas_aplicadas": [
+          {
+            "trecho": "tr_corredor_200",
+            "densidade_m2": 1.6,
+            "nivel_lotacao": 4,
+            "nivel_anterior": 2
+          },
+          {
+            "trecho": "tr_boulevard_central",
+            "densidade_m2": 2.1,
+            "nivel_lotacao": 5,
+            "nivel_anterior": 3
+          }
+        ]
+      }
+    },
+    "GET /eventos/{evento}/painel": {
+      "handler": 10,
+      "metodo": "GET",
+      "caminho": "/eventos/{evento}/painel",
+      "descricao": "Indicadores e telemetria gerencial para o painel do organizador: KPIs, corredores críticos, reportes ativos, decisões por perfil e itens para curadoria",
+      "autenticacao": "Publico",
+      "parametros": [
+        {
+          "nome": "evento",
+          "tipo": "path",
+          "obrigatorio": true,
+          "exemplo": "NEXT26"
+        }
+      ],
+      "exemplo_resposta": {
+        "kpis": {
+          "total_rotas_calculadas": 1420,
+          "participantes_ativos": 380,
+          "reportes_ativos": 3,
+          "taxa_adesao_rotas_sugeridas": "89%",
+          "rotas_por_perfil": {
+            "PADRAO": 520,
+            "CADEIRANTE": 290,
+            "MOBILIDADE": 310,
+            "NEURODIVERGENTE": 300
+          }
+        },
+        "corredores_criticos": [
+          {
+            "trecho": "tr_corredor_200",
+            "lotacao": 4,
+            "ruido": 4,
+            "motivo": "Aglomeração em frente ao Stand de Robótica"
+          },
+          {
+            "trecho": "tr_boulevard_central",
+            "lotacao": 5,
+            "ruido": 5,
+            "motivo": "Fluxo intenso pós-palestra de abertura"
+          }
+        ],
+        "ultimos_reportes": [
+          {
+            "id": 1084,
+            "ponto": "wp_stairs_f1",
+            "tipo": "BLOQUEIO",
+            "hora": "14:48",
+            "status": "ATIVO"
+          },
+          {
+            "id": 1083,
+            "ponto": "poi_main_stage",
+            "tipo": "BARULHO",
+            "hora": "14:32",
+            "status": "ATIVO"
+          }
+        ],
+        "curadoria_ia": {
+          "frases_nao_compreendidas": [
+            {
+              "id": 401,
+              "texto": "onde consigo recarregar minha scooter eletrica?",
+              "sugestao_rotulo": "FAQ_PONTO_ENERGIA"
+            },
+            {
+              "id": 402,
+              "texto": "tem como ir por fora pra fugir do ar condicionado?",
+              "sugestao_rotulo": "ROTA_EXTERNA"
+            }
+          ]
+        }
+      }
+    },
+    "POST /eventos/{evento}/evacuacao": {
+      "handler": 11,
+      "metodo": "POST",
+      "caminho": "/eventos/{evento}/evacuacao",
+      "descricao": "Ativa ou encerra o protocolo de emergência geral / evacuação do evento (AC_EVACUACAO), comutando todos os clientes conectados para o modo saída",
+      "autenticacao": "PIN_ORGANIZADOR",
+      "parametros": [
+        {
+          "nome": "evento",
+          "tipo": "path",
+          "obrigatorio": true,
+          "exemplo": "NEXT26"
+        }
+      ],
+      "request_body": {
+        "tipo": "application/json",
+        "schema": {
+          "ativa": "boolean (obrigatorio)",
+          "mensagem": "string (obrigatorio)",
+          "pin": "string (obrigatorio, ex: '2026')"
+        },
+        "exemplo": {
+          "ativa": true,
+          "mensagem": "Evacuação preventiva acionada pelo Corpo de Bombeiros. Siga as rotas iluminadas no mapa.",
+          "pin": "2026"
+        }
+      },
+      "exemplo_resposta": {
+        "status": "EVACUACAO_ATIVADA",
+        "evento": "NEXT26",
+        "ativa": true,
+        "mensagem": "Evacuação preventiva acionada pelo Corpo de Bombeiros. Siga as rotas iluminadas no mapa.",
+        "timestamp": "2026-09-20T14:50:40Z",
+        "notificacao_broadcast": true
+      }
+    },
+    "POST /eventos/{evento}/decisoes": {
+      "handler": 12,
+      "metodo": "POST",
+      "caminho": "/eventos/{evento}/decisoes",
+      "descricao": "Registra telemetria de decisão humana: se a pessoa seguiu a rota sugerida pela IA, escolheu outra opção ou trocou de perfil (AC_DECISAO)",
+      "autenticacao": "Publico",
+      "parametros": [
+        {
+          "nome": "evento",
+          "tipo": "path",
+          "obrigatorio": true,
+          "exemplo": "NEXT26"
+        }
+      ],
+      "request_body": {
+        "tipo": "application/json",
+        "schema": {
+          "perfil": "string (PADRAO | CADEIRANTE | MOBILIDADE | NEURODIVERGENTE)",
+          "origem": "string",
+          "destino": "string",
+          "modo": "string (ROTA | COMPARAR | SAIDA)",
+          "caminho": "array de strings (IDs de pontos)",
+          "decisao": "string (SEGUIU | OUTRA_OPCAO | TROCOU_PERFIL)"
+        },
+        "exemplo": {
+          "perfil": "CADEIRANTE",
+          "origem": "poi_oracle",
+          "destino": "poi_quiet_room",
+          "modo": "ROTA",
+          "caminho": [
+            "poi_oracle",
+            "wp_corredor_400",
+            "wp_elevator_f1",
+            "poi_quiet_room"
+          ],
+          "decisao": "SEGUIU"
+        }
+      },
+      "exemplo_resposta": {
+        "status": "REGISTRADO",
+        "decisao_id": 620,
+        "timestamp": "2026-09-20T14:50:45Z"
+      }
+    },
+    "POST /eventos/{evento}/treino/ensinar": {
+      "handler": 13,
+      "metodo": "POST",
+      "caminho": "/eventos/{evento}/treino/ensinar",
+      "descricao": "Curadoria ativa in-database: adiciona frase de exemplo a uma intenção ou FAQ e gera o embedding VECTOR(384) diretamente no Oracle 26ai",
+      "autenticacao": "PIN_ORGANIZADOR",
+      "parametros": [
+        {
+          "nome": "evento",
+          "tipo": "path",
+          "obrigatorio": true,
+          "exemplo": "NEXT26"
+        }
+      ],
+      "request_body": {
+        "tipo": "application/json",
+        "schema": {
+          "pin": "string (obrigatorio)",
+          "texto": "string (obrigatorio)",
+          "rotulo": "string (obrigatorio, ex: 'FAQ_PONTO_ENERGIA')",
+          "log_id": "number (opcional, para associar ao log original)"
+        },
+        "exemplo": {
+          "pin": "2026",
+          "texto": "Onde consigo tomada para recarregar a bateria da cadeira de rodas?",
+          "rotulo": "FAQ_PONTO_ENERGIA",
+          "log_id": 401
+        }
+      },
+      "exemplo_resposta": {
+        "status": "GRAVADO_E_VETORIZADO",
+        "rotulo": "FAQ_PONTO_ENERGIA",
+        "vetor_dimensoes": 384,
+        "modelo": "DOC_MODEL (all_MiniLM_L12_v2)",
+        "mensagem": "Frase gravada com sucesso na base de busca semântica."
+      }
+    },
+    "GET /rotulos": {
+      "handler": 14,
+      "metodo": "GET",
+      "caminho": "/rotulos",
+      "descricao": "Lista todos os rótulos de intenções e FAQs disponíveis para classificação e curadoria",
+      "autenticacao": "Publico",
+      "parametros": [],
+      "exemplo_resposta": {
+        "intencoes": [
+          {
+            "codigo": "LOCALIZAR_ACOLHIMENTO",
+            "categoria": "NECESSIDADE",
+            "descricao": "Busca por sala de acolhimento sensorial"
+          },
+          {
+            "codigo": "LOCALIZAR_BANHEIRO_PCD",
+            "categoria": "NECESSIDADE",
+            "descricao": "Busca por sanitário acessível NBR 9050"
+          },
+          {
+            "codigo": "LOCALIZAR_RAMPA_ELEVADOR",
+            "categoria": "NECESSIDADE",
+            "descricao": "Busca por rampa ou elevador sem escadas"
+          },
+          {
+            "codigo": "LOCALIZAR_STAND",
+            "categoria": "PERGUNTA",
+            "descricao": "Localização de expositores ou stands"
+          },
+          {
+            "codigo": "PROGRAMACAO_PALESTRA",
+            "categoria": "PERGUNTA",
+            "descricao": "Horários e palestrantes das palestras"
+          },
+          {
+            "codigo": "EVACUACAO_SAIDA",
+            "categoria": "EMERGENCIA",
+            "descricao": "Como sair do prédio com segurança"
+          }
+        ],
+        "faqs": [
+          {
+            "codigo": "FAQ_LIBRAS",
+            "pergunta": "O evento conta com intérpretes de Libras?"
+          },
+          {
+            "codigo": "FAQ_ABAFADORES",
+            "pergunta": "Onde retirar fones abafadores de som?"
+          },
+          {
+            "codigo": "FAQ_PONTO_ENERGIA",
+            "pergunta": "Onde há pontos de recarga para cadeiras elétricas?"
+          }
+        ]
+      }
+    },
+    "GET /eventos/{evento}/tarefas": {
+      "handler": 15,
+      "metodo": "GET",
+      "caminho": "/eventos/{evento}/tarefas",
+      "descricao": "Lista de tarefas padronizadas do protocolo de validação com usuários (AC_VAL_TAREFA)",
+      "autenticacao": "Publico",
+      "parametros": [
+        {
+          "nome": "evento",
+          "tipo": "path",
+          "obrigatorio": true,
+          "exemplo": "NEXT26"
+        }
+      ],
+      "exemplo_resposta": {
+        "tarefas": [
+          {
+            "id": 1,
+            "codigo": "T1_ROTA_SEM_ESCADA",
+            "titulo": "Chegar ao Mezanino sem usar escadas",
+            "tempo_alvo_seg": 120
+          },
+          {
+            "id": 2,
+            "codigo": "T2_EVITAR_BARULHO",
+            "titulo": "Traçar rota desviando do palco principal",
+            "tempo_alvo_seg": 90
+          },
+          {
+            "id": 3,
+            "codigo": "T3_ENCONTRAR_SAIDA",
+            "titulo": "Localizar saída de emergência acessível mais próxima",
+            "tempo_alvo_seg": 60
+          }
+        ]
+      }
+    },
+    "POST /eventos/{evento}/validacao/participantes": {
+      "handler": 16,
+      "metodo": "POST",
+      "caminho": "/eventos/{evento}/validacao/participantes",
+      "descricao": "Registra participante de teste de usabilidade (AC_VAL_PARTICIPANTE) com termo de consentimento obrigatório",
+      "autenticacao": "Publico",
+      "parametros": [
+        {
+          "nome": "evento",
+          "tipo": "path",
+          "obrigatorio": true,
+          "exemplo": "NEXT26"
+        }
+      ],
+      "request_body": {
+        "tipo": "application/json",
+        "schema": {
+          "pseudonimo": "string (obrigatorio)",
+          "perfil": "string (PADRAO | CADEIRANTE | MOBILIDADE | NEURODIVERGENTE)",
+          "consentimento_lgpd": "boolean (obrigatorio: true)"
+        },
+        "exemplo": {
+          "pseudonimo": "Participante_01_Cadeirante",
+          "perfil": "CADEIRANTE",
+          "consentimento_lgpd": true
+        }
+      },
+      "exemplo_resposta": {
+        "participante_id": 101,
+        "status": "CADASTRADO",
+        "timestamp": "2026-09-20T14:50:50Z"
+      }
+    },
+    "POST /eventos/{evento}/validacao/execucoes": {
+      "handler": 17,
+      "metodo": "POST",
+      "caminho": "/eventos/{evento}/validacao/execucoes",
+      "descricao": "Registra execução cronometrada de tarefa de validação (AC_VAL_EXECUCAO)",
+      "autenticacao": "Publico",
+      "parametros": [
+        {
+          "nome": "evento",
+          "tipo": "path",
+          "obrigatorio": true,
+          "exemplo": "NEXT26"
+        }
+      ],
+      "request_body": {
+        "tipo": "application/json",
+        "schema": {
+          "participante_id": "number (obrigatorio)",
+          "tarefa_id": "number (obrigatorio)",
+          "tempo_segundos": "number (obrigatorio)",
+          "sucesso": "boolean (obrigatorio)",
+          "observacoes": "string (opcional)"
+        },
+        "exemplo": {
+          "participante_id": 101,
+          "tarefa_id": 1,
+          "tempo_segundos": 84.5,
+          "sucesso": true,
+          "observacoes": "Encontrou rampa sem hesitação, achou visualização 3D intuitiva."
+        }
+      },
+      "exemplo_resposta": {
+        "execucao_id": 205,
+        "status": "REGISTRADO"
+      }
+    },
+    "POST /eventos/{evento}/reset": {
+      "handler": 18,
+      "metodo": "POST",
+      "caminho": "/eventos/{evento}/reset",
+      "descricao": "Restaura o cenário de demonstração para os níveis base de ruído, lotação e desfaz bloqueios temporários",
+      "autenticacao": "PIN_ORGANIZADOR",
+      "parametros": [
+        {
+          "nome": "evento",
+          "tipo": "path",
+          "obrigatorio": true,
+          "exemplo": "NEXT26"
+        }
+      ],
+      "request_body": {
+        "tipo": "application/json",
+        "schema": {
+          "pin": "string (obrigatorio, ex: '2026')"
+        },
+        "exemplo": {
+          "pin": "2026"
+        }
+      },
+      "exemplo_resposta": {
+        "status": "CENARIO_RESETADO",
+        "evento": "NEXT26",
+        "trechos_restaurados": 42,
+        "reportes_limpos": 3,
+        "timestamp": "2026-09-20T14:50:55Z"
+      }
+    }
+  },
+  "database_schema": {
+    "tables": [
+      {
+        "name": "AC_EVENTO",
+        "description": "Evento, dimensões da planta, escala (m/px), largura de corredor, origem padrão"
+      },
+      {
+        "name": "AC_AREA",
+        "description": "Retângulos da planta (stands, palco, acolhimento) com cor, subtítulo e descrição"
+      },
+      {
+        "name": "AC_PONTO",
+        "description": "Nós do grafo (x, y, tipo, bloqueado) + busca_texto e embedding VECTOR(384)"
+      },
+      {
+        "name": "AC_TRECHO",
+        "description": "Arestas: distância, escada, acessível, ruído, lotação, valores base, via, bloqueado"
+      },
+      {
+        "name": "AC_PERFIL",
+        "description": "Perfis: evita escada, pesos de ruído/lotação, limites, fator de excesso, velocidade"
+      },
+      {
+        "name": "AC_PROGRAMACAO",
+        "description": "Agenda por lugar (horário, ruído previsto) — ilustrativa"
+      },
+      {
+        "name": "AC_REPORTE",
+        "description": "Crowdsourcing de cheio / barulho / bloqueio / liberado"
+      },
+      {
+        "name": "AC_LEITURA_SENSOR",
+        "description": "Contagem por trecho, densidade, nível e horário (retenção de 3 h)"
+      },
+      {
+        "name": "AC_INTENCAO",
+        "description": "Tipos de pergunta, necessidade, perfil e social + categorias"
+      },
+      {
+        "name": "AC_INTENCAO_FRASE",
+        "description": "Frases de exemplo vetorizadas com VECTOR(384)"
+      },
+      {
+        "name": "AC_FAQ",
+        "description": "Perguntas frequentes globais ou do evento"
+      },
+      {
+        "name": "AC_FAQ_PERGUNTA",
+        "description": "Perguntas e exemplos vetorizados"
+      },
+      {
+        "name": "AC_CONVERSA_LOG",
+        "description": "Perguntas feitas ao chat, sem identificação pessoal, para curadoria e métricas"
+      },
+      {
+        "name": "AC_DECISAO",
+        "description": "Sugestão da IA x escolha da pessoa (SEGUIU, OUTRA_OPCAO, TROCOU_PERFIL)"
+      },
+      {
+        "name": "AC_EVACUACAO",
+        "description": "Histórico e status de evacuações acionadas pelo organizador"
+      },
+      {
+        "name": "AC_VAL_TAREFA",
+        "description": "Tarefas padronizadas para testes de usabilidade com usuários"
+      },
+      {
+        "name": "AC_VAL_PARTICIPANTE",
+        "description": "Registro de participantes com consentimento LGPD"
+      },
+      {
+        "name": "AC_VAL_EXECUCAO",
+        "description": "Métricas de tempo e sucesso em tarefas de validação"
+      },
+      {
+        "name": "AC_LLM_CONFIG",
+        "description": "Endpoint, modelo, credencial e compartment do LLM opcional (OCI GenAI)"
+      }
+    ],
+    "packages": [
+      {
+        "name": "AC_ROTAS",
+        "description": "Motor de rotas em PL/SQL com Dijkstra ponderado e limites por perfil"
+      },
+      {
+        "name": "AC_CONVERSA",
+        "description": "Motor conversacional in-database com AI Vector Search (DOC_MODEL)"
+      },
+      {
+        "name": "AC_ASSISTENTE",
+        "description": "Classificador semântico e extrator de intenções/entidades NLU"
+      },
+      {
+        "name": "AC_SENSORES",
+        "description": "Cálculo de densidade, níveis de lotação e decaimento temporal"
+      },
+      {
+        "name": "AC_OPERACAO",
+        "description": "Funções de painel do organizador, evacuação e métricas"
+      },
+      {
+        "name": "AC_LLM",
+        "description": "Integração com OCI Generative AI (Llama 3.3) com trava de segurança"
+      }
+    ]
+  }
+}
