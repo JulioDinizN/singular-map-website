@@ -129,15 +129,15 @@ export function ChatModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-xl h-[85vh] p-0 gap-0 overflow-hidden rounded-3xl bg-white border-slate-200 flex flex-col">
+      <DialogContent className="w-[calc(100%-1.5rem)] sm:w-full max-w-xl h-[85vh] p-0 gap-0 overflow-hidden rounded-3xl bg-white border-slate-200 flex flex-col">
         {/* Header */}
         <DialogHeader className="p-4 sm:p-5 border-b border-slate-100 flex flex-row items-center justify-between space-y-0 pr-12 bg-slate-50/50">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/25">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/25 shrink-0">
               <Bot className="w-5 h-5" />
             </div>
             <div>
-              <DialogTitle className="text-base font-bold text-slate-900 flex items-center gap-2">
+              <DialogTitle className="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
                 <span>Assistente Acessível</span>
                 <Badge variant="secondary" className="text-[10px] bg-blue-100 text-blue-700 font-bold border-blue-200">
                   IA Local

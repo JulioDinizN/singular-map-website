@@ -30,10 +30,10 @@ export function ProfileComparisonModal({
 }: ProfileComparisonModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-2xl max-h-[85vh] p-0 gap-0 overflow-hidden rounded-3xl bg-white border-slate-200">
+      <DialogContent className="w-[calc(100%-1.5rem)] sm:w-full max-w-2xl max-h-[85vh] p-0 gap-0 overflow-hidden rounded-3xl bg-white border-slate-200">
         {/* Header */}
         <DialogHeader className="p-4 sm:p-5 border-b border-slate-100 pr-12">
-          <DialogTitle className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+          <DialogTitle className="text-sm sm:text-lg font-bold text-slate-900 flex items-center gap-2">
             Comparação de Rotas por Perfil
           </DialogTitle>
           <DialogDescription className="text-xs text-slate-500">

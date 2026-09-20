@@ -148,20 +148,21 @@ export function PoiDetailDrawer({
         </div>
 
         {/* Footer Actions */}
-        <div className="p-4 sm:p-5 border-t border-slate-100 bg-slate-50 flex items-center gap-2.5">
+        <div className="p-3.5 sm:p-5 border-t border-slate-100 bg-slate-50 flex items-center gap-2 sm:gap-2.5 pb-6 sm:pb-5">
           <Button
             onClick={() => onNavigateHere(poi)}
             className="flex-1 gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl shadow-lg shadow-blue-500/25 text-xs sm:text-sm min-h-[44px]"
           >
-            <Navigation className="w-4 h-4" />
-            <span>Como Chegar (Rota Acessível)</span>
+            <Navigation className="w-4 h-4 shrink-0" />
+            <span className="sm:hidden">Como Chegar</span>
+            <span className="hidden sm:inline">Como Chegar (Rota Acessível)</span>
           </Button>
 
           <Button
             variant="outline"
             size="icon"
             onClick={() => setBookmarked(!bookmarked)}
-            className={`rounded-2xl min-w-[44px] min-h-[44px] ${
+            className={`rounded-2xl min-w-[44px] min-h-[44px] shrink-0 ${
               bookmarked
                 ? 'bg-amber-50 text-amber-600 border-amber-300'
                 : 'bg-white text-slate-600 hover:text-slate-900 border-slate-200'
@@ -175,7 +176,7 @@ export function PoiDetailDrawer({
             variant="outline"
             size="icon"
             onClick={handleShare}
-            className="rounded-2xl bg-white text-slate-600 hover:text-slate-900 border-slate-200 min-w-[44px] min-h-[44px] shadow-sm"
+            className="rounded-2xl bg-white text-slate-600 hover:text-slate-900 border-slate-200 min-w-[44px] min-h-[44px] shrink-0 shadow-sm"
             title="Compartilhar Localização"
           >
             {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Share2 className="w-4 h-4" />}

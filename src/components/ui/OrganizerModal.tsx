@@ -60,15 +60,15 @@ export function OrganizerModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-3xl max-h-[90vh] p-0 gap-0 overflow-hidden rounded-3xl bg-white border-slate-200 flex flex-col">
+      <DialogContent className="w-[calc(100%-1.5rem)] sm:w-full max-w-3xl max-h-[90vh] p-0 gap-0 overflow-hidden rounded-3xl bg-white border-slate-200 flex flex-col">
         {/* Header */}
         <DialogHeader className="p-4 sm:p-6 border-b border-slate-100 flex flex-row items-center justify-between space-y-0 pr-12 bg-slate-50/50">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-amber-500 flex items-center justify-center text-white shadow-md shadow-amber-500/25">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-amber-500 flex items-center justify-center text-white shadow-md shadow-amber-500/25 shrink-0">
               <LayoutDashboard className="w-5 h-5" />
             </div>
             <div>
-              <DialogTitle className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+              <DialogTitle className="text-sm sm:text-lg font-bold text-slate-900 flex items-center gap-2 flex-wrap">
                 <span>Painel do Organizador</span>
                 <Badge variant="secondary" className="text-[10px] bg-amber-100 text-amber-800 font-bold border-amber-200">
                   Métricas em Tempo Real
@@ -209,7 +209,7 @@ export function OrganizerModal({
                 </Button>
               </form>
             ) : (
-              <div className="flex flex-wrap items-center gap-3">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
                 <Button
                   variant="destructive"
                   size="sm"
@@ -217,7 +217,7 @@ export function OrganizerModal({
                     onTriggerEvacuation();
                     onClose();
                   }}
-                  className="rounded-xl font-bold text-xs gap-1.5 min-h-[42px] shadow-md shadow-red-500/20"
+                  className="rounded-xl font-bold text-xs gap-1.5 min-h-[42px] shadow-md shadow-red-500/20 justify-center"
                 >
                   <ShieldAlert className="w-4 h-4" />
                   <span>Acionar Evacuação Geral do Evento</span>
@@ -227,7 +227,7 @@ export function OrganizerModal({
                   variant="outline"
                   size="sm"
                   onClick={handleResetCenario}
-                  className="rounded-xl font-bold text-xs gap-1.5 min-h-[42px] border-slate-300"
+                  className="rounded-xl font-bold text-xs gap-1.5 min-h-[42px] border-slate-300 justify-center"
                 >
                   <RotateCcw className="w-3.5 h-3.5 text-slate-600" />
                   <span>{resetSuccess ? 'Cenário Resetado!' : 'Resetar Níveis do Cenário'}</span>

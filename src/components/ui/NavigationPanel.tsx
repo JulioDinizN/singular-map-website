@@ -172,17 +172,26 @@ export function NavigationPanel({
         </div>
 
         {/* Live Simulation Controls & Voice */}
-        <div className="p-3 sm:p-4 bg-slate-50 border-b border-slate-100 flex items-center justify-between gap-2">
+        <div className="p-3 sm:p-4 bg-slate-50 border-b border-slate-100 flex items-center justify-between gap-1.5 sm:gap-2">
           <Button
             onClick={onToggleSimulation}
-            className={`flex-1 gap-2 font-bold text-xs sm:text-sm shadow-md transition-all active:scale-95 min-h-[44px] rounded-xl ${
+            className={`flex-1 gap-1.5 sm:gap-2 font-bold text-xs sm:text-sm shadow-md transition-all active:scale-95 min-h-[42px] sm:min-h-[44px] rounded-xl px-2 sm:px-4 ${
               isSimulating
                 ? 'bg-amber-500 hover:bg-amber-600 text-white'
                 : 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-500/20'
             }`}
           >
-            {isSimulating ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-white" />}
-            <span>{isSimulating ? 'Pausar' : 'Iniciar Passo a Passo'}</span>
+            {isSimulating ? <Pause className="w-4 h-4 shrink-0" /> : <Play className="w-4 h-4 shrink-0 fill-white" />}
+            <span>
+              {isSimulating ? (
+                'Pausar'
+              ) : (
+                <>
+                  <span className="sm:hidden">Iniciar</span>
+                  <span className="hidden sm:inline">Iniciar Passo a Passo</span>
+                </>
+              )}
+            </span>
           </Button>
 
           {/* Voice Text-to-Speech Toggle */}
@@ -196,7 +205,7 @@ export function NavigationPanel({
                 speakInstruction(route.steps[0].instruction);
               }
             }}
-            className={`rounded-xl min-w-[44px] min-h-[44px] ${
+            className={`rounded-xl min-w-[40px] min-h-[40px] sm:min-w-[44px] sm:min-h-[44px] shrink-0 ${
               voiceEnabled
                 ? 'bg-blue-50 text-blue-600 border-blue-300 ring-2 ring-blue-500/20'
                 : 'bg-white text-slate-600 hover:text-slate-900 border-slate-200'
@@ -214,7 +223,7 @@ export function NavigationPanel({
               const next = speeds[(speeds.indexOf(simulationSpeed) + 1) % speeds.length];
               onChangeSpeed(next);
             }}
-            className="gap-1 px-3 bg-white text-slate-700 hover:text-slate-900 rounded-xl text-xs font-mono font-bold border-slate-200 min-h-[44px] shadow-sm"
+            className="gap-1 px-2.5 sm:px-3 bg-white text-slate-700 hover:text-slate-900 rounded-xl text-xs font-mono font-bold border-slate-200 min-h-[40px] sm:min-h-[44px] shrink-0 shadow-sm"
             title="Velocidade de Simulação"
           >
             <FastForward className="w-3.5 h-3.5 text-blue-600" />
@@ -226,7 +235,7 @@ export function NavigationPanel({
             variant="outline"
             size="icon"
             onClick={onResetSimulation}
-            className="bg-white text-slate-600 hover:text-slate-900 rounded-xl border-slate-200 min-w-[44px] min-h-[44px] shadow-sm"
+            className="bg-white text-slate-600 hover:text-slate-900 rounded-xl border-slate-200 min-w-[40px] min-h-[40px] sm:min-w-[44px] sm:min-h-[44px] shrink-0 shadow-sm"
             title="Reiniciar ao Início"
           >
             <RotateCcw className="w-4 h-4" />

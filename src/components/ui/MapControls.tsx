@@ -30,7 +30,7 @@ export function MapControls({
     <TooltipProvider delayDuration={300}>
       <aside
         aria-label="Controles do Mapa"
-        className="absolute right-2.5 sm:right-5 top-28 sm:top-24 z-10 flex flex-col items-center gap-2 pointer-events-none"
+        className="absolute right-2 sm:right-5 top-[142px] sm:top-24 z-10 flex flex-col items-center gap-1.5 sm:gap-2 pointer-events-none"
       >
         {/* 2D / 3D Toggle */}
         <div className="pointer-events-auto bg-white/95 backdrop-blur-xl p-1 rounded-2xl border border-slate-200/90 shadow-xl shadow-slate-900/10">
@@ -41,7 +41,7 @@ export function MapControls({
                 size="icon"
                 type="button"
                 onClick={onToggle2DView}
-                className={`min-w-[44px] min-h-[44px] rounded-xl font-bold text-xs flex flex-col gap-0.5 ${
+                className={`min-w-[40px] min-h-[40px] sm:min-w-[44px] sm:min-h-[44px] rounded-xl font-bold text-xs flex flex-col gap-0.5 ${
                   is2DView ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-md shadow-indigo-600/30' : ''
                 }`}
               >

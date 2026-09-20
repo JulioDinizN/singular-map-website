@@ -83,15 +83,15 @@ export function ReportModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-lg max-h-[90vh] p-0 gap-0 overflow-hidden rounded-3xl bg-white border-slate-200">
+      <DialogContent className="w-[calc(100%-1.5rem)] sm:w-full max-w-lg max-h-[90vh] p-0 gap-0 overflow-hidden rounded-3xl bg-white border-slate-200">
         {/* Header */}
         <DialogHeader className="p-4 sm:p-5 border-b border-slate-100 flex flex-row items-center justify-between space-y-0 pr-12">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600">
-              <AlertTriangle className="w-5 h-5" />
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 shrink-0">
+              <AlertTriangle className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <div>
-              <DialogTitle className="text-base font-bold text-slate-900">
+              <DialogTitle className="text-sm sm:text-base font-bold text-slate-900">
                 Reportar Acessibilidade / Incidente
               </DialogTitle>
               <DialogDescription className="text-xs text-slate-500">

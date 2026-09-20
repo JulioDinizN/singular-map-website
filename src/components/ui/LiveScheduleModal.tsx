@@ -47,14 +47,14 @@ export function LiveScheduleModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-2xl max-h-[85vh] flex flex-col p-0 overflow-hidden">
+      <DialogContent className="w-[calc(100%-1.5rem)] sm:w-full max-w-2xl max-h-[85vh] flex flex-col p-0 overflow-hidden">
         {/* Header */}
-        <DialogHeader className="p-4 sm:p-6 border-b border-slate-100 flex flex-row items-center gap-3 space-y-0">
-          <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600 shrink-0">
-            <Radio className="w-5 h-5 animate-pulse text-emerald-600" />
+        <DialogHeader className="p-4 sm:p-6 border-b border-slate-100 flex flex-row items-center gap-3 space-y-0 pr-12">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600 shrink-0">
+            <Radio className="w-4 h-4 sm:w-5 sm:h-5 animate-pulse text-emerald-600" />
           </div>
           <div>
-            <DialogTitle className="text-base sm:text-lg font-bold text-slate-900">
+            <DialogTitle className="text-sm sm:text-lg font-bold text-slate-900">
               Programação & Palestras ao Vivo
             </DialogTitle>
             <DialogDescription className="text-xs text-slate-500">
@@ -64,40 +64,42 @@ export function LiveScheduleModal({
         </DialogHeader>
 
         {/* Tab Filters */}
-        <div className="px-4 sm:px-6 pt-2 flex gap-2 border-b border-slate-100 bg-slate-50">
+        <div className="px-3 sm:px-6 pt-2 flex gap-1 sm:gap-2 border-b border-slate-100 bg-slate-50">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setActiveTab('all')}
-            className={`rounded-none border-b-2 font-bold px-3 py-2 h-auto text-xs sm:text-sm ${
+            className={`rounded-none border-b-2 font-bold px-2.5 sm:px-3 py-2 h-auto text-xs sm:text-sm ${
               activeTab === 'all'
                 ? 'border-blue-600 text-blue-600'
                 : 'border-transparent text-slate-500 hover:text-slate-900'
             }`}
           >
-            Todas as Sessões ({allSessions.length})
+            <span className="sm:hidden">Todas ({allSessions.length})</span>
+            <span className="hidden sm:inline">Todas as Sessões ({allSessions.length})</span>
           </Button>
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setActiveTab('live')}
-            className={`rounded-none border-b-2 font-bold px-3 py-2 h-auto text-xs sm:text-sm gap-1.5 ${
+            className={`rounded-none border-b-2 font-bold px-2.5 sm:px-3 py-2 h-auto text-xs sm:text-sm gap-1.5 ${
               activeTab === 'live'
                 ? 'border-emerald-600 text-emerald-700'
                 : 'border-transparent text-slate-500 hover:text-slate-900'
             }`}
           >
-            <span className="w-2 h-2 rounded-full bg-emerald-600 animate-ping" />
-            <span>Acontecendo Agora ({allSessions.filter((s) => s.isLiveNow).length})</span>
+            <span className="w-2 h-2 rounded-full bg-emerald-600 animate-ping shrink-0" />
+            <span className="sm:hidden">Ao Vivo ({allSessions.filter((s) => s.isLiveNow).length})</span>
+            <span className="hidden sm:inline">Acontecendo Agora ({allSessions.filter((s) => s.isLiveNow).length})</span>
           </Button>
         </div>
 
         {/* Sessions List */}
-        <div className="p-4 sm:p-6 overflow-y-auto space-y-3 flex-1">
+        <div className="p-3.5 sm:p-6 overflow-y-auto space-y-3 flex-1">
           {displayedSessions.map((session) => (
             <div
               key={`${session.poi.id}-${session.id}`}
-              className={`p-4 rounded-2xl border transition-all ${
+              className={`p-3.5 sm:p-4 rounded-2xl border transition-all ${
                 session.isLiveNow
                   ? 'bg-emerald-50/60 border-emerald-300 ring-1 ring-emerald-400/30'
                   : 'bg-white border-slate-200 hover:border-slate-300'
@@ -110,7 +112,7 @@ export function LiveScheduleModal({
                     {session.time}
                   </span>
                   <Badge
-                    className="text-white shadow-sm border-0"
+                    className="text-white shadow-sm border-0 text-[11px]"
                     style={{ backgroundColor: session.poi.accentColor || session.poi.color }}
                   >
                     {session.poi.name} (Piso {session.poi.floor})
@@ -118,20 +120,20 @@ export function LiveScheduleModal({
                 </div>
 
                 {session.isLiveNow && (
-                  <Badge variant="success" className="gap-1.5 w-fit">
+                  <Badge variant="success" className="gap-1.5 w-fit text-[10px]">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-ping" />
                     AO VIVO
                   </Badge>
                 )}
               </div>
 
-              <h4 className="text-sm sm:text-base font-bold text-slate-900 mb-1">
+              <h4 className="text-xs sm:text-base font-bold text-slate-900 mb-1 leading-snug">
                 {session.title}
               </h4>
 
               <div className="flex items-center text-xs text-slate-500 gap-1.5 mb-3">
-                <User className="w-3.5 h-3.5 text-blue-600" />
-                <span>{session.speaker}</span>
+                <User className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                <span className="truncate">{session.speaker}</span>
               </div>
 
               {/* Action Buttons */}
@@ -144,10 +146,11 @@ export function LiveScheduleModal({
                     onLocatePoi(session.poi);
                     onClose();
                   }}
-                  className="gap-1.5"
+                  className="gap-1.5 text-xs flex-1 sm:flex-none justify-center"
                 >
                   <MapPin className="w-3.5 h-3.5 text-blue-600" />
-                  <span>Ver no Mapa</span>
+                  <span className="sm:hidden">No Mapa</span>
+                  <span className="hidden sm:inline">Ver no Mapa</span>
                 </Button>
                 <Button
                   variant="primary"
@@ -157,7 +160,7 @@ export function LiveScheduleModal({
                     onNavigatePoi(session.poi);
                     onClose();
                   }}
-                  className="gap-1.5 shadow-md shadow-blue-500/20"
+                  className="gap-1.5 shadow-md shadow-blue-500/20 text-xs flex-1 sm:flex-none justify-center"
                 >
                   <Navigation className="w-3.5 h-3.5" />
                   <span>Como Chegar</span>
