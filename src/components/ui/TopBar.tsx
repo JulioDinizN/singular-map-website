@@ -365,8 +365,8 @@ export function TopBar({
         )}
       </div>
 
-      {/* 4. ACTION PILLS & CATEGORIES (Horizontal Scroll Carousel) */}
-      <div className="pointer-events-auto flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-7xl mx-auto w-full py-0.5 touch-pan-x">
+      {/* 4. ACTION PILLS & CATEGORIES (Horizontal Scroll Carousel - Desktop Only) */}
+      <div className="pointer-events-auto hidden sm:flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-7xl mx-auto w-full py-0.5 touch-pan-x">
         {/* Quick Sala de Acolhimento */}
         <Button
           variant="outline"
