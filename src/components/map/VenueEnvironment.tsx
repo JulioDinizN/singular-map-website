@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-import * as THREE from 'three';
 import { Text } from '@react-three/drei';
 import { AllArchitecturalDoors } from './ArchitecturalDoors';
 import { StartupAlley } from './StartupAlley';
@@ -12,52 +10,7 @@ interface VenueEnvironmentProps {
 export const VENUE_PLANE_WIDTH = 84.0;
 export const VENUE_PLANE_DEPTH = (84.0 * 768.0) / 1376.0; // 46.8837
 
-// 24 structural columns (4 rows × 6 columns) matching the architectural grid
-const STRUCTURAL_PILLARS = [
-  // Row 1: North (Avenida dos Palcos, Z = -14.83)
-  { id: 'P1', pos: [-25.21, 0, -14.83] as [number, number, number] },
-  { id: 'P2', pos: [-12.70, 0, -14.83] as [number, number, number] },
-  { id: 'P3', pos: [-2.81, 0, -14.83] as [number, number, number] },
-  { id: 'P4', pos: [2.81, 0, -14.83] as [number, number, number] },
-  { id: 'P5', pos: [9.83, 0, -14.83] as [number, number, number] },
-  { id: 'P6', pos: [23.74, 0, -14.83] as [number, number, number] },
-
-  // Row 2: Upper-Middle (Between top & bottom booths, Z = -7.51)
-  { id: 'P1', pos: [-25.21, 0, -7.51] as [number, number, number] },
-  { id: 'P2', pos: [-12.70, 0, -7.51] as [number, number, number] },
-  { id: 'P3', pos: [-2.81, 0, -7.51] as [number, number, number] },
-  { id: 'P4', pos: [2.81, 0, -7.51] as [number, number, number] },
-  { id: 'P5', pos: [9.83, 0, -7.51] as [number, number, number] },
-  { id: 'P6', pos: [23.74, 0, -7.51] as [number, number, number] },
-
-  // Row 3: Lower-Middle (Cross aisle / Rua 200-300-400, Z = -0.06)
-  { id: 'P1', pos: [-25.21, 0, -0.06] as [number, number, number] },
-  { id: 'P2', pos: [-12.70, 0, -0.06] as [number, number, number] },
-  { id: 'P3', pos: [-2.81, 0, -0.06] as [number, number, number] },
-  { id: 'P4', pos: [2.81, 0, -0.06] as [number, number, number] },
-  { id: 'P5', pos: [9.83, 0, -0.06] as [number, number, number] },
-  { id: 'P6', pos: [23.74, 0, -0.06] as [number, number, number] },
-
-  // Row 4: South (Bottom of booths / Concurso Sul, Z = 7.51)
-  { id: 'P1', pos: [-25.21, 0, 7.51] as [number, number, number] },
-  { id: 'P2', pos: [-12.70, 0, 7.51] as [number, number, number] },
-  { id: 'P3', pos: [-2.81, 0, 7.51] as [number, number, number] },
-  { id: 'P4', pos: [2.81, 0, 7.51] as [number, number, number] },
-  { id: 'P5', pos: [9.83, 0, 7.51] as [number, number, number] },
-  { id: 'P6', pos: [23.74, 0, 7.51] as [number, number, number] },
-];
-
 export function VenueEnvironment({ activeFloor }: VenueEnvironmentProps) {
-  // Load architectural floorplan reference blueprint texture
-  const floorplanTexture = useMemo(() => {
-    const loader = new THREE.TextureLoader();
-    const tex = loader.load('/floorplan_reference.jpg');
-    tex.colorSpace = THREE.SRGBColorSpace;
-    tex.minFilter = THREE.LinearFilter;
-    tex.magFilter = THREE.LinearFilter;
-    return tex;
-  }, []);
-
   return (
     <group>
       {/* Warm Natural Exhibition Daylight Lighting */}
@@ -84,16 +37,17 @@ export function VenueEnvironment({ activeFloor }: VenueEnvironmentProps) {
 
       {/* ================= FLOOR 1 (GROUND EXPO) ================= */}
       <group position={[0, 0, 0]}>
-        {/* Architectural Blueprint Floor Ground Overlay (100% 1:1 Scale) */}
+        {/* Clean Modern Exhibition Floor */}
         <mesh
           rotation={[-Math.PI / 2, 0, 0]}
-          position={[0, 0.001, 0]}
+          position={[0, 0, 0]}
           receiveShadow
         >
           <planeGeometry args={[VENUE_PLANE_WIDTH, VENUE_PLANE_DEPTH]} />
-          <meshBasicMaterial
-            map={floorplanTexture}
-            toneMapped={false}
+          <meshStandardMaterial
+            color="#f8fafc"
+            roughness={0.9}
+            metalness={0.02}
           />
         </mesh>
 
@@ -251,39 +205,6 @@ export function VenueEnvironment({ activeFloor }: VenueEnvironmentProps) {
           <meshStandardMaterial color="#94a3b8" roughness={0.5} />
         </mesh>
 
-        {/* ================= 24 STRUCTURAL PILLARS (P1 to P6) ================= */}
-        {STRUCTURAL_PILLARS.map((pillar, idx) => (
-          <group key={`${pillar.id}-${idx}`} position={pillar.pos}>
-            {/* Concrete Pillar Column */}
-            <mesh position={[0, 3.5, 0]} castShadow receiveShadow>
-              <boxGeometry args={[0.85, 7.0, 0.85]} />
-              <meshStandardMaterial color="#64748b" roughness={0.7} metalness={0.1} />
-            </mesh>
-            {/* Base Protective Collar */}
-            <mesh position={[0, 0.2, 0]} receiveShadow>
-              <boxGeometry args={[1.1, 0.4, 1.1]} />
-              <meshStandardMaterial color="#94a3b8" roughness={0.5} />
-            </mesh>
-            {/* Overhead Pillar Sign Cube */}
-            <mesh position={[0, 5.0, 0]} castShadow>
-              <boxGeometry args={[1.0, 0.65, 1.0]} />
-              <meshStandardMaterial color="#0f172a" roughness={0.3} />
-            </mesh>
-            {/* Pillar Numbering on 4 Faces */}
-            <Text position={[0, 5.0, 0.52]} fontSize={0.4} color="#ffffff">
-              {pillar.id}
-            </Text>
-            <Text position={[0, 5.0, -0.52]} rotation={[0, Math.PI, 0]} fontSize={0.4} color="#ffffff">
-              {pillar.id}
-            </Text>
-            <Text position={[0.52, 5.0, 0]} rotation={[0, Math.PI / 2, 0]} fontSize={0.4} color="#ffffff">
-              {pillar.id}
-            </Text>
-            <Text position={[-0.52, 5.0, 0]} rotation={[0, -Math.PI / 2, 0]} fontSize={0.4} color="#ffffff">
-              {pillar.id}
-            </Text>
-          </group>
-        ))}
 
         {/* ================= LOBBY ENCLOSED STAIRWELLS ================= */}
         {/* Left Enclosed Stairwell */}
