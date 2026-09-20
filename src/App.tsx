@@ -74,6 +74,7 @@ export default function App() {
 
   const [cameraTargetTrigger, setCameraTargetTrigger] = useState<number>(0);
   const [cameraTargetPos, setCameraTargetPos] = useState<[number, number, number] | null>(null);
+  const [showSensors, setShowSensors] = useState<boolean>(true);
 
   // Count live sessions for badge
   const liveSessionsCount = useMemo(() => {
@@ -381,6 +382,7 @@ export default function App() {
         cameraTargetPos={cameraTargetPos}
         selectedCategory={selectedCategory}
         dynamicOverrides={dynamicOverrides}
+        showSensors={showSensors}
       />
 
       {/* Top Header, Search, Profile & Quick Actions */}
@@ -399,7 +401,7 @@ export default function App() {
         onOpenOrganizer={() => setIsOrganizerModalOpen(true)}
       />
 
-      {/* Floating Map Controls (Floor, 2D/3D, Reset, Locate) */}
+      {/* Floating Map Controls (2D/3D, Reset, Locate, Sensors) */}
       <MapControls
         activeFloor={activeFloor}
         onChangeFloor={setActiveFloor}
@@ -407,6 +409,8 @@ export default function App() {
         onToggle2DView={() => setIs2DView(!is2DView)}
         onResetView={handleResetView}
         onLocateMe={handleLocateMe}
+        showSensors={showSensors}
+        onToggleSensors={() => setShowSensors(!showSensors)}
       />
 
       {/* POI / Booth Details Drawer */}

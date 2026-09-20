@@ -1,4 +1,4 @@
-import { Box, Square, Compass, Navigation } from 'lucide-react';
+import { Box, Square, Compass, Navigation, Radio } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Tooltip,
@@ -14,6 +14,8 @@ interface MapControlsProps {
   onToggle2DView: () => void;
   onResetView: () => void;
   onLocateMe: () => void;
+  showSensors?: boolean;
+  onToggleSensors?: () => void;
 }
 
 export function MapControls({
@@ -21,6 +23,8 @@ export function MapControls({
   onToggle2DView,
   onResetView,
   onLocateMe,
+  showSensors = true,
+  onToggleSensors,
 }: MapControlsProps) {
   return (
     <TooltipProvider delayDuration={300}>
@@ -28,7 +32,6 @@ export function MapControls({
         aria-label="Controles do Mapa"
         className="absolute right-2.5 sm:right-5 top-28 sm:top-24 z-10 flex flex-col items-center gap-2 pointer-events-none"
       >
-
         {/* 2D / 3D Toggle */}
         <div className="pointer-events-auto bg-white/95 backdrop-blur-xl p-1 rounded-2xl border border-slate-200/90 shadow-xl shadow-slate-900/10">
           <Tooltip>
@@ -51,6 +54,33 @@ export function MapControls({
             </TooltipContent>
           </Tooltip>
         </div>
+
+        {/* Heatmap & Real-time Sensors Toggle */}
+        {onToggleSensors && (
+          <div className="pointer-events-auto bg-white/95 backdrop-blur-xl p-1 rounded-2xl border border-slate-200/90 shadow-xl shadow-slate-900/10">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant={showSensors ? 'default' : 'ghost'}
+                  size="icon"
+                  type="button"
+                  onClick={onToggleSensors}
+                  className={`min-w-[44px] min-h-[44px] rounded-xl font-bold text-xs flex flex-col gap-0.5 ${
+                    showSensors
+                      ? 'bg-rose-600 hover:bg-rose-500 text-white shadow-md shadow-rose-600/30'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  <Radio className="w-4 h-4 animate-pulse" />
+                  <span className="text-[8px] font-mono">SENSORES</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="left">
+                <p>{showSensors ? 'Ocultar Sensores de Ruído & Lotação' : 'Exibir Sensores de Ruído & Lotação (dB e %)'}</p>
+              </TooltipContent>
+            </Tooltip>
+          </div>
+        )}
 
         {/* View Actions: Reset & Locate Me */}
         <div className="pointer-events-auto flex flex-col bg-white/95 backdrop-blur-xl p-1 rounded-2xl border border-slate-200/90 shadow-xl shadow-slate-900/10 gap-1">

@@ -12,6 +12,7 @@ import { NavigationPath3D } from './NavigationPath3D';
 import { LiveUserMarker } from './LiveUserMarker';
 import { ApiCorridors3D } from './ApiCorridors3D';
 import { CrowdFlux3D } from './CrowdFlux3D';
+import { NoiseAndCrowdSensors3D } from './NoiseAndCrowdSensors3D';
 import type { WaypointEdge } from '../../data/eventData';
 
 interface EventMapCanvasProps {
@@ -29,6 +30,7 @@ interface EventMapCanvasProps {
   cameraTargetPos: [number, number, number] | null;
   selectedCategory?: PoiCategory | 'all';
   dynamicOverrides?: Map<string, Partial<WaypointEdge>>;
+  showSensors?: boolean;
 }
 
 // Internal Camera & Controls Controller (Google Maps / Waze Style)
@@ -160,6 +162,7 @@ export function EventMapCanvas({
   cameraTargetPos,
   selectedCategory = 'all',
   dynamicOverrides,
+  showSensors = true,
 }: EventMapCanvasProps) {
   const isNavigating = !!route;
 
@@ -205,6 +208,9 @@ export function EventMapCanvas({
 
         {/* 3D Crowd Flux of little people walking along API walkways */}
         <CrowdFlux3D eventoCodigo="NEXT26" />
+
+        {/* 3D Real-time Acoustic & Crowd Congestion Sensors */}
+        <NoiseAndCrowdSensors3D visible={showSensors} />
 
         {/* 3D Booths & POIs formulated from API data */}
         <group>
