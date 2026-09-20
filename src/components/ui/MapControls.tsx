@@ -30,10 +30,10 @@ export function MapControls({
     <TooltipProvider delayDuration={300}>
       <aside
         aria-label="Controles do Mapa"
-        className="absolute right-2 sm:right-5 top-28 sm:top-24 z-10 flex flex-col items-center gap-1.5 sm:gap-2 pointer-events-none"
+        className="absolute right-2 sm:right-4 top-24 sm:top-24 z-10 flex flex-col items-center gap-1 sm:gap-1.5 pointer-events-none"
       >
         {/* 2D / 3D Toggle */}
-        <div className="pointer-events-auto bg-white/95 backdrop-blur-xl p-1 rounded-2xl border border-slate-200/90 shadow-xl shadow-slate-900/10">
+        <div className="pointer-events-auto bg-white/95 backdrop-blur-xl p-0.5 sm:p-1 rounded-xl sm:rounded-2xl border border-slate-200/90 shadow-md sm:shadow-xl shadow-slate-900/10">
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -41,12 +41,12 @@ export function MapControls({
                 size="icon"
                 type="button"
                 onClick={onToggle2DView}
-                className={`min-w-[40px] min-h-[40px] sm:min-w-[44px] sm:min-h-[44px] rounded-xl font-bold text-xs flex flex-col gap-0.5 ${
-                  is2DView ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-md shadow-indigo-600/30' : ''
+                className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl font-bold text-xs flex flex-col items-center justify-center gap-0.5 ${
+                  is2DView ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm' : 'text-slate-700'
                 }`}
               >
-                {is2DView ? <Square className="w-4 h-4" /> : <Box className="w-4 h-4" />}
-                <span className="text-[9px] font-mono">{is2DView ? '2D' : '3D'}</span>
+                {is2DView ? <Square className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <Box className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
+                <span className="text-[7.5px] sm:text-[8.5px] font-mono leading-none">{is2DView ? '2D' : '3D'}</span>
               </Button>
             </TooltipTrigger>
             <TooltipContent side="left">
@@ -57,7 +57,7 @@ export function MapControls({
 
         {/* Heatmap & Real-time Sensors Toggle */}
         {onToggleSensors && (
-          <div className="pointer-events-auto bg-white/95 backdrop-blur-xl p-1 rounded-2xl border border-slate-200/90 shadow-xl shadow-slate-900/10">
+          <div className="pointer-events-auto bg-white/95 backdrop-blur-xl p-0.5 sm:p-1 rounded-xl sm:rounded-2xl border border-slate-200/90 shadow-md sm:shadow-xl shadow-slate-900/10">
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
@@ -65,14 +65,14 @@ export function MapControls({
                   size="icon"
                   type="button"
                   onClick={onToggleSensors}
-                  className={`min-w-[44px] min-h-[44px] rounded-xl font-bold text-xs flex flex-col gap-0.5 ${
+                  className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl font-bold text-xs flex flex-col items-center justify-center gap-0.5 ${
                     showSensors
-                      ? 'bg-rose-600 hover:bg-rose-500 text-white shadow-md shadow-rose-600/30'
+                      ? 'bg-rose-600 hover:bg-rose-500 text-white shadow-sm'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
-                  <Radio className="w-4 h-4 animate-pulse" />
-                  <span className="text-[8px] font-mono">SENSORES</span>
+                  <Radio className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-pulse" />
+                  <span className="text-[7px] sm:text-[7.5px] font-mono leading-none">SENSORES</span>
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="left">
@@ -82,8 +82,8 @@ export function MapControls({
           </div>
         )}
 
-        {/* View Actions: Reset & Locate Me */}
-        <div className="pointer-events-auto flex flex-col bg-white/95 backdrop-blur-xl p-1 rounded-2xl border border-slate-200/90 shadow-xl shadow-slate-900/10 gap-1">
+        {/* View Actions: Reset & Locate Me (Compact Compass & Cursor Pill) */}
+        <div className="pointer-events-auto flex flex-col bg-white/95 backdrop-blur-xl p-0.5 sm:p-1 rounded-xl sm:rounded-2xl border border-slate-200/90 shadow-md sm:shadow-xl shadow-slate-900/10">
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -91,15 +91,17 @@ export function MapControls({
                 size="icon"
                 type="button"
                 onClick={onLocateMe}
-                className="min-w-[44px] min-h-[44px] rounded-xl text-blue-600 hover:text-blue-700 hover:bg-slate-100"
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-blue-600 hover:text-blue-700 hover:bg-slate-100 flex items-center justify-center"
               >
-                <Navigation className="w-4 h-4" />
+                <Navigation className="w-3.5 h-3.5" />
               </Button>
             </TooltipTrigger>
             <TooltipContent side="left">
               <p>Minha Localização (Você está aqui)</p>
             </TooltipContent>
           </Tooltip>
+
+          <div className="h-[1px] w-4/5 mx-auto bg-slate-200/80 my-0.5" />
 
           <Tooltip>
             <TooltipTrigger asChild>
@@ -108,9 +110,9 @@ export function MapControls({
                 size="icon"
                 type="button"
                 onClick={onResetView}
-                className="min-w-[44px] min-h-[44px] rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 flex items-center justify-center"
               >
-                <Compass className="w-4 h-4" />
+                <Compass className="w-3.5 h-3.5" />
               </Button>
             </TooltipTrigger>
             <TooltipContent side="left">
