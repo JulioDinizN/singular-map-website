@@ -60,7 +60,6 @@ export function TopBar({
   const [query, setQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const desktopSearchRef = useRef<HTMLDivElement>(null);
-  const mobileSearchRef = useRef<HTMLDivElement>(null);
 
   const searchResults =
     query.trim() === ''
@@ -72,20 +71,30 @@ export function TopBar({
             (poi.shortName && poi.shortName.toLowerCase().includes(q));
           const matchesBooth = poi.boothNumber?.toLowerCase().includes(q);
           const matchesZone = poi.zone.toLowerCase().includes(q);
+          const matchesCategory =
+            poi.category.toLowerCase().includes(q) ||
+            (CATEGORIES.find((c) => c.id === poi.category)?.label.toLowerCase().includes(q) ?? false);
+          const matchesDescription = poi.description?.toLowerCase().includes(q);
           const matchesSession = poi.sessions?.some(
             (s) =>
               s.title.toLowerCase().includes(q) ||
               s.speaker.toLowerCase().includes(q)
           );
-          return matchesName || matchesBooth || matchesZone || matchesSession;
-        }).slice(0, 6);
+          return (
+            matchesName ||
+            matchesBooth ||
+            matchesZone ||
+            matchesCategory ||
+            matchesDescription ||
+            matchesSession
+          );
+        }).slice(0, 8);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       const target = e.target as Node;
       const insideDesktop = desktopSearchRef.current?.contains(target);
-      const insideMobile = mobileSearchRef.current?.contains(target);
-      if (!insideDesktop && !insideMobile) {
+      if (!insideDesktop) {
         setIsOpen(false);
       }
     }
@@ -133,6 +142,15 @@ export function TopBar({
                 setIsOpen(true);
               }}
               onFocus={() => setIsOpen(true)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && searchResults.length > 0) {
+                  onSelectPoi(searchResults[0]);
+                  setIsOpen(false);
+                  setQuery('');
+                } else if (e.key === 'Escape') {
+                  setIsOpen(false);
+                }
+              }}
               placeholder="Buscar estandes, palcos, facilidades, café..."
               className="border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 h-auto"
             />
@@ -287,83 +305,7 @@ export function TopBar({
         </div>
       </div>
 
-      {/* 3. MOBILE ROW 2 (Full-Width Search Bar) */}
-      <div
-        ref={mobileSearchRef}
-        className="sm:hidden pointer-events-auto relative w-full"
-      >
-        <div className="relative flex items-center bg-white/95 backdrop-blur-xl rounded-2xl border border-slate-200/90 shadow-md shadow-slate-900/5 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 transition-all min-h-[42px]">
-          <Search className="w-4 h-4 text-slate-400 ml-3 shrink-0" />
-          <Input
-            id="mobile-search-input"
-            type="text"
-            value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              setIsOpen(true);
-            }}
-            onFocus={() => setIsOpen(true)}
-            placeholder="Buscar estandes, palcos, café..."
-            className="border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 px-2.5 py-1.5 text-xs text-slate-900 placeholder:text-slate-400 h-auto"
-          />
-          {query && (
-            <Button
-              variant="ghost"
-              size="iconSm"
-              type="button"
-              onClick={() => {
-                setQuery('');
-                setIsOpen(false);
-              }}
-              className="mr-2 text-slate-400 hover:text-slate-600"
-            >
-              <X className="w-3.5 h-3.5" />
-            </Button>
-          )}
-        </div>
 
-        {/* Autocomplete Dropdown (Mobile) */}
-        {isOpen && searchResults.length > 0 && (
-          <div className="absolute top-full left-0 right-0 mt-1.5 bg-white/98 backdrop-blur-2xl border border-slate-200 rounded-2xl shadow-2xl overflow-hidden z-50 divide-y divide-slate-100 max-h-[50vh] overflow-y-auto">
-            {searchResults.map((poi) => (
-              <button
-                key={poi.id}
-                type="button"
-                onClick={() => {
-                  onSelectPoi(poi);
-                  setIsOpen(false);
-                  setQuery('');
-                }}
-                className="w-full text-left px-3.5 py-2.5 hover:bg-slate-50 flex items-center justify-between gap-2 transition-colors group min-h-[44px]"
-              >
-                <div className="flex items-center gap-2 min-w-0">
-                  <div
-                    className="w-2.5 h-2.5 rounded-full shrink-0 shadow-sm"
-                    style={{ backgroundColor: poi.accentColor || poi.color }}
-                  />
-                  <div className="truncate">
-                    <div className="text-xs font-semibold text-slate-900 group-hover:text-blue-600 truncate flex items-center gap-1.5">
-                      <span>{poi.name}</span>
-                      {poi.boothNumber && (
-                        <span className="text-[10px] text-slate-500 font-mono">
-                          ({poi.boothNumber})
-                        </span>
-                      )}
-                    </div>
-                    <div className="text-[10px] text-slate-500 truncate">
-                      Piso {poi.floor} • {poi.zone}
-                    </div>
-                  </div>
-                </div>
-                <div className="shrink-0 flex items-center text-[10px] text-slate-500 group-hover:text-blue-600">
-                  <MapPin className="w-3 h-3 mr-0.5" />
-                  <span>Ver</span>
-                </div>
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
 
       {/* 4. ACTION PILLS & CATEGORIES (Horizontal Scroll Carousel - Desktop Only) */}
       <div className="pointer-events-auto hidden sm:flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-7xl mx-auto w-full py-0.5 touch-pan-x">
