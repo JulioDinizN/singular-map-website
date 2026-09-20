@@ -103,13 +103,13 @@ export function TopBar({
           </div>
           <div>
             <h1 className="text-xs sm:text-sm font-bold tracking-tight text-slate-900 flex items-center gap-1.5">
-              <span>BRASIL TECH SUMMIT</span>
+              <span>FIAP NEXT 2026</span>
               <Badge variant="success" className="text-[9px] uppercase px-1.5 py-0">
                 MAPA 3D
               </Badge>
             </h1>
             <p className="text-[10px] text-slate-500 hidden sm:block">
-              São Paulo Expo • Navegação Acessível NBR 9050
+              Pavilhão Principal • Navegação Acessível NBR 9050
             </p>
           </div>
         </div>
