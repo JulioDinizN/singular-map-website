@@ -69,7 +69,7 @@
 @keyframes slideLeftToRight {
   0% {
     opacity: 0;
-    transform: translateX(-100%);
+    transform: translateX(-45px);
   }
   100% {
     opacity: 1;
@@ -78,6 +78,6 @@
 }
 
 .animate-slide-left-to-right {
-  animation: slideLeftToRight 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: slideLeftToRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   will-change: transform, opacity;
 }

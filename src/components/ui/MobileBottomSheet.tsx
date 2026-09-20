@@ -132,16 +132,9 @@ export function MobileBottomSheet({
     ? 'chat'
     : 'explore';
 
-  // Snap points based on mode
-  const snapPeek =
-    mode === 'navigation'
-      ? '200px'
-      : mode === 'poi'
-      ? '210px'
-      : mode === 'chat'
-      ? '280px'
-      : '148px';
-  const snapExpanded = mode === 'chat' ? 0.88 : 0.8;
+  // Unified snap points across all modes so the sheet itself never shifts size unexpectedly
+  const snapPeek = '160px';
+  const snapExpanded = 0.85;
 
   const [snapPoint, setSnapPoint] = useState<number | string | null>(
     mode === 'chat' ? snapExpanded : snapPeek
@@ -151,22 +144,29 @@ export function MobileBottomSheet({
   const [voiceEnabled, setVoiceEnabled] = useState(false);
 
   // When mode changes:
-  // If opening chat, expand immediately so conversation & input are ready
-  // Otherwise, default to peek height
+  // - If entering chat, expand so conversation and input are ready
+  // - If the sheet was ALREADY expanded, KEEP IT EXPANDED (never collapse when selecting a feature!)
+  // - If the sheet was at peek, keep it at peek
   useEffect(() => {
     if (mode === 'chat') {
       setSnapPoint(snapExpanded);
     } else {
-      setSnapPoint(snapPeek);
+      setSnapPoint((prev) => {
+        const wasExpanded =
+          prev === snapExpanded ||
+          prev === 0.85 ||
+          prev === '85%' ||
+          prev === 0.8 ||
+          prev === 1;
+        return wasExpanded ? snapExpanded : snapPeek;
+      });
     }
-  }, [mode, snapPeek, snapExpanded]);
+  }, [mode]);
 
   const isExpanded =
     snapPoint === snapExpanded ||
-    snapPoint === 0.8 ||
-    snapPoint === 0.88 ||
-    snapPoint === '80%' ||
-    snapPoint === '88%' ||
+    snapPoint === 0.85 ||
+    snapPoint === '85%' ||
     snapPoint === 1;
 
   const toggleSnap = () => {
@@ -242,9 +242,7 @@ export function MobileBottomSheet({
         <div className="flex-1 overflow-hidden relative flex flex-col min-h-0">
           <div
             key={mode === 'poi' ? `poi-${selectedPoi?.id}` : mode}
-            className={`flex flex-col ${
-              mode === 'chat' ? 'h-[88dvh] max-h-[88dvh]' : 'h-[80dvh] max-h-[80dvh]'
-            } animate-slide-left-to-right`}
+            className="flex flex-col h-[85dvh] max-h-[85dvh] animate-slide-left-to-right"
           >
             {/* ========================================================= */}
             {/* MODE 1: NAVIGATION (Turn-by-turn guidance) */}

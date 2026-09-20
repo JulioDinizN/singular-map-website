@@ -121,7 +121,7 @@ export function ChatContent({
   };
 
   return (
-    <div className={`flex flex-col ${isMobile ? 'h-[88dvh] max-h-[88dvh]' : 'h-full'} overflow-hidden bg-white`}>
+    <div className="flex flex-col h-full overflow-hidden bg-white">
       {/* Header */}
       {isMobile ? (
         <div className="shrink-0 px-3.5 py-2.5 border-b border-slate-100 flex items-center justify-between bg-slate-50/70 select-none">
@@ -287,7 +287,9 @@ export function ChatContent({
           e.preventDefault();
           handleSendMessage();
         }}
-        className="p-2.5 sm:p-4 border-t border-slate-100 bg-white flex items-center gap-2 shrink-0 pb-safe"
+        className={`border-t border-slate-100 bg-white flex items-center gap-2 shrink-0 ${
+          isMobile ? 'px-3.5 pt-2.5 pb-8' : 'p-4'
+        }`}
       >
         <Input
           type="text"
